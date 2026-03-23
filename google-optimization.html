@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Google Optimization | ANTHRŌPOS Alpha Intelligence</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#000;color:#fff;overflow-x:hidden}
+header{position:fixed;top:0;width:100%;background:rgba(0,0,0,0.92);backdrop-filter:blur(10px);padding:14px 24px;z-index:100;border-bottom:1px solid rgba(255,255,255,0.08);display:flex;align-items:center;justify-content:space-between}
+.logo{font-family:'Space Grotesk',sans-serif;font-size:1.1rem;font-weight:700;letter-spacing:2px;color:#34A853;text-decoration:none}
+.back-btn{color:#9ca3af;text-decoration:none;font-size:0.85rem;transition:color 0.3s}
+.back-btn:hover{color:#fff}
+.container{max-width:960px;margin:0 auto}
+section{padding:80px 20px}
+.hero{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:100px 20px 60px;background:radial-gradient(ellipse 60% 60% at 50% 40%,rgba(52,168,83,0.07) 0%,transparent 70%)}
+.hero-label{font-size:0.75rem;letter-spacing:4px;color:#34A853;text-transform:uppercase;margin-bottom:16px}
+.hero-title{font-family:'Space Grotesk',sans-serif;font-size:clamp(2.8rem,7vw,5rem);font-weight:700;line-height:1.05;margin-bottom:20px}
+.hero-title span{color:#34A853}
+.hero-sub{font-size:1.1rem;color:#9ca3af;max-width:560px;line-height:1.7;margin-bottom:30px}
+.hero-price{font-size:1rem;color:#34A853;font-weight:600;letter-spacing:1px;margin-bottom:40px}
+.btn-primary{padding:15px 36px;background:#34A853;border:none;border-radius:30px;color:#fff;font-size:1rem;font-weight:600;cursor:pointer;text-decoration:none;transition:all 0.3s;display:inline-block}
+.btn-primary:hover{background:#45ba64;transform:translateY(-2px);box-shadow:0 10px 30px rgba(52,168,83,0.3)}
+.btn-secondary{padding:15px 36px;background:transparent;border:1px solid rgba(255,255,255,0.25);border-radius:30px;color:#fff;font-size:1rem;font-weight:600;cursor:pointer;text-decoration:none;display:inline-block;transition:all 0.3s}
+.btn-secondary:hover{border-color:#34A853;color:#34A853}
+.section-label{text-align:center;font-size:0.75rem;letter-spacing:4px;color:#34A853;text-transform:uppercase;margin-bottom:12px}
+.section-title{text-align:center;font-size:2rem;font-weight:700;margin-bottom:48px}
+
+/* Google profile mock */
+.profile-section{background:rgba(52,168,83,0.03);border-top:1px solid rgba(52,168,83,0.1);border-bottom:1px solid rgba(52,168,83,0.1)}
+.compare-toggle{display:flex;justify-content:center;gap:0;margin-bottom:40px;border:1px solid rgba(255,255,255,0.15);border-radius:30px;overflow:hidden;max-width:320px;margin-left:auto;margin-right:auto}
+.toggle-btn{flex:1;padding:10px 24px;background:transparent;border:none;color:#9ca3af;cursor:pointer;font-size:0.9rem;transition:all 0.3s}
+.toggle-btn.active{background:#34A853;color:#fff;font-weight:600}
+.gmb-card{background:#1a1a1a;border-radius:16px;padding:24px;max-width:520px;margin:0 auto;border:1px solid rgba(255,255,255,0.1)}
+.gmb-biz-name{font-size:1.3rem;font-weight:700;margin-bottom:6px}
+.gmb-category{font-size:0.85rem;color:#9ca3af;margin-bottom:14px}
+.gmb-rating-row{display:flex;align-items:center;gap:10px;margin-bottom:16px}
+.gmb-stars{color:#FBBC04;font-size:1.1rem;letter-spacing:2px}
+.gmb-rating-num{font-size:1.1rem;font-weight:700}
+.gmb-review-count{font-size:0.85rem;color:#9ca3af}
+.gmb-actions{display:flex;gap:10px;margin-bottom:20px;flex-wrap:wrap}
+.gmb-action{padding:8px 16px;border-radius:20px;font-size:0.8rem;font-weight:600;cursor:default}
+.gmb-action.blue{background:rgba(66,133,244,0.15);color:#4285F4;border:1px solid rgba(66,133,244,0.3)}
+.gmb-action.gray{background:rgba(255,255,255,0.05);color:#9ca3af;border:1px solid rgba(255,255,255,0.1)}
+.gmb-posts{border-top:1px solid rgba(255,255,255,0.07);padding-top:16px}
+.gmb-post{margin-bottom:12px;padding:12px;background:rgba(255,255,255,0.03);border-radius:10px;font-size:0.82rem;color:#9ca3af;line-height:1.5}
+.gmb-post-date{font-size:0.75rem;color:rgba(255,255,255,0.25);margin-top:6px}
+.gmb-badge{display:inline-block;padding:3px 10px;border-radius:10px;font-size:0.72rem;font-weight:600;margin-left:8px}
+.badge-green{background:rgba(52,168,83,0.2);color:#34A853}
+.badge-red{background:rgba(234,67,53,0.2);color:#EA4335}
+
+/* Deliverables */
+.deliverables-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:24px;margin-top:40px}
+.del-card{padding:24px;background:rgba(255,255,255,0.02);border:1px solid rgba(52,168,83,0.2);border-radius:14px}
+.del-card .icon{font-size:1.8rem;margin-bottom:12px}
+.del-card h3{font-size:0.95rem;margin-bottom:8px}
+.del-card p{font-size:0.82rem;color:#9ca3af;line-height:1.6}
+
+/* Stats */
+.stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:30px;margin-top:40px}
+.stat-card{text-align:center;padding:36px 24px;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.08);border-radius:16px}
+.stat-number{font-family:'Space Grotesk',sans-serif;font-size:3rem;font-weight:700;color:#34A853;line-height:1}
+.stat-label{font-size:0.85rem;color:#9ca3af;margin-top:10px}
+
+/* Bundle */
+.bundle-section{background:rgba(52,168,83,0.03);border-top:1px solid rgba(52,168,83,0.1)}
+.bundle-card{max-width:580px;margin:0 auto;padding:36px;background:rgba(255,255,255,0.02);border:1px solid rgba(52,168,83,0.3);border-radius:20px;text-align:center}
+.bundle-items{display:flex;flex-direction:column;gap:12px;margin:24px 0;text-align:left}
+.bundle-item{display:flex;justify-content:space-between;align-items:center;padding:12px 16px;background:rgba(255,255,255,0.03);border-radius:10px;font-size:0.875rem}
+.bundle-item .price{color:#34A853;font-weight:600}
+.bundle-total{font-size:1.3rem;font-weight:700;margin-top:16px;color:#34A853}
+
+.cta-section{text-align:center;background:radial-gradient(ellipse 60% 60% at 50% 50%,rgba(52,168,83,0.07) 0%,transparent 70%)}
+.cta-title{font-family:'Space Grotesk',sans-serif;font-size:clamp(1.8rem,4vw,2.8rem);font-weight:700;margin-bottom:20px}
+.cta-sub{color:#9ca3af;font-size:1rem;margin-bottom:40px;max-width:480px;margin-left:auto;margin-right:auto}
+.cta-btns{display:flex;gap:16px;justify-content:center;flex-wrap:wrap}
+
+@media(max-width:600px){.hero-title{font-size:2.4rem}}
+</style>
+</head>
+<body>
+
+<header>
+  <a href="index.html" class="back-btn">← Back to ANTHRŌPOS</a>
+  <a href="index.html" class="logo">ANTHRŌPOS</a>
+  <a href="index.html#contact" class="btn-primary" style="padding:8px 20px;font-size:0.85rem;border-radius:20px">Book Free Audit</a>
+</header>
+
+<section class="hero">
+  <p class="hero-label">Google Optimization</p>
+  <h1 class="hero-title">Google rewards<br>active businesses.<br><span>Be one.</span></h1>
+  <p class="hero-sub">Your Google Business Profile is the first thing a potential customer sees. If it's stale, incomplete, or has fewer reviews than your competitor — you've already lost. We fix that.</p>
+  <p class="hero-price">Starting at $299/mo · Setup in 48 hours · Managed every week</p>
+  <a href="#compare" class="btn-primary">See the Difference ↓</a>
+</section>
+
+<section class="profile-section" id="compare">
+  <div class="container">
+    <p class="section-label">Before &amp; After</p>
+    <h2 class="section-title">This is what Google sees.</h2>
+    <div class="compare-toggle">
+      <button class="toggle-btn active" onclick="showProfile('before', this)">Before</button>
+      <button class="toggle-btn" onclick="showProfile('after', this)">After 90 Days</button>
+    </div>
+
+    <div id="profile-before" class="gmb-card">
+      <div class="gmb-biz-name">Austin Dental <span class="gmb-badge badge-red">Inactive</span></div>
+      <div class="gmb-category">Dentist · Austin, TX</div>
+      <div class="gmb-rating-row">
+        <span class="gmb-stars">★★★☆☆</span>
+        <span class="gmb-rating-num">3.1</span>
+        <span class="gmb-review-count">(12 reviews)</span>
+      </div>
+      <div class="gmb-actions">
+        <div class="gmb-action gray">Website not verified</div>
+        <div class="gmb-action gray">Hours unconfirmed</div>
+      </div>
+      <div class="gmb-posts">
+        <p style="font-size:0.8rem;color:rgba(255,255,255,0.25);margin-bottom:10px">Last update: 8 months ago</p>
+        <div class="gmb-post">No recent posts. Business may have closed or reduced hours.</div>
+      </div>
+    </div>
+
+    <div id="profile-after" class="gmb-card" style="display:none">
+      <div class="gmb-biz-name">Austin Dental <span class="gmb-badge badge-green">Active</span></div>
+      <div class="gmb-category">Dentist · Austin, TX · Verified ✓</div>
+      <div class="gmb-rating-row">
+        <span class="gmb-stars">★★★★★</span>
+        <span class="gmb-rating-num">4.8</span>
+        <span class="gmb-review-count">(89 reviews)</span>
+      </div>
+      <div class="gmb-actions">
+        <div class="gmb-action blue">Book Appointment</div>
+        <div class="gmb-action blue">Call Now</div>
+        <div class="gmb-action blue">Get Directions</div>
+      </div>
+      <div class="gmb-posts">
+        <p style="font-size:0.8rem;color:#34A853;margin-bottom:10px">Updated this week</p>
+        <div class="gmb-post">🦷 New patients welcome this month! Dr. Martinez is now accepting new patients — same-week appointments available. Call or book online.
+          <div class="gmb-post-date">Posted 2 days ago</div>
+        </div>
+        <div class="gmb-post">⭐ Thank you for 80+ Google reviews! We read every single one and our team is grateful for your trust.
+          <div class="gmb-post-date">Posted 1 week ago</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="container">
+    <p class="section-label">What We Deliver</p>
+    <h2 class="section-title">Every week. Every month. On autopilot.</h2>
+    <div class="deliverables-grid">
+      <div class="del-card"><div class="icon">📝</div><h3>Weekly Google Posts</h3><p>Fresh content every week — promotions, updates, educational posts. Google rewards active profiles with higher local rankings.</p></div>
+      <div class="del-card"><div class="icon">💬</div><h3>Review Responses</h3><p>Every review gets a professional response within 48 hours. Google rewards engagement. Customers respect businesses that respond.</p></div>
+      <div class="del-card"><div class="icon">📋</div><h3>Profile Accuracy Audit</h3><p>Hours, services, photos, categories — all verified and updated. One wrong hour can cost you a customer who showed up when you were closed.</p></div>
+      <div class="del-card"><div class="icon">📊</div><h3>Monthly Performance Report</h3><p>Clicks, calls, directions requests, profile views — you see exactly what's changing every single month.</p></div>
+      <div class="del-card"><div class="icon">🖼️</div><h3>Photo Management</h3><p>Fresh photos added monthly. Profiles with photos get 42% more requests for directions and 35% more website clicks.</p></div>
+      <div class="del-card"><div class="icon">🔍</div><h3>Q&amp;A Optimization</h3><p>Common questions answered proactively on your profile so Google shows your business for the right search terms.</p></div>
+    </div>
+  </div>
+</section>
+
+<section style="padding:80px 20px;background:rgba(255,255,255,0.01);border-top:1px solid rgba(255,255,255,0.05)">
+  <div class="container">
+    <p class="section-label">The Numbers</p>
+    <h2 class="section-title">Google is your most valuable real estate.</h2>
+    <div class="stats-grid">
+      <div class="stat-card"><div class="stat-number">7x</div><p class="stat-label">more website clicks for businesses that post weekly vs. inactive profiles</p></div>
+      <div class="stat-card"><div class="stat-number">46%</div><p class="stat-label">of all Google searches have local intent — these people want to buy now</p></div>
+      <div class="stat-card"><div class="stat-number">42%</div><p class="stat-label">more direction requests for profiles with current photos vs. none</p></div>
+      <div class="stat-card"><div class="stat-number">90%</div><p class="stat-label">of customers read Google reviews before choosing a local business</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="bundle-section">
+  <div class="container">
+    <p class="section-label">Power Bundle</p>
+    <h2 class="section-title">Stack it with GUARDIAN.</h2>
+    <div class="bundle-card">
+      <p style="color:#9ca3af;margin-bottom:24px">Google Optimization brings them to your profile. GUARDIAN makes sure what they see builds your reputation. Together, they compound.</p>
+      <div class="bundle-items">
+        <div class="bundle-item"><span>🛡️ GUARDIAN — Reputation Management</span><span class="price">$297/mo</span></div>
+        <div class="bundle-item"><span>📍 Google Optimization</span><span class="price">$299/mo</span></div>
+      </div>
+      <div class="bundle-total">$596/mo · Both services. One team. One goal.</div>
+      <a href="index.html#contact" class="btn-primary" style="margin-top:24px;width:100%;display:block;text-align:center">Ask About the Bundle →</a>
+    </div>
+  </div>
+</section>
+
+<section class="cta-section">
+  <div class="container">
+    <h2 class="cta-title">Your Google profile is working<br>right now — for or against you.</h2>
+    <p class="cta-sub">Book a free AI audit and we'll pull your current Google profile stats live in the meeting. You'll see exactly where you stand and what 90 days of optimization can do.</p>
+    <div class="cta-btns">
+      <a href="index.html#contact" class="btn-primary">Book Free AI Audit</a>
+      <a href="index.html#services" class="btn-secondary">See All Services</a>
+    </div>
+  </div>
+</section>
+
+<script>
+function showProfile(state, btn) {
+  document.querySelectorAll('.toggle-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('profile-before').style.display = state === 'before' ? 'block' : 'none';
+  document.getElementById('profile-after').style.display = state === 'after' ? 'block' : 'none';
+}
+</script>
+</body>
+</html>

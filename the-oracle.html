@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>The Oracle — AI-Powered Website | ANTHRŌPOS Alpha Intelligence</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#000;color:#fff;overflow-x:hidden}
+header{position:fixed;top:0;width:100%;background:rgba(0,0,0,0.92);backdrop-filter:blur(10px);padding:14px 24px;z-index:100;border-bottom:1px solid rgba(255,255,255,0.08);display:flex;align-items:center;justify-content:space-between}
+.logo{font-family:'Space Grotesk',sans-serif;font-size:1.1rem;font-weight:700;letter-spacing:2px;color:#4285F4;text-decoration:none}
+.back-btn{color:#9ca3af;text-decoration:none;font-size:0.85rem;transition:color 0.3s}
+.back-btn:hover{color:#fff}
+.container{max-width:960px;margin:0 auto}
+section{padding:80px 20px}
+.hero{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:100px 20px 60px;background:radial-gradient(ellipse 60% 60% at 50% 40%,rgba(66,133,244,0.07) 0%,transparent 70%)}
+.hero-label{font-size:0.75rem;letter-spacing:4px;color:#4285F4;text-transform:uppercase;margin-bottom:16px}
+.hero-title{font-family:'Space Grotesk',sans-serif;font-size:clamp(2.8rem,7vw,5rem);font-weight:700;line-height:1.05;margin-bottom:20px}
+.hero-title span{color:#4285F4}
+.hero-sub{font-size:1.1rem;color:#9ca3af;max-width:560px;line-height:1.7;margin-bottom:30px}
+.hero-price{font-size:1rem;color:#4285F4;font-weight:600;letter-spacing:1px;margin-bottom:40px}
+.btn-primary{padding:15px 36px;background:#4285F4;border:none;border-radius:30px;color:#fff;font-size:1rem;font-weight:600;cursor:pointer;text-decoration:none;transition:all 0.3s;display:inline-block}
+.btn-primary:hover{background:#5a95f5;transform:translateY(-2px);box-shadow:0 10px 30px rgba(66,133,244,0.3)}
+.btn-secondary{padding:15px 36px;background:transparent;border:1px solid rgba(255,255,255,0.25);border-radius:30px;color:#fff;font-size:1rem;font-weight:600;cursor:pointer;text-decoration:none;display:inline-block;transition:all 0.3s}
+.btn-secondary:hover{border-color:#4285F4;color:#4285F4}
+.section-label{text-align:center;font-size:0.75rem;letter-spacing:4px;color:#4285F4;text-transform:uppercase;margin-bottom:12px}
+.section-title{text-align:center;font-size:2rem;font-weight:700;margin-bottom:48px}
+
+/* Live Oracle Demo */
+.oracle-section{background:rgba(66,133,244,0.03);border-top:1px solid rgba(66,133,244,0.1);border-bottom:1px solid rgba(66,133,244,0.1)}
+.oracle-window{max-width:620px;margin:0 auto;background:rgba(0,0,0,0.8);border:1px solid rgba(66,133,244,0.3);border-radius:20px;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,0.6),0 0 40px rgba(66,133,244,0.1)}
+.oracle-header{background:rgba(66,133,244,0.08);padding:18px 24px;border-bottom:1px solid rgba(66,133,244,0.15);display:flex;align-items:center;gap:14px}
+.oracle-avatar{width:42px;height:42px;border-radius:50%;background:rgba(66,133,244,0.2);border:1px solid rgba(66,133,244,0.4);display:flex;align-items:center;justify-content:center;font-size:1.2rem}
+.oracle-info h3{font-size:0.95rem;margin-bottom:2px}
+.oracle-info p{font-size:0.78rem;color:#34A853}
+.oracle-messages{height:340px;overflow-y:auto;padding:20px;display:flex;flex-direction:column;gap:14px}
+.oracle-messages::-webkit-scrollbar{width:4px}
+.oracle-messages::-webkit-scrollbar-track{background:transparent}
+.oracle-messages::-webkit-scrollbar-thumb{background:rgba(66,133,244,0.3);border-radius:2px}
+.oracle-msg{max-width:82%;padding:12px 16px;border-radius:14px;font-size:0.875rem;line-height:1.6}
+.oracle-msg.bot{background:rgba(66,133,244,0.1);border:1px solid rgba(66,133,244,0.2);align-self:flex-start}
+.oracle-msg.user{background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.1);align-self:flex-end}
+.oracle-suggestions{padding:12px 20px;display:flex;gap:8px;flex-wrap:wrap;border-top:1px solid rgba(255,255,255,0.05)}
+.suggest-btn{padding:7px 14px;background:rgba(66,133,244,0.08);border:1px solid rgba(66,133,244,0.2);border-radius:16px;color:#9ca3af;font-size:0.78rem;cursor:pointer;transition:all 0.2s;white-space:nowrap}
+.suggest-btn:hover{background:rgba(66,133,244,0.18);color:#fff;border-color:#4285F4}
+.oracle-input-area{display:flex;gap:10px;padding:16px 20px;border-top:1px solid rgba(255,255,255,0.07)}
+.oracle-input{flex:1;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.15);border-radius:20px;padding:12px 18px;color:#fff;font-size:0.875rem;outline:none;transition:all 0.3s}
+.oracle-input:focus{border-color:#4285F4;background:rgba(255,255,255,0.09)}
+.oracle-send{width:40px;height:40px;border-radius:50%;background:#4285F4;border:none;color:#fff;cursor:pointer;font-size:1rem;transition:all 0.3s;flex-shrink:0}
+.oracle-send:hover{background:#5a95f5}
+.typing-dots{display:flex;gap:4px;align-items:center;padding:4px 0}
+.typing-dots span{width:5px;height:5px;border-radius:50%;background:#4285F4;animation:dot 1.2s infinite}
+.typing-dots span:nth-child(2){animation-delay:0.2s}
+.typing-dots span:nth-child(3){animation-delay:0.4s}
+@keyframes dot{0%,60%,100%{opacity:0.3;transform:translateY(0)}30%{opacity:1;transform:translateY(-4px)}}
+
+/* Features */
+.features-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:24px;margin-top:40px}
+.feat-card{padding:28px;background:rgba(255,255,255,0.02);border:1px solid rgba(66,133,244,0.15);border-radius:14px}
+.feat-card .icon{font-size:1.8rem;margin-bottom:12px}
+.feat-card h3{font-size:0.95rem;margin-bottom:8px}
+.feat-card p{font-size:0.82rem;color:#9ca3af;line-height:1.6}
+
+/* What's included */
+.includes-section{background:rgba(255,255,255,0.01);border-top:1px solid rgba(255,255,255,0.05)}
+.includes-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:16px;margin-top:40px}
+.include-item{display:flex;align-items:flex-start;gap:10px;padding:16px;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.07);border-radius:12px}
+.include-check{color:#34A853;font-size:1rem;flex-shrink:0;margin-top:1px}
+.include-text{font-size:0.85rem;color:#9ca3af;line-height:1.4}
+
+.cta-section{text-align:center;background:radial-gradient(ellipse 60% 60% at 50% 50%,rgba(66,133,244,0.07) 0%,transparent 70%)}
+.cta-title{font-family:'Space Grotesk',sans-serif;font-size:clamp(1.8rem,4vw,2.8rem);font-weight:700;margin-bottom:20px}
+.cta-sub{color:#9ca3af;font-size:1rem;margin-bottom:40px;max-width:480px;margin-left:auto;margin-right:auto}
+.cta-btns{display:flex;gap:16px;justify-content:center;flex-wrap:wrap}
+
+@media(max-width:600px){.hero-title{font-size:2.4rem}.oracle-messages{height:260px}}
+</style>
+</head>
+<body>
+
+<header>
+  <a href="index.html" class="back-btn">← Back to ANTHRŌPOS</a>
+  <a href="index.html" class="logo">ANTHRŌPOS</a>
+  <a href="index.html#contact" class="btn-primary" style="padding:8px 20px;font-size:0.85rem;border-radius:20px">Book Free Audit</a>
+</header>
+
+<section class="hero">
+  <p class="hero-label">AI-Powered Website</p>
+  <h1 class="hero-title">Your website.<br>Now with <span>The Oracle</span><br>inside it.</h1>
+  <p class="hero-sub">A professional website with an AI chatbot that answers every question, captures every lead, and books appointments around the clock. Not just a pretty page — a 24/7 sales machine.</p>
+  <p class="hero-price">Starting at $799 setup · Professional design · AI-trained on your business</p>
+  <a href="#demo" class="btn-primary">Talk to The Oracle ↓</a>
+</section>
+
+<section class="oracle-section" id="demo">
+  <div class="container">
+    <p class="section-label">Live Demo</p>
+    <h2 class="section-title">This is what sits on your website.</h2>
+    <div class="oracle-window">
+      <div class="oracle-header">
+        <div class="oracle-avatar">🔮</div>
+        <div class="oracle-info">
+          <h3>The Oracle</h3>
+          <p>● Online — Ready to help</p>
+        </div>
+      </div>
+      <div class="oracle-messages" id="oracleMessages">
+        <div class="oracle-msg bot">Welcome. I am The Oracle — built specifically for this business. Ask me anything about our services, or tell me what you need and I'll make sure the right person reaches out to you.</div>
+      </div>
+      <div class="oracle-suggestions" id="suggestions">
+        <button class="suggest-btn" onclick="askOracle('What services do you offer?')">What services do you offer?</button>
+        <button class="suggest-btn" onclick="askOracle('How much does it cost?')">How much does it cost?</button>
+        <button class="suggest-btn" onclick="askOracle('How fast can you set this up?')">How fast can you set this up?</button>
+        <button class="suggest-btn" onclick="askOracle('Book a free consultation')">Book a consultation</button>
+      </div>
+      <div class="oracle-input-area">
+        <input type="text" id="oracleInput" class="oracle-input" placeholder="Ask The Oracle..." onkeypress="if(event.key==='Enter')sendOracle()">
+        <button class="oracle-send" onclick="sendOracle()">↑</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="container">
+    <p class="section-label">What You Get</p>
+    <h2 class="section-title">Everything a modern business needs.</h2>
+    <div class="features-grid">
+      <div class="feat-card"><div class="icon">🎨</div><h3>Custom Professional Design</h3><p>Dark, modern, premium. Built to match your brand. Not a template — a presence that commands attention and builds trust.</p></div>
+      <div class="feat-card"><div class="icon">🔮</div><h3>The Oracle AI Chatbot</h3><p>Trained on your specific services, FAQs, pricing, and business. Answers questions, captures leads, and books appointments 24/7.</p></div>
+      <div class="feat-card"><div class="icon">📅</div><h3>Appointment Booking</h3><p>Integrated calendar booking so prospects can schedule directly from your website — no phone tag, no friction, no lost leads.</p></div>
+      <div class="feat-card"><div class="icon">📱</div><h3>Mobile First</h3><p>60%+ of your traffic is mobile. Your site loads fast, looks perfect, and converts on every device.</p></div>
+      <div class="feat-card"><div class="icon">🔍</div><h3>SEO Optimized</h3><p>Built with search in mind — structured data, meta tags, page speed, and local SEO foundations baked in from day one.</p></div>
+      <div class="feat-card"><div class="icon">⚡</div><h3>Lead Capture + Alerts</h3><p>Every form submission, every chatbot inquiry — you get notified instantly. Hot leads never go cold because you didn't see them.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="includes-section">
+  <div class="container">
+    <p class="section-label">Included in Every Build</p>
+    <h2 class="section-title">No surprises. No hidden add-ons.</h2>
+    <div class="includes-grid">
+      <div class="include-item"><span class="include-check">✓</span><span class="include-text">Custom domain setup</span></div>
+      <div class="include-item"><span class="include-check">✓</span><span class="include-text">SSL security certificate</span></div>
+      <div class="include-item"><span class="include-check">✓</span><span class="include-text">AI chatbot trained on your business</span></div>
+      <div class="include-item"><span class="include-check">✓</span><span class="include-text">Contact &amp; lead capture forms</span></div>
+      <div class="include-item"><span class="include-check">✓</span><span class="include-text">Appointment booking integration</span></div>
+      <div class="include-item"><span class="include-check">✓</span><span class="include-text">Google Business Profile link</span></div>
+      <div class="include-item"><span class="include-check">✓</span><span class="include-text">Mobile responsive design</span></div>
+      <div class="include-item"><span class="include-check">✓</span><span class="include-text">Page speed optimization</span></div>
+      <div class="include-item"><span class="include-check">✓</span><span class="include-text">Social media links + icons</span></div>
+      <div class="include-item"><span class="include-check">✓</span><span class="include-text">2 revision rounds</span></div>
+      <div class="include-item"><span class="include-check">✓</span><span class="include-text">7-day turnaround</span></div>
+      <div class="include-item"><span class="include-check">✓</span><span class="include-text">Lifetime ownership — it's yours</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="cta-section">
+  <div class="container">
+    <h2 class="cta-title">Your website should be<br>working while you sleep.</h2>
+    <p class="cta-sub">Book a free AI audit and we'll show you a live demo of The Oracle on a business like yours — and what a new site could look like.</p>
+    <div class="cta-btns">
+      <a href="index.html#contact" class="btn-primary">Book Free AI Audit</a>
+      <a href="index.html#services" class="btn-secondary">See All Services</a>
+    </div>
+  </div>
+</section>
+
+<script>
+const ORACLE_RESPONSES = {
+  "what services do you offer": "We offer four core services: **ARIA** (24/7 AI receptionist that answers your calls), **GUARDIAN** (reputation management that filters reviews before they hit Google), **Google Optimization** (we keep your Google profile active and growing), and **AI-Powered Websites** with The Oracle built in. Plus full business automation. Want details on any of these?",
+  "how much does it cost": "Our services start at accessible price points — the AI receptionist starts at $399/mo, GUARDIAN is $297/mo, Google Optimization is $299/mo. Every engagement starts with a free 30-minute AI audit so we can scope the right solution for your specific business. Want to book that?",
+  "how fast can you set this up": "ARIA can be live in 48 hours. Websites typically take 5–7 business days. GUARDIAN is usually live within 24 hours of onboarding. We move fast because every day you're not set up is revenue you're leaving on the table.",
+  "book a free consultation": "Let's do it. You can reach us directly at **b@anthroposalphaintelligence.com** or scroll down to the contact section on the main page. I'll also flag your interest right now so our team knows to expect you. What's the best number to reach you?",
+  "default": "That's a great question. Our team would be able to give you a much more specific answer for your business during a free AI audit — no cost, no pressure, just clarity. Want me to connect you? It only takes 30 minutes."
+};
+
+function getOracleResponse(msg) {
+  const m = msg.toLowerCase();
+  for (const [key, response] of Object.entries(ORACLE_RESPONSES)) {
+    if (key !== 'default' && m.includes(key.split(' ')[0]) && m.includes(key.split(' ')[key.split(' ').length-1])) {
+      return response;
+    }
+  }
+  if (m.includes('price') || m.includes('cost') || m.includes('how much')) return ORACLE_RESPONSES['how much does it cost'];
+  if (m.includes('fast') || m.includes('quick') || m.includes('how long') || m.includes('timeline')) return ORACLE_RESPONSES['how fast can you set this up'];
+  if (m.includes('service') || m.includes('offer') || m.includes('do you do')) return ORACLE_RESPONSES['what services do you offer'];
+  if (m.includes('book') || m.includes('consult') || m.includes('audit') || m.includes('talk') || m.includes('meet')) return ORACLE_RESPONSES['book a free consultation'];
+  if (m.includes('aria') || m.includes('receptionist') || m.includes('call')) return "ARIA is our 24/7 AI voice receptionist. She answers every call, books appointments, and qualifies leads — in your business's voice, with your name. Customers think they're talking to your team. Starting at $399/mo.";
+  if (m.includes('guardian') || m.includes('review') || m.includes('reputation')) return "GUARDIAN intercepts every customer review before it hits Google. Happy customers (4–5 stars) get guided to post publicly. Unhappy customers (1–3 stars) get routed to a private form so you can fix it first. $297/mo.";
+  if (m.includes('google') || m.includes('seo') || m.includes('ranking') || m.includes('search')) return "Our Google Optimization service keeps your Google Business Profile active with weekly posts, review responses, photo updates, and monthly performance reporting. Google rewards active businesses. $299/mo.";
+  return ORACLE_RESPONSES['default'];
+}
+
+function addMessage(text, role) {
+  const msgs = document.getElementById('oracleMessages');
+  const el = document.createElement('div');
+  el.className = `oracle-msg ${role}`;
+  el.innerHTML = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+  msgs.appendChild(el);
+  msgs.scrollTop = msgs.scrollHeight;
+}
+
+function showTyping() {
+  const msgs = document.getElementById('oracleMessages');
+  const el = document.createElement('div');
+  el.className = 'oracle-msg bot';
+  el.id = 'typing';
+  el.innerHTML = '<div class="typing-dots"><span></span><span></span><span></span></div>';
+  msgs.appendChild(el);
+  msgs.scrollTop = msgs.scrollHeight;
+}
+
+function askOracle(text) {
+  addMessage(text, 'user');
+  document.getElementById('suggestions').style.display = 'none';
+  showTyping();
+  setTimeout(() => {
+    const t = document.getElementById('typing');
+    if (t) t.remove();
+    addMessage(getOracleResponse(text), 'bot');
+  }, 1200);
+}
+
+function sendOracle() {
+  const input = document.getElementById('oracleInput');
+  const text = input.value.trim();
+  if (!text) return;
+  input.value = '';
+  askOracle(text);
+}
+</script>
+</body>
+</html>

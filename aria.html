@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>ARIA — AI Voice Receptionist | ANTHRŌPOS Alpha Intelligence</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#000;color:#fff;overflow-x:hidden}
+header{position:fixed;top:0;width:100%;background:rgba(0,0,0,0.92);backdrop-filter:blur(10px);padding:14px 24px;z-index:100;border-bottom:1px solid rgba(255,255,255,0.08);display:flex;align-items:center;justify-content:space-between}
+.logo{font-family:'Space Grotesk',sans-serif;font-size:1.1rem;font-weight:700;letter-spacing:2px;color:#4285F4;text-decoration:none}
+.back-btn{color:#9ca3af;text-decoration:none;font-size:0.85rem;transition:color 0.3s}
+.back-btn:hover{color:#fff}
+.hero{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:100px 20px 60px;background:radial-gradient(ellipse 60% 60% at 50% 40%,rgba(66,133,244,0.08) 0%,transparent 70%)}
+.hero-label{font-size:0.75rem;letter-spacing:4px;color:#4285F4;text-transform:uppercase;margin-bottom:16px;opacity:0.8}
+.hero-title{font-family:'Space Grotesk',sans-serif;font-size:clamp(2.8rem,7vw,5rem);font-weight:700;line-height:1.05;margin-bottom:20px}
+.hero-title span{color:#4285F4}
+.hero-sub{font-size:1.1rem;color:#9ca3af;max-width:560px;line-height:1.7;margin-bottom:40px}
+.hero-price{font-size:1rem;color:#4285F4;font-weight:600;letter-spacing:1px;margin-bottom:40px}
+
+/* Demo Player */
+.demo-section{padding:80px 20px;background:rgba(66,133,244,0.03);border-top:1px solid rgba(66,133,244,0.1);border-bottom:1px solid rgba(66,133,244,0.1)}
+.container{max-width:960px;margin:0 auto}
+.section-label{text-align:center;font-size:0.75rem;letter-spacing:4px;color:#4285F4;text-transform:uppercase;margin-bottom:12px}
+.section-title{text-align:center;font-size:2rem;font-weight:700;margin-bottom:48px}
+.industry-tabs{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-bottom:40px}
+.tab{padding:8px 20px;border:1px solid rgba(255,255,255,0.2);border-radius:20px;cursor:pointer;font-size:0.85rem;color:#9ca3af;transition:all 0.3s;background:transparent}
+.tab.active,.tab:hover{border-color:#4285F4;color:#fff;background:rgba(66,133,244,0.12)}
+.demo-player{background:rgba(255,255,255,0.03);border:1px solid rgba(66,133,244,0.25);border-radius:20px;padding:36px;max-width:680px;margin:0 auto}
+.call-header{display:flex;align-items:center;gap:16px;margin-bottom:28px;padding-bottom:20px;border-bottom:1px solid rgba(255,255,255,0.07)}
+.call-icon{width:52px;height:52px;border-radius:50%;background:rgba(66,133,244,0.15);border:1px solid rgba(66,133,244,0.3);display:flex;align-items:center;justify-content:center;font-size:1.4rem;flex-shrink:0}
+.call-info h3{font-size:1rem;margin-bottom:4px}
+.call-info p{font-size:0.8rem;color:#9ca3af}
+.call-status{margin-left:auto;display:flex;align-items:center;gap:8px;font-size:0.8rem;color:#34A853}
+.status-dot{width:8px;height:8px;border-radius:50%;background:#34A853;animation:pulse 1.5s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}
+.transcript{min-height:200px;margin-bottom:24px}
+.msg{margin-bottom:18px;display:flex;gap:12px;align-items:flex-start;opacity:0;transform:translateY(10px);transition:all 0.4s}
+.msg.visible{opacity:1;transform:translateY(0)}
+.msg.caller{flex-direction:row-reverse}
+.msg-avatar{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.9rem;flex-shrink:0}
+.msg-aria .msg-avatar{background:rgba(66,133,244,0.2);border:1px solid rgba(66,133,244,0.4)}
+.msg-caller .msg-avatar{background:rgba(255,255,255,0.08)}
+.msg-bubble{max-width:78%;padding:12px 16px;border-radius:14px;font-size:0.9rem;line-height:1.6}
+.msg-aria .msg-bubble{background:rgba(66,133,244,0.12);border:1px solid rgba(66,133,244,0.2)}
+.msg-caller .msg-bubble{background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.1)}
+.play-btn{width:100%;padding:14px;background:#4285F4;border:none;border-radius:12px;color:#fff;font-size:0.95rem;font-weight:600;cursor:pointer;transition:all 0.3s;display:flex;align-items:center;justify-content:center;gap:10px}
+.play-btn:hover{background:#5a95f5;transform:translateY(-1px)}
+.play-btn.playing{background:rgba(66,133,244,0.2);border:1px solid #4285F4;color:#4285F4}
+
+/* Stats */
+.stats-section{padding:80px 20px}
+.stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:30px;margin-top:40px}
+.stat-card{text-align:center;padding:36px 24px;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.08);border-radius:16px}
+.stat-number{font-family:'Space Grotesk',sans-serif;font-size:3rem;font-weight:700;color:#4285F4;line-height:1}
+.stat-label{font-size:0.85rem;color:#9ca3af;margin-top:10px}
+
+/* How it works */
+.how-section{padding:80px 20px;background:rgba(255,255,255,0.01);border-top:1px solid rgba(255,255,255,0.05)}
+.steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:30px;margin-top:48px}
+.step{position:relative;padding:28px}
+.step-num{font-family:'Space Grotesk',sans-serif;font-size:3rem;font-weight:700;color:rgba(66,133,244,0.15);line-height:1;margin-bottom:12px}
+.step h3{font-size:1.05rem;margin-bottom:10px}
+.step p{font-size:0.875rem;color:#9ca3af;line-height:1.6}
+
+/* Industries */
+.industries-section{padding:80px 20px}
+.industry-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:16px;margin-top:40px}
+.industry-card{padding:20px;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.08);border-radius:12px;text-align:center;transition:all 0.3s;cursor:default}
+.industry-card:hover{border-color:rgba(66,133,244,0.4);background:rgba(66,133,244,0.05)}
+.industry-card .icon{font-size:1.8rem;margin-bottom:10px}
+.industry-card p{font-size:0.8rem;color:#9ca3af}
+
+/* CTA */
+.cta-section{padding:100px 20px;text-align:center;background:radial-gradient(ellipse 60% 60% at 50% 50%,rgba(66,133,244,0.07) 0%,transparent 70%)}
+.cta-title{font-family:'Space Grotesk',sans-serif;font-size:clamp(1.8rem,4vw,2.8rem);font-weight:700;margin-bottom:20px}
+.cta-sub{color:#9ca3af;font-size:1rem;margin-bottom:40px;max-width:480px;margin-left:auto;margin-right:auto}
+.cta-btns{display:flex;gap:16px;justify-content:center;flex-wrap:wrap}
+.btn-primary{padding:15px 36px;background:#4285F4;border:none;border-radius:30px;color:#fff;font-size:1rem;font-weight:600;cursor:pointer;text-decoration:none;transition:all 0.3s}
+.btn-primary:hover{background:#5a95f5;transform:translateY(-2px);box-shadow:0 10px 30px rgba(66,133,244,0.3)}
+.btn-secondary{padding:15px 36px;background:transparent;border:1px solid rgba(255,255,255,0.25);border-radius:30px;color:#fff;font-size:1rem;font-weight:600;cursor:pointer;text-decoration:none;transition:all 0.3s}
+.btn-secondary:hover{border-color:#4285F4;color:#4285F4}
+
+/* Typing indicator */
+.typing{display:flex;align-items:center;gap:6px;padding:12px 16px;background:rgba(66,133,244,0.08);border:1px solid rgba(66,133,244,0.15);border-radius:14px;width:fit-content}
+.typing span{width:6px;height:6px;border-radius:50%;background:#4285F4;animation:typing 1.2s infinite}
+.typing span:nth-child(2){animation-delay:0.2s}
+.typing span:nth-child(3){animation-delay:0.4s}
+@keyframes typing{0%,60%,100%{opacity:0.3;transform:translateY(0)}30%{opacity:1;transform:translateY(-4px)}}
+
+@media(max-width:600px){
+  .hero-title{font-size:2.4rem}
+  .demo-player{padding:20px}
+  .stat-number{font-size:2.4rem}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <a href="index.html" class="back-btn">← Back to ANTHRŌPOS</a>
+  <a href="index.html" class="logo">ANTHRŌPOS</a>
+  <a href="index.html#contact" class="btn-primary" style="padding:8px 20px;font-size:0.85rem;border-radius:20px">Book Free Audit</a>
+</header>
+
+<section class="hero">
+  <p class="hero-label">Product Overview</p>
+  <h1 class="hero-title">Meet <span>ARIA</span>.<br>Your business never<br>misses another call.</h1>
+  <p class="hero-sub">An AI receptionist trained specifically for your business. She answers every call, books appointments, qualifies leads, and texts callers back — 24/7, 365. Your customers think they're talking to your team.</p>
+  <p class="hero-price">Starting at $399/mo · No long-term contracts · Setup in 48 hours</p>
+  <a href="#demo" class="btn-primary">Hear a Live Demo ↓</a>
+</section>
+
+<section class="demo-section" id="demo">
+  <div class="container">
+    <p class="section-label">Live Call Simulation</p>
+    <h2 class="section-title">Hear ARIA in action.</h2>
+
+    <div class="industry-tabs">
+      <div class="tab active" onclick="loadDemo('dental')">🦷 Dental</div>
+      <div class="tab" onclick="loadDemo('funeral')">🕊️ Funeral Home</div>
+      <div class="tab" onclick="loadDemo('hvac')">🔧 HVAC</div>
+      <div class="tab" onclick="loadDemo('medspa')">💆 Med Spa</div>
+      <div class="tab" onclick="loadDemo('law')">⚖️ Law Firm</div>
+    </div>
+
+    <div class="demo-player">
+      <div class="call-header">
+        <div class="call-icon">📞</div>
+        <div class="call-info">
+          <h3 id="demo-title">Austin Dental — ARIA (Jasmine)</h3>
+          <p id="demo-subtitle">Inbound call · New patient inquiry</p>
+        </div>
+        <div class="call-status">
+          <div class="status-dot"></div>
+          <span id="call-status-text">Ready</span>
+        </div>
+      </div>
+      <div class="transcript" id="transcript"></div>
+      <button class="play-btn" id="playBtn" onclick="playDemo()">▶ Play Demo Call</button>
+    </div>
+  </div>
+</section>
+
+<section class="stats-section">
+  <div class="container">
+    <p class="section-label">The Business Case</p>
+    <h2 class="section-title">The numbers don't lie.</h2>
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-number">40%</div>
+        <p class="stat-label">of inbound calls go unanswered at the average SMB</p>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number">$2k+</div>
+        <p class="stat-label">average customer lifetime value in service businesses</p>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number">24/7</div>
+        <p class="stat-label">ARIA answers — nights, weekends, holidays, no exceptions</p>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number">48hr</div>
+        <p class="stat-label">typical setup time from signed agreement to live calls</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="how-section">
+  <div class="container">
+    <p class="section-label">How It Works</p>
+    <h2 class="section-title">Simple. Powerful. Yours.</h2>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">01</div>
+        <h3>We build your ARIA</h3>
+        <p>You choose the name, we train her on your services, hours, FAQs, pricing, and booking process. She becomes your business.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">02</div>
+        <h3>Your number forwards to ARIA</h3>
+        <p>During off-hours — or whenever you choose. One simple call forwarding setup. Nothing changes for your callers.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">03</div>
+        <h3>She handles everything</h3>
+        <p>Answers questions, books appointments, qualifies leads, collects information, texts the caller a confirmation. You get a notification.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">04</div>
+        <h3>You review and close</h3>
+        <p>Every conversation is logged. Hot leads are flagged. Your team steps in for the big conversations. ARIA handles the volume.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="industries-section">
+  <div class="container">
+    <p class="section-label">Who It's For</p>
+    <h2 class="section-title">Every industry. One standard.</h2>
+    <div class="industry-grid">
+      <div class="industry-card"><div class="icon">🦷</div><strong>Dental</strong><p>New patient calls, appointment booking, anxiety reassurance</p></div>
+      <div class="industry-card"><div class="icon">⚕️</div><strong>Medical</strong><p>Intake, scheduling, insurance questions, after-hours triage</p></div>
+      <div class="industry-card"><div class="icon">⚖️</div><strong>Law Firms</strong><p>New client intake, consultation booking, confidentiality-first</p></div>
+      <div class="industry-card"><div class="icon">🔧</div><strong>HVAC / Roofing</strong><p>Emergency dispatch, estimate requests, service area confirmation</p></div>
+      <div class="industry-card"><div class="icon">💆</div><strong>Med Spa</strong><p>Treatment inquiries, consultation booking, luxury tone</p></div>
+      <div class="industry-card"><div class="icon">🕊️</div><strong>Funeral Homes</strong><p>Empathy-first protocols, immediate human handoff triggers</p></div>
+      <div class="industry-card"><div class="icon">⛪</div><strong>Churches</strong><p>Visitor welcome, event info, pastoral care routing</p></div>
+      <div class="industry-card"><div class="icon">🏠</div><strong>Real Estate</strong><p>Lead qualification, showing scheduling, market FAQs</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="cta-section">
+  <div class="container">
+    <h2 class="cta-title">Your business is losing money<br>every time it goes to voicemail.</h2>
+    <p class="cta-sub">Let's fix that. Book a free 30-minute AI audit and we'll show you exactly what ARIA can do for your specific business.</p>
+    <div class="cta-btns">
+      <a href="index.html#contact" class="btn-primary">Book Free AI Audit</a>
+      <a href="index.html#services" class="btn-secondary">See All Services</a>
+    </div>
+  </div>
+</section>
+
+<script>
+const DEMOS = {
+  dental: {
+    title: "Austin Dental — ARIA (Jasmine)",
+    subtitle: "Inbound call · New patient inquiry",
+    icon: "🦷",
+    messages: [
+      { role: "aria", text: "Thank you for calling Austin Dental! This is Jasmine. How are you doing today?" },
+      { role: "caller", text: "Hi, yeah — I've been having some tooth pain and I need to get in to see someone." },
+      { role: "aria", text: "Oh I'm sorry to hear that — tooth pain is no fun. You called the right place. Dr. Martinez is wonderful with patients who are nervous about dental work, and we'll take great care of you. Are you a new patient with us?" },
+      { role: "caller", text: "Yeah, first time. I'm honestly a little anxious about it." },
+      { role: "aria", text: "We hear that a lot — and I completely understand. We promise to take great care of you. Dr. Martinez has been doing this for 18 years and is incredibly gentle. Can I get your name and a couple time slots that work for you? We have some openings as early as tomorrow." },
+      { role: "caller", text: "Oh wow, tomorrow works. I'm Marcus." },
+      { role: "aria", text: "Perfect, Marcus! We have 10am or 2:30pm tomorrow. Which works better? And I'll text you a confirmation with the address and what to bring." }
+    ]
+  },
+  funeral: {
+    title: "Riverside Memorial — ARIA (Grace)",
+    subtitle: "Inbound call · Immediate arrangement needed",
+    icon: "🕊️",
+    messages: [
+      { role: "aria", text: "Thank you for reaching out to Riverside Memorial. This is Grace. I'm here to help — please take your time." },
+      { role: "caller", text: "Hi... my father passed away this morning. I don't really know what to do." },
+      { role: "aria", text: "I'm so deeply sorry for your loss. [Pause.] I'm here. Please take all the time you need. You don't have to figure this out alone — we're going to guide you through every step." },
+      { role: "caller", text: "Thank you. I just... I don't know where to start." },
+      { role: "aria", text: "That is completely understandable. Can I ask who I have the honor of speaking with today?" },
+      { role: "caller", text: "I'm David. My father's name was Robert." },
+      { role: "aria", text: "David, I want to make sure Robert is cared for with the dignity and respect he deserves. I'm going to connect you directly with one of our directors right now — they'll walk alongside you through everything. Whatever you need, we're here." }
+    ]
+  },
+  hvac: {
+    title: "Lone Star HVAC — ARIA (Riley)",
+    subtitle: "Inbound call · Emergency — AC out",
+    icon: "🔧",
+    messages: [
+      { role: "aria", text: "Lone Star HVAC, this is Riley. What can I help you with?" },
+      { role: "caller", text: "My AC just stopped working. It's 96 degrees outside and I have two kids at home." },
+      { role: "aria", text: "Okay — I'm making this a priority right now. We handle emergency calls all day and we've got a tech in your area. Can you give me your address?" },
+      { role: "caller", text: "6210 Barton Springs Road, Austin." },
+      { role: "aria", text: "Got it. And is it a complete shutdown — no cool air at all — or is it running but not cooling properly?" },
+      { role: "caller", text: "Completely off. Nothing." },
+      { role: "aria", text: "Understood. I'm dispatching now. Someone will be at your door within 90 minutes. You'll get a text when the tech is on his way. In the meantime, keep the blinds closed and get the kids to the coolest room. We're on it." }
+    ]
+  },
+  medspa: {
+    title: "Luminary Med Spa — ARIA (Sophia)",
+    subtitle: "Inbound call · Treatment inquiry",
+    icon: "💆",
+    messages: [
+      { role: "aria", text: "Thank you for calling Luminary Med Spa! This is Sophia. It's wonderful to hear from you — how can I help you today?" },
+      { role: "caller", text: "Hi, I'm interested in Botox. I've never done it before and I'm not sure where to start." },
+      { role: "aria", text: "Oh you're going to love what we can do for you. First-time consultations are my favorite — there's something so exciting about that first visit. Can I ask what your main goal is? Are you looking to soften expression lines, prevent new ones from forming, or something else?" },
+      { role: "caller", text: "Mostly around my eyes and forehead. I've been noticing them more." },
+      { role: "aria", text: "That's one of our most popular areas and the results are beautiful. Our provider will customize everything specifically for you during your consultation — she'll look at your specific anatomy and recommend exactly what you need. Most clients describe it as looking in the mirror and seeing themselves, just refreshed. Can I get you on the calendar?" }
+    ]
+  },
+  law: {
+    title: "Sterling Law Group — ARIA (Victoria)",
+    subtitle: "Inbound call · New client inquiry",
+    icon: "⚖️",
+    messages: [
+      { role: "aria", text: "Thank you for calling Sterling Law Group. This is Victoria. How may I assist you today?" },
+      { role: "caller", text: "Hi, I was just served with divorce papers and I'm honestly not sure what to do." },
+      { role: "aria", text: "I understand — this can feel very overwhelming. You've called the right place. Everything you share with our office is completely confidential." },
+      { role: "caller", text: "I've never dealt with anything like this before." },
+      { role: "aria", text: "Our attorneys handle family law matters regularly, and they're very good at helping clients understand exactly where they stand and what their options are. The most important thing right now is getting you scheduled for a consultation. Can I collect some initial information so our team can prepare before your call?" },
+      { role: "caller", text: "Yes, please." },
+      { role: "aria", text: "Of course. Can I get your name? And do you have a preferred time for your consultation — we have availability this week." }
+    ]
+  }
+};
+
+let currentDemo = 'dental';
+let isPlaying = false;
+let playTimeout = [];
+
+function loadDemo(industry) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  event.target.classList.add('active');
+  currentDemo = industry;
+  stopDemo();
+  const d = DEMOS[industry];
+  document.getElementById('demo-title').textContent = d.title;
+  document.getElementById('demo-subtitle').textContent = d.subtitle;
+  document.querySelector('.call-icon').textContent = d.icon;
+  document.getElementById('transcript').innerHTML = '';
+  document.getElementById('playBtn').textContent = '▶ Play Demo Call';
+  document.getElementById('playBtn').classList.remove('playing');
+  document.getElementById('call-status-text').textContent = 'Ready';
+}
+
+function stopDemo() {
+  playTimeout.forEach(t => clearTimeout(t));
+  playTimeout = [];
+  isPlaying = false;
+}
+
+function playDemo() {
+  if (isPlaying) { stopDemo(); document.getElementById('playBtn').textContent = '▶ Play Demo Call'; document.getElementById('playBtn').classList.remove('playing'); document.getElementById('call-status-text').textContent = 'Ready'; return; }
+  isPlaying = true;
+  document.getElementById('transcript').innerHTML = '';
+  document.getElementById('playBtn').textContent = '⏹ Stop';
+  document.getElementById('playBtn').classList.add('playing');
+  document.getElementById('call-status-text').textContent = 'Live';
+
+  const msgs = DEMOS[currentDemo].messages;
+  let delay = 300;
+
+  msgs.forEach((msg, i) => {
+    const showTyping = playTimeout.length;
+    playTimeout.push(setTimeout(() => {
+      if (!isPlaying) return;
+      const transcript = document.getElementById('transcript');
+
+      // Show typing indicator for ARIA messages
+      if (msg.role === 'aria' && i > 0) {
+        const typing = document.createElement('div');
+        typing.className = 'msg msg-aria visible';
+        typing.id = 'typing-indicator';
+        typing.innerHTML = '<div class="msg-avatar">🤖</div><div class="typing"><span></span><span></span><span></span></div>';
+        transcript.appendChild(typing);
+        transcript.scrollTop = transcript.scrollHeight;
+      }
+
+      playTimeout.push(setTimeout(() => {
+        if (!isPlaying) return;
+        const typingEl = document.getElementById('typing-indicator');
+        if (typingEl) typingEl.remove();
+
+        const el = document.createElement('div');
+        el.className = `msg msg-${msg.role}`;
+        const avatar = msg.role === 'aria' ? '🤖' : '👤';
+        el.innerHTML = `<div class="msg-avatar">${avatar}</div><div class="msg-bubble">${msg.text}</div>`;
+        transcript.appendChild(el);
+        setTimeout(() => el.classList.add('visible'), 50);
+        transcript.scrollTop = transcript.scrollHeight;
+
+        if (i === msgs.length - 1) {
+          setTimeout(() => {
+            isPlaying = false;
+            document.getElementById('playBtn').textContent = '↺ Replay';
+            document.getElementById('playBtn').classList.remove('playing');
+            document.getElementById('call-status-text').textContent = 'Complete';
+          }, 800);
+        }
+      }, msg.role === 'aria' && i > 0 ? 1400 : 0));
+    }, delay));
+
+    delay += msg.text.length * 28 + (msg.role === 'aria' ? 1800 : 800);
+  });
+}
+</script>
+</body>
+</html>

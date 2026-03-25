@@ -503,30 +503,16 @@ async function speakResponse(text){
 async function sendMessage(){
   var inp=document.getElementById("chatInput");
   var status=document.getElementById("chatStatus");
-  var msgs=document.getElementById("chatMessages");
+  var resp=document.getElementById("oracleResponse");
   var msg=inp.value.trim();
   if(!msg)return;
   inp.value="";
-  // Show messages panel
-  msgs.style.display="block";
-  // User line
-  var userLine=document.createElement("div");
-  userLine.style.cssText="color:#f59e0b;margin-bottom:6px";
-  userLine.textContent="> "+msg;
-  msgs.appendChild(userLine);
-  msgs.scrollTop=msgs.scrollHeight;
-  status.textContent="PROCESSING...";
+  if(status)status.textContent="...";
+  if(resp){resp.classList.remove("visible");resp.textContent="";}
   var reply=await sendToGemini(msg);
-  // Oracle response with typewriter effect
-  var replyLine=document.createElement("div");
-  replyLine.style.cssText="color:#d1cfbf;margin-bottom:10px;border-left:2px solid rgba(245,158,11,0.3);padding-left:8px";
-  msgs.appendChild(replyLine);
-  msgs.scrollTop=msgs.scrollHeight;
-  var i=0;
-  var typer=setInterval(function(){
-    if(i<reply.length){replyLine.textContent+=reply[i];i++;msgs.scrollTop=msgs.scrollHeight;}
-    else{clearInterval(typer);status.textContent="QUERY READY";}
-  },18);
+  if(resp){resp.textContent=reply;resp.classList.add("visible");}
+  if(status)status.textContent="";
+  speakResponse(reply);
 }
 
 function toggleMenu(){document.getElementById("mobileMenu").classList.toggle("active")}

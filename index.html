@@ -496,6 +496,17 @@ async function sendMessage(){
   var msg=inp.value.trim();
   if(!msg)return;
   inp.value="";
+  // Unlock audio on iOS/mobile — must happen synchronously inside user gesture
+  if(!window._audioUnlocked){
+    try{
+      var ctx=new(window.AudioContext||window.webkitAudioContext)();
+      ctx.resume();
+      var buf=ctx.createBuffer(1,1,22050);
+      var src=ctx.createBufferSource();
+      src.buffer=buf;src.connect(ctx.destination);src.start(0);
+      window._audioUnlocked=true;
+    }catch(e){}
+  }
   if(status)status.textContent="...";
   if(resp){resp.classList.remove("visible");resp.textContent="";}
   var reply=await sendToGemini(msg);

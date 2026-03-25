@@ -474,20 +474,30 @@ async function sendToGemini(userMsg){
 // ── Voice ───────────────────────────────────────────────────
 
 
-var currentAudio=new Audio();
-function stopOracle(){currentAudio.pause();currentAudio.src="";document.getElementById("oracleStop").style.display="none";}
+var _ac=null,_acSrc=null;
+function _getAC(){if(!_ac)_ac=new(window.AudioContext||window.webkitAudioContext)();return _ac;}
+function stopOracle(){if(_acSrc){try{_acSrc.stop();}catch(e){}}_acSrc=null;document.getElementById("oracleStop").style.display="none";}
 async function speakResponse(text){
   try{
+    var ac=_getAC();
+    if(ac.state==="suspended")await ac.resume();
     var resp=await fetch("https://splendid-laughter-production-7b93.up.railway.app/api/tts",{
       method:"POST",headers:{"Content-Type":"application/json"},
-      body:JSON.stringify({text:text,voice:"en-US-Chirp3-HD-Orus"})
+      body:JSON.stringify({text:text,voice:"en-US-Chirp3-HD-Charon"})
     });
     var data=await resp.json();
     if(data.audioContent){
-      currentAudio.src="data:audio/mp3;base64,"+data.audioContent;
-      document.getElementById("oracleStop").style.display="inline-block";
-      currentAudio.onended=function(){document.getElementById("oracleStop").style.display="none";};
-      currentAudio.play().catch(function(e){console.warn("play:",e);});
+      var bin=atob(data.audioContent),bytes=new Uint8Array(bin.length);
+      for(var i=0;i<bin.length;i++)bytes[i]=bin.charCodeAt(i);
+      ac.decodeAudioData(bytes.buffer,function(buf){
+        if(_acSrc)try{_acSrc.stop();}catch(e){}
+        _acSrc=ac.createBufferSource();
+        _acSrc.buffer=buf;
+        _acSrc.connect(ac.destination);
+        _acSrc.onended=function(){document.getElementById("oracleStop").style.display="none";_acSrc=null;};
+        _acSrc.start(0);
+        document.getElementById("oracleStop").style.display="inline-block";
+      });
     }
   }catch(e){console.warn("TTS:",e);}
 }
@@ -499,8 +509,8 @@ async function sendMessage(){
   var msg=inp.value.trim();
   if(!msg)return;
   inp.value="";
-  // Unlock the shared Audio element on iOS — must happen sync inside user gesture
-  try{currentAudio.src="data:audio/wav;base64,UklGRigAAABXQVZFZm10IBIAAAABAAEARKwAAIhYAQACABAAAABkYXRhAgAAAAEA";currentAudio.play().catch(function(){});}catch(e){}
+  // Unlock AudioContext on iOS — must happen sync inside user gesture
+  try{var ac=_getAC();if(ac.state==="suspended")ac.resume();}catch(e){}
   if(status)status.textContent="...";
   if(resp){resp.classList.remove("visible");resp.textContent="";}
   var reply=await sendToGemini(msg);

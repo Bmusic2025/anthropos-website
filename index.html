@@ -197,6 +197,7 @@ footer{
 <button class="oracle-mic-btn" id="oracleMicBtn" onclick="toggleOracleMic()" title="Speak">🎤</button>
 <button class="oracle-send-btn" onclick="sendMessage()" title="Send">➤</button>
 </div>
+<button id="oracleStop" onclick="stopOracle()" style="display:none;margin-top:8px;background:transparent;border:1px solid rgba(255,255,255,0.2);border-radius:20px;color:rgba(255,255,255,0.5);padding:5px 16px;font-size:0.75rem;cursor:pointer;letter-spacing:0.08em">■ Stop</button>
 <div class="oracle-status" id="chatStatus"></div>
 </div>
 <div style="display:flex;flex-direction:column;align-items:center;gap:12px;margin-top:20px;width:90%;max-width:500px">
@@ -473,18 +474,20 @@ async function sendToGemini(userMsg){
 // ── Voice ───────────────────────────────────────────────────
 
 
-var currentAudio=null;
+var currentAudio=new Audio();
+function stopOracle(){currentAudio.pause();currentAudio.src="";document.getElementById("oracleStop").style.display="none";}
 async function speakResponse(text){
   try{
     var resp=await fetch("https://splendid-laughter-production-7b93.up.railway.app/api/tts",{
       method:"POST",headers:{"Content-Type":"application/json"},
-      body:JSON.stringify({text:text,voice:"en-US-Chirp3-HD-Fenrir"})
+      body:JSON.stringify({text:text,voice:"en-US-Chirp3-HD-Orus"})
     });
     var data=await resp.json();
     if(data.audioContent){
-      if(currentAudio){currentAudio.pause();currentAudio=null;}
-      currentAudio=new Audio("data:audio/mp3;base64,"+data.audioContent);
-      currentAudio.play();
+      currentAudio.src="data:audio/mp3;base64,"+data.audioContent;
+      document.getElementById("oracleStop").style.display="inline-block";
+      currentAudio.onended=function(){document.getElementById("oracleStop").style.display="none";};
+      currentAudio.play().catch(function(e){console.warn("play:",e);});
     }
   }catch(e){console.warn("TTS:",e);}
 }
@@ -496,17 +499,8 @@ async function sendMessage(){
   var msg=inp.value.trim();
   if(!msg)return;
   inp.value="";
-  // Unlock audio on iOS/mobile — must happen synchronously inside user gesture
-  if(!window._audioUnlocked){
-    try{
-      var ctx=new(window.AudioContext||window.webkitAudioContext)();
-      ctx.resume();
-      var buf=ctx.createBuffer(1,1,22050);
-      var src=ctx.createBufferSource();
-      src.buffer=buf;src.connect(ctx.destination);src.start(0);
-      window._audioUnlocked=true;
-    }catch(e){}
-  }
+  // Unlock the shared Audio element on iOS — must happen sync inside user gesture
+  try{currentAudio.src="data:audio/wav;base64,UklGRigAAABXQVZFZm10IBIAAAABAAEARKwAAIhYAQACABAAAABkYXRhAgAAAAEA";currentAudio.play().catch(function(){});}catch(e){}
   if(status)status.textContent="...";
   if(resp){resp.classList.remove("visible");resp.textContent="";}
   var reply=await sendToGemini(msg);

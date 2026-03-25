@@ -35,13 +35,13 @@ nav a:hover{color:#4285F4}
 .oracle-title-label{font-size:1.05rem;letter-spacing:0.3em;color:rgba(245,158,11,0.85);text-transform:uppercase;font-weight:700;text-align:center}
 .oracle-subtitle{font-size:0.75rem;color:rgba(255,255,255,0.35);letter-spacing:0.12em;text-align:center;margin-top:-14px}
 .oracle-orb-wrap{position:relative;display:flex;flex-direction:column;align-items:center;gap:14px;cursor:pointer}
-.oracle-orb{width:160px;height:160px;border-radius:50%;background:radial-gradient(circle at 38% 33%,rgba(251,191,36,0.75),rgba(217,119,6,0.4) 45%,rgba(10,10,6,0.92));box-shadow:0 0 40px rgba(245,158,11,0.4),0 0 80px rgba(245,158,11,0.15),0 0 140px rgba(245,158,11,0.06),inset 0 0 30px rgba(245,158,11,0.1);animation:orb-idle 4s ease-in-out infinite;transition:all 0.4s;display:flex;align-items:center;justify-content:center;position:relative}
+.oracle-orb{width:110px;height:110px;border-radius:50%;background:radial-gradient(circle at 38% 33%,rgba(251,191,36,0.55),rgba(217,119,6,0.2) 45%,rgba(10,10,6,0.95));box-shadow:0 0 14px rgba(245,158,11,0.25),0 0 30px rgba(245,158,11,0.06);animation:orb-idle 4s ease-in-out infinite;transition:all 0.4s;display:flex;align-items:center;justify-content:center;position:relative;cursor:pointer}
 .oracle-orb::before{content:"";position:absolute;inset:6px;border-radius:50%;border:1px solid rgba(251,191,36,0.2)}
 .oracle-orb::after{content:"";position:absolute;inset:18px;border-radius:50%;border:1px solid rgba(251,191,36,0.1)}
 .oracle-mic-icon{font-size:2.4rem;opacity:0.85;transition:all 0.3s;user-select:none}
-.oracle-orb.listening{background:radial-gradient(circle at 38% 33%,rgba(167,139,250,0.8),rgba(109,40,217,0.45) 45%,rgba(10,10,6,0.92));box-shadow:0 0 50px rgba(139,92,246,0.55),0 0 100px rgba(139,92,246,0.2),inset 0 0 30px rgba(139,92,246,0.15);animation:orb-listen 0.65s ease-in-out infinite}
-.oracle-orb.speaking{animation:orb-speak 0.45s ease-in-out infinite alternate;box-shadow:0 0 60px rgba(245,158,11,0.75),0 0 120px rgba(245,158,11,0.3),inset 0 0 35px rgba(245,158,11,0.2)}
-@keyframes orb-idle{0%,100%{transform:scale(1);box-shadow:0 0 40px rgba(245,158,11,0.4),0 0 80px rgba(245,158,11,0.15)}50%{transform:scale(1.035);box-shadow:0 0 55px rgba(245,158,11,0.55),0 0 110px rgba(245,158,11,0.22)}}
+.oracle-orb.listening{background:radial-gradient(circle at 38% 33%,rgba(167,139,250,0.7),rgba(109,40,217,0.3) 45%,rgba(10,10,6,0.95));box-shadow:0 0 18px rgba(139,92,246,0.35),0 0 40px rgba(139,92,246,0.1);animation:orb-listen 0.65s ease-in-out infinite}
+.oracle-orb.speaking{animation:orb-speak 0.45s ease-in-out infinite alternate;box-shadow:0 0 22px rgba(245,158,11,0.5),0 0 50px rgba(245,158,11,0.12)}
+@keyframes orb-idle{0%,100%{transform:scale(1);box-shadow:0 0 14px rgba(245,158,11,0.25),0 0 30px rgba(245,158,11,0.06)}50%{transform:scale(1.03);box-shadow:0 0 20px rgba(245,158,11,0.35),0 0 45px rgba(245,158,11,0.1)}}
 @keyframes orb-listen{0%,100%{transform:scale(1)}50%{transform:scale(1.07)}}
 @keyframes orb-speak{0%{transform:scale(1)}100%{transform:scale(1.055)}}
 .oracle-tap-hint{font-size:0.8rem;color:rgba(255,255,255,0.4);letter-spacing:0.1em;text-align:center}

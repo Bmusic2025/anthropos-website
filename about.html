@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Our Story | ANTHRŌPOS Alpha Intelligence</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#000;color:#fff;overflow-x:hidden}
+header{position:fixed;top:0;width:100%;background:rgba(0,0,0,0.92);backdrop-filter:blur(10px);padding:14px 24px;z-index:100;border-bottom:1px solid rgba(255,255,255,0.08);display:flex;align-items:center;justify-content:space-between}
+.logo{font-family:'Space Grotesk',sans-serif;font-size:1.1rem;font-weight:700;letter-spacing:2px;color:#4285F4;text-decoration:none}
+.back-btn{color:#9ca3af;text-decoration:none;font-size:0.85rem;transition:color 0.3s}
+.back-btn:hover{color:#fff}
+.container{max-width:960px;margin:0 auto;padding:0 20px}
+.section-label{font-size:0.75rem;letter-spacing:4px;color:#4285F4;text-transform:uppercase;margin-bottom:14px;opacity:0.8}
+
+/* Hero */
+.hero{min-height:68vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:120px 24px 80px;background:radial-gradient(ellipse 70% 60% at 50% 40%,rgba(66,133,244,0.07) 0%,transparent 70%)}
+.hero-eyebrow{font-size:0.75rem;letter-spacing:4px;color:#4285F4;text-transform:uppercase;margin-bottom:18px;opacity:0.8}
+.hero-title{font-family:'Space Grotesk',sans-serif;font-size:clamp(2.4rem,6vw,4.2rem);font-weight:700;line-height:1.08;margin-bottom:24px}
+.hero-title .accent{color:#4285F4}
+.hero-sub{font-size:1.15rem;color:#9ca3af;max-width:580px;line-height:1.75}
+
+/* Divider */
+.divider{height:1px;background:linear-gradient(90deg,transparent,rgba(66,133,244,0.3),transparent);margin:0}
+
+/* Origin Story */
+.origin{padding:100px 20px}
+.origin-grid{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center}
+.origin-text .tag{font-size:0.7rem;letter-spacing:3px;color:#4285F4;text-transform:uppercase;margin-bottom:18px;display:block}
+.origin-text h2{font-family:'Space Grotesk',sans-serif;font-size:clamp(1.8rem,3.5vw,2.6rem);font-weight:700;line-height:1.2;margin-bottom:24px}
+.origin-text p{color:#9ca3af;line-height:1.8;font-size:1rem;margin-bottom:18px}
+.origin-text p strong{color:#fff}
+.origin-stats{display:flex;flex-direction:column;gap:32px}
+.origin-stat{padding:32px;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.08);border-radius:16px;transition:border-color 0.3s}
+.origin-stat:hover{border-color:rgba(66,133,244,0.35)}
+.origin-stat .num{font-family:'Space Grotesk',sans-serif;font-size:3rem;font-weight:700;color:#4285F4;line-height:1;margin-bottom:6px}
+.origin-stat .label{font-size:0.85rem;color:#9ca3af;line-height:1.5}
+
+/* Why We Built This */
+.why{padding:100px 20px;background:rgba(255,255,255,0.01);border-top:1px solid rgba(255,255,255,0.05)}
+.why-inner{text-align:center;max-width:800px;margin:0 auto}
+.why-inner h2{font-family:'Space Grotesk',sans-serif;font-size:clamp(1.8rem,4vw,2.8rem);font-weight:700;margin-bottom:20px}
+.why-inner .lead{font-size:1.2rem;color:#e8e3d5;line-height:1.8;margin-bottom:60px}
+.pain-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:24px;text-align:left}
+.pain-card{padding:28px;background:rgba(234,67,53,0.04);border:1px solid rgba(234,67,53,0.15);border-radius:14px}
+.pain-card .icon{font-size:1.6rem;margin-bottom:12px}
+.pain-card h3{font-size:0.95rem;font-weight:600;margin-bottom:8px;color:#fff}
+.pain-card p{font-size:0.85rem;color:#9ca3af;line-height:1.6}
+
+/* What Makes Us Different */
+.diff{padding:100px 20px}
+.diff-header{text-align:center;margin-bottom:64px}
+.diff-header h2{font-family:'Space Grotesk',sans-serif;font-size:clamp(1.8rem,4vw,2.8rem);font-weight:700;margin-bottom:16px}
+.diff-header p{color:#9ca3af;font-size:1rem;max-width:560px;margin:0 auto;line-height:1.7}
+.diff-list{display:flex;flex-direction:column;gap:1px;background:rgba(255,255,255,0.06);border-radius:16px;overflow:hidden}
+.diff-item{display:grid;grid-template-columns:64px 1fr;align-items:start;gap:24px;padding:32px 36px;background:#000;transition:background 0.3s}
+.diff-item:hover{background:rgba(66,133,244,0.04)}
+.diff-num{font-family:'Space Grotesk',sans-serif;font-size:2.2rem;font-weight:700;color:rgba(66,133,244,0.25);line-height:1;padding-top:4px}
+.diff-content h3{font-size:1.05rem;font-weight:600;margin-bottom:8px}
+.diff-content p{font-size:0.9rem;color:#9ca3af;line-height:1.7}
+
+/* Philosophy */
+.philosophy{padding:100px 20px;background:rgba(255,255,255,0.01);border-top:1px solid rgba(255,255,255,0.05)}
+.philosophy-inner{max-width:720px;margin:0 auto}
+.philosophy-inner .tag{font-size:0.7rem;letter-spacing:3px;color:#FBBC04;text-transform:uppercase;margin-bottom:18px;display:block}
+.philosophy-inner h2{font-family:'Space Grotesk',sans-serif;font-size:clamp(1.8rem,4vw,2.8rem);font-weight:700;margin-bottom:40px}
+.pull-quote{border-left:3px solid #4285F4;padding:24px 32px;margin-bottom:32px;background:rgba(66,133,244,0.04);border-radius:0 12px 12px 0}
+.pull-quote p{font-size:1.2rem;color:#e8e3d5;line-height:1.75;font-style:italic}
+.philosophy-inner p{color:#9ca3af;line-height:1.8;font-size:1rem;margin-bottom:18px}
+
+/* CTA */
+.cta{padding:120px 20px;text-align:center;background:radial-gradient(ellipse 70% 50% at 50% 50%,rgba(66,133,244,0.08) 0%,transparent 70%)}
+.cta h2{font-family:'Space Grotesk',sans-serif;font-size:clamp(1.8rem,4vw,2.8rem);font-weight:700;margin-bottom:18px}
+.cta p{color:#9ca3af;font-size:1rem;max-width:480px;margin:0 auto 40px;line-height:1.7}
+.cta-btns{display:flex;gap:16px;justify-content:center;flex-wrap:wrap}
+.btn-primary{padding:15px 36px;background:#4285F4;border:none;border-radius:30px;color:#fff;font-size:1rem;font-weight:600;cursor:pointer;text-decoration:none;transition:all 0.3s;display:inline-block}
+.btn-primary:hover{background:#5a95f5;transform:translateY(-2px);box-shadow:0 8px 24px rgba(66,133,244,0.35)}
+.btn-ghost{padding:14px 36px;border:1px solid rgba(255,255,255,0.25);border-radius:30px;color:#fff;font-size:1rem;font-weight:500;cursor:pointer;text-decoration:none;transition:all 0.3s;display:inline-block}
+.btn-ghost:hover{border-color:#fff;background:rgba(255,255,255,0.06)}
+
+@media(max-width:768px){
+  .origin-grid{grid-template-columns:1fr;gap:48px}
+  .diff-item{grid-template-columns:40px 1fr;gap:16px;padding:24px 20px}
+  .pull-quote{padding:18px 20px}
+  .hero{padding:100px 20px 60px}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <a href="/" class="logo">ANTHRŌPOS</a>
+  <a href="/#intro" class="back-btn">← All Products</a>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+  <p class="hero-eyebrow">Our Story</p>
+  <h1 class="hero-title">Built by a Closer.<br><span class="accent">Powered by Intelligence.</span></h1>
+  <p class="hero-sub">Most AI companies have never closed a deal in their lives. We have — $50 million worth. That changes everything about how we build.</p>
+</section>
+
+<div class="divider"></div>
+
+<!-- ORIGIN STORY -->
+<section class="origin">
+  <div class="container">
+    <div class="origin-grid">
+      <div class="origin-text">
+        <span class="tag">The Founder</span>
+        <h2>I'm Brittain. And I've been in your shoes.</h2>
+        <p>I spent decades on the floor — <strong>Mercedes-Benz, Porsche, BMW, Jaguar Land Rover</strong> — not in a boardroom studying sales theory, but face-to-face with real buyers, in real moments, where every word either moved the deal forward or killed it. That's where I built $50 million in revenue, one relationship at a time.</p>
+        <p>Before that, I worked inside two of the most demanding tech companies in the world — <strong>Dell and Apple</strong> — where I learned that technology is only as powerful as the systems around it. A great product sold poorly is a wasted product.</p>
+        <p>I've also spent my life in music — writing, producing, playing since I was two years old — which taught me something most business people never learn: <strong>the rhythm of a conversation matters as much as the words in it.</strong></p>
+        <p>I built ANTHRŌPOS because I got tired of watching great businesses lose to voicemail, dead leads, and systems that were never designed to sell.</p>
+      </div>
+      <div class="origin-stats">
+        <div class="origin-stat">
+          <div class="num">$50M+</div>
+          <div class="label">Career revenue built across luxury automotive and enterprise technology — real deals, real relationships</div>
+        </div>
+        <div class="origin-stat">
+          <div class="num">24/7</div>
+          <div class="label">The system runs while you sleep. Your best hour for capturing a lead shouldn't be limited to business hours</div>
+        </div>
+        <div class="origin-stat">
+          <div class="num">Austin, TX</div>
+          <div class="label">Headquartered in one of the fastest-growing business markets in America — we know this world</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- WHY WE BUILT THIS -->
+<section class="why">
+  <div class="container">
+    <div class="why-inner">
+      <p class="section-label">The Problem We Solve</p>
+      <h2>The businesses that lose are the ones that go silent.</h2>
+      <p class="lead">You built something real. You're good at what you do. But the calls aren't getting answered, the leads are going cold, and your competitors — who may not be as good as you — are winning because their systems are faster.</p>
+      <div class="pain-grid">
+        <div class="pain-card">
+          <div class="icon">📞</div>
+          <h3>The Missed Call Problem</h3>
+          <p>62% of calls to small businesses go unanswered. Every one of those is a lead that called your competitor next.</p>
+        </div>
+        <div class="pain-card">
+          <div class="icon">🕐</div>
+          <h3>The Speed-to-Lead Problem</h3>
+          <p>Businesses that respond within 5 minutes are 100x more likely to close. Most respond in hours — or not at all.</p>
+        </div>
+        <div class="pain-card">
+          <div class="icon">⭐</div>
+          <h3>The Reputation Problem</h3>
+          <p>One negative review posted publicly can cost you dozens of customers. Most businesses never see it coming until it's too late.</p>
+        </div>
+        <div class="pain-card">
+          <div class="icon">🔁</div>
+          <h3>The Follow-Up Problem</h3>
+          <p>80% of sales require 5+ follow-ups. Most businesses stop at one — and the sale dies in silence.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- WHAT MAKES US DIFFERENT -->
+<section class="diff">
+  <div class="container">
+    <div class="diff-header">
+      <p class="section-label">Why ANTHRŌPOS</p>
+      <h2>We're not consultants. We're operators.</h2>
+      <p>There's no shortage of AI companies. There's a shortage of AI companies that understand what it actually takes to run a business, close a customer, and build something that lasts.</p>
+    </div>
+    <div class="diff-list">
+      <div class="diff-item">
+        <div class="diff-num">01</div>
+        <div class="diff-content">
+          <h3>We've sold at the highest level</h3>
+          <p>We didn't learn about sales from a textbook. We built $50 million in revenue across luxury automotive and enterprise technology. We know what closes, what stalls, and what costs you the deal. That instinct is baked into every system we build for you.</p>
+        </div>
+      </div>
+      <div class="diff-item">
+        <div class="diff-num">02</div>
+        <div class="diff-content">
+          <h3>We build systems, not one-off projects</h3>
+          <p>Most AI vendors hand you a tool and walk away. We build a full intelligence layer around your business — ARIA answers your calls, GUARDIAN protects your reputation, NEO follows up automatically. Every piece connects. Nothing falls through the cracks.</p>
+        </div>
+      </div>
+      <div class="diff-item">
+        <div class="diff-num">03</div>
+        <div class="diff-content">
+          <h3>We think in relationships, not transactions</h3>
+          <p>The best salespeople don't chase. They build trust so well that the close becomes the natural conclusion. Our AI systems are designed the same way — warm, conversational, human. Your customers won't feel like they're talking to a bot. They'll feel taken care of.</p>
+        </div>
+      </div>
+      <div class="diff-item">
+        <div class="diff-num">04</div>
+        <div class="diff-content">
+          <h3>We're invested in your results, not your contract</h3>
+          <p>We're not a software subscription you forget about. We're an active partner in your growth. We measure success by what changes for your business — more calls answered, more leads closed, more reviews earned, more revenue generated.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- PHILOSOPHY -->
+<section class="philosophy">
+  <div class="container">
+    <div class="philosophy-inner">
+      <span class="tag">Our Philosophy</span>
+      <h2>We are building a skyscraper, not a house.</h2>
+      <div class="pull-quote">
+        <p>"The foundation has to be perfect before you go vertical. We don't rush to market. We build what's right, and then we scale it. That's how you build something that lasts a generation — not just a quarter."</p>
+      </div>
+      <p>ANTHRŌPOS is not chasing trends. We're setting them. While most businesses are still figuring out how to use AI, our clients are already running it — answering every call, capturing every lead, protecting every review, and following up on every opportunity, automatically, around the clock.</p>
+      <p>We are future thinkers. Six to twelve months ahead of where the market is going. We build for where things are headed, not where they are. And when the market catches up, our clients are already there — ahead of it, with a system that works.</p>
+      <p><strong>One human in the loop. Everything else is the machine.</strong> That's the vision. You stay in your zone of genius. ANTHRŌPOS handles the rest.</p>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta">
+  <div class="container">
+    <h2>Ready to stop losing business<br>to businesses that are less good than you?</h2>
+    <p>Thirty minutes. We'll show you exactly where the gaps are and what it would take to close them — no pitch, no pressure.</p>
+    <div class="cta-btns">
+      <a href="mailto:b@anthroposalphaintelligence.com?subject=Free AI Audit Request" class="btn-primary">Book a Free AI Audit</a>
+      <a href="/" class="btn-ghost">See Our Services</a>
+    </div>
+  </div>
+</section>
+
+</body>
+</html>

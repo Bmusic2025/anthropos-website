@@ -123,6 +123,9 @@ header{position:fixed;top:0;width:100%;background:rgba(0,0,0,0.92);backdrop-filt
       <div class="tab" onclick="loadDemo('hvac')">🔧 HVAC</div>
       <div class="tab" onclick="loadDemo('medspa')">💆 Med Spa</div>
       <div class="tab" onclick="loadDemo('law')">⚖️ Law Firm</div>
+      <div class="tab" onclick="loadDemo('construction')">🔨 Construction</div>
+      <div class="tab" onclick="loadDemo('realestate')">🏠 Real Estate</div>
+      <div class="tab" onclick="loadDemo('auto')">🚗 Luxury Auto</div>
     </div>
 
     <div class="demo-player">
@@ -232,13 +235,19 @@ const DEMOS = {
     subtitle: "Inbound call · New patient inquiry",
     icon: "🦷",
     messages: [
-      { role: "aria", text: "Thank you for calling Austin Dental! This is Jasmine. How are you doing today?" },
+      { role: "aria",   text: "Thank you for calling Austin Dental! This is Jasmine. How are you doing today?" },
       { role: "caller", text: "Hi, yeah — I've been having some tooth pain and I need to get in to see someone." },
-      { role: "aria", text: "Oh I'm sorry to hear that — tooth pain is no fun. You called the right place. Dr. Martinez is wonderful with patients who are nervous about dental work, and we'll take great care of you. Are you a new patient with us?" },
+      { role: "aria",   text: "Oh I'm sorry to hear that — tooth pain is no fun. You called the right place. Dr. Martinez is wonderful with patients who are nervous about dental work, and we'll take great care of you. Are you a new patient with us?" },
       { role: "caller", text: "Yeah, first time. I'm honestly a little anxious about it." },
-      { role: "aria", text: "We hear that a lot — and I completely understand. We promise to take great care of you. Dr. Martinez has been doing this for 18 years and is incredibly gentle. Can I get your name and a couple time slots that work for you? We have some openings as early as tomorrow." },
+      { role: "aria",   text: "We hear that a lot — and I completely understand. We promise to take great care of you. Dr. Martinez has been doing this for 18 years and is incredibly gentle. Can I get your name and a couple time slots that work for you? We have some openings as early as tomorrow." },
       { role: "caller", text: "Oh wow, tomorrow works. I'm Marcus." },
-      { role: "aria", text: "Perfect, Marcus! We have 10am or 2:30pm tomorrow. Which works better? And I'll text you a confirmation with the address and what to bring." }
+      { role: "aria",   text: "Perfect, Marcus! We have 10am or 2:30pm tomorrow. Which works better? And I'll text you a confirmation with the address and what to bring." },
+      { role: "caller", text: "2:30 works perfectly." },
+      { role: "aria",   text: "Wonderful! And can I grab your last name, Marcus?" },
+      { role: "caller", text: "It's Johnson. Marcus Johnson." },
+      { role: "aria",   text: "Perfect. And the best email for your appointment confirmation?" },
+      { role: "caller", text: "marcus.johnson at gmail dot com." },
+      { role: "aria",   text: "Got it — Marcus Johnson, marcus dot johnson at gmail dot com, 2:30 tomorrow. You're all set! Dr. Martinez is genuinely great and I think you're going to feel really good about this. We'll send your confirmation right now. See you tomorrow!" }
     ]
   },
   funeral: {
@@ -246,13 +255,16 @@ const DEMOS = {
     subtitle: "Inbound call · Immediate arrangement needed",
     icon: "🕊️",
     messages: [
-      { role: "aria", text: "Thank you for reaching out to Riverside Memorial. This is Grace. I'm here to help — please take your time." },
+      { role: "aria",   text: "Thank you for reaching out to Riverside Memorial. This is Grace. I'm here to help — please take your time." },
       { role: "caller", text: "Hi... my father passed away this morning. I don't really know what to do." },
-      { role: "aria", text: "I'm so deeply sorry for your loss. [Pause.] I'm here. Please take all the time you need. You don't have to figure this out alone — we're going to guide you through every step." },
+      { role: "aria",   text: "I'm so deeply sorry for your loss. I'm here. Please take all the time you need. You don't have to figure this out alone — we're going to guide you through every step." },
       { role: "caller", text: "Thank you. I just... I don't know where to start." },
-      { role: "aria", text: "That is completely understandable. Can I ask who I have the honor of speaking with today?" },
+      { role: "aria",   text: "That is completely understandable. Can I ask who I have the honor of speaking with today?" },
       { role: "caller", text: "I'm David. My father's name was Robert." },
-      { role: "aria", text: "David, I want to make sure Robert is cared for with the dignity and respect he deserves. I'm going to connect you directly with one of our directors right now — they'll walk alongside you through everything. Whatever you need, we're here." }
+      { role: "aria",   text: "David, I want to make sure Robert is cared for with the dignity and respect he deserves. I'm going to connect you directly with one of our directors right now — they'll walk alongside you through everything. Whatever you need, we're here." },
+      { role: "aria",   text: "David, I also want to make sure we have the best way to reach you. Can I confirm your phone number and a good email address?" },
+      { role: "caller", text: "Of course. 512-555-0147. Email is david.chen at gmail dot com." },
+      { role: "aria",   text: "Thank you, David. 512-555-0147, and david dot chen at gmail dot com. Director Williams will be reaching out to you personally within the next few minutes. You are not alone in this. We will take care of everything — for Robert, and for your family." }
     ]
   },
   hvac: {
@@ -260,13 +272,19 @@ const DEMOS = {
     subtitle: "Inbound call · Emergency — AC out",
     icon: "🔧",
     messages: [
-      { role: "aria", text: "Lone Star HVAC, this is Riley. What can I help you with?" },
+      { role: "aria",   text: "Lone Star HVAC, this is Riley. What can I help you with?" },
       { role: "caller", text: "My AC just stopped working. It's 96 degrees outside and I have two kids at home." },
-      { role: "aria", text: "Okay — I'm making this a priority right now. We handle emergency calls all day and we've got a tech in your area. Can you give me your address?" },
+      { role: "aria",   text: "Okay — I'm making this a priority right now. We handle emergency calls all day and we've got a tech in your area. Can you give me your address?" },
       { role: "caller", text: "6210 Barton Springs Road, Austin." },
-      { role: "aria", text: "Got it. And is it a complete shutdown — no cool air at all — or is it running but not cooling properly?" },
+      { role: "aria",   text: "Got it. And is it a complete shutdown — no cool air at all — or is it running but not cooling properly?" },
       { role: "caller", text: "Completely off. Nothing." },
-      { role: "aria", text: "Understood. I'm dispatching now. Someone will be at your door within 90 minutes. You'll get a text when the tech is on his way. In the meantime, keep the blinds closed and get the kids to the coolest room. We're on it." }
+      { role: "aria",   text: "Understood. I'm dispatching now. Someone will be at your door within 90 minutes. You'll get a text when the tech is on his way. In the meantime, keep the blinds closed and get the kids to the coolest room. We're on it." },
+      { role: "caller", text: "Thank you so much. What's the tech's name?" },
+      { role: "aria",   text: "That'll be Carlos — he's fantastic. Can I confirm your name and a good number to text when he's 15 minutes out?" },
+      { role: "caller", text: "Sarah Mitchell. Best number is 512-555-0293." },
+      { role: "aria",   text: "Got it, Sarah. And a good email for your service invoice after the visit?" },
+      { role: "caller", text: "sarah.mitchell at yahoo dot com." },
+      { role: "aria",   text: "Perfect — Sarah Mitchell, 512-555-0293, sarah dot mitchell at yahoo dot com. Carlos is dispatched. You'll get a text when he's on the way. Stay cool in the meantime — you've got this handled." }
     ]
   },
   medspa: {
@@ -274,11 +292,17 @@ const DEMOS = {
     subtitle: "Inbound call · Treatment inquiry",
     icon: "💆",
     messages: [
-      { role: "aria", text: "Thank you for calling Luminary Med Spa! This is Sophia. It's wonderful to hear from you — how can I help you today?" },
+      { role: "aria",   text: "Thank you for calling Luminary Med Spa! This is Sophia. It's wonderful to hear from you — how can I help you today?" },
       { role: "caller", text: "Hi, I'm interested in Botox. I've never done it before and I'm not sure where to start." },
-      { role: "aria", text: "Oh you're going to love what we can do for you. First-time consultations are my favorite — there's something so exciting about that first visit. Can I ask what your main goal is? Are you looking to soften expression lines, prevent new ones from forming, or something else?" },
+      { role: "aria",   text: "Oh you're going to love what we can do for you. First-time consultations are my favorite — there's something so exciting about that first visit. Can I ask what your main goal is? Are you looking to soften expression lines, prevent new ones from forming, or something else?" },
       { role: "caller", text: "Mostly around my eyes and forehead. I've been noticing them more." },
-      { role: "aria", text: "That's one of our most popular areas and the results are beautiful. Our provider will customize everything specifically for you during your consultation — she'll look at your specific anatomy and recommend exactly what you need. Most clients describe it as looking in the mirror and seeing themselves, just refreshed. Can I get you on the calendar?" }
+      { role: "aria",   text: "That's one of our most popular areas and the results are beautiful. Our provider will customize everything specifically for you during your consultation. Most clients describe it as looking in the mirror and seeing themselves, just refreshed. Can I get you on the calendar?" },
+      { role: "caller", text: "Yes, absolutely. I'd love to come in." },
+      { role: "aria",   text: "You are going to love it. Can I get your first and last name to get you in our system?" },
+      { role: "caller", text: "It's Nicole Williams." },
+      { role: "aria",   text: "Beautiful name. And the best email for your consultation confirmation, Nicole?" },
+      { role: "caller", text: "nicole.williams at icloud dot com." },
+      { role: "aria",   text: "Perfect — Nicole Williams, nicole dot williams at icloud dot com. You are officially on the calendar. Our provider is going to love working with you, Nicole. You'll receive your confirmation shortly. We absolutely cannot wait to meet you." }
     ]
   },
   law: {
@@ -286,20 +310,90 @@ const DEMOS = {
     subtitle: "Inbound call · New client inquiry",
     icon: "⚖️",
     messages: [
-      { role: "aria", text: "Thank you for calling Sterling Law Group. This is Victoria. How may I assist you today?" },
+      { role: "aria",   text: "Thank you for calling Sterling Law Group. This is Victoria. How may I assist you today?" },
       { role: "caller", text: "Hi, I was just served with divorce papers and I'm honestly not sure what to do." },
-      { role: "aria", text: "I understand — this can feel very overwhelming. You've called the right place. Everything you share with our office is completely confidential." },
+      { role: "aria",   text: "I understand — this can feel very overwhelming. You've called the right place. Everything you share with our office is completely confidential." },
       { role: "caller", text: "I've never dealt with anything like this before." },
-      { role: "aria", text: "Our attorneys handle family law matters regularly, and they're very good at helping clients understand exactly where they stand and what their options are. The most important thing right now is getting you scheduled for a consultation. Can I collect some initial information so our team can prepare before your call?" },
+      { role: "aria",   text: "Our attorneys handle family law matters regularly, and they're very good at helping clients understand exactly where they stand and what their options are. Can I collect some initial information so our team can prepare before your call?" },
       { role: "caller", text: "Yes, please." },
-      { role: "aria", text: "Of course. Can I get your name? And do you have a preferred time for your consultation — we have availability this week." }
+      { role: "aria",   text: "Of course. Can I get your name? And do you have a preferred time for your consultation — we have availability this week." },
+      { role: "caller", text: "My name is Robert Chen." },
+      { role: "aria",   text: "Thank you, Robert. And the best email address so we can send you some preliminary information before your consultation?" },
+      { role: "caller", text: "robert.chen at outlook dot com." },
+      { role: "aria",   text: "Robert Chen, robert dot chen at outlook dot com. You are in excellent hands. One of our attorneys will be reaching out to you within the hour. Everything is completely confidential. You made the right call today, Robert. We've got you." }
+    ]
+  },
+  construction: {
+    title: "Pinnacle Construction — ARIA (Jordan)",
+    subtitle: "Inbound call · Kitchen remodel inquiry",
+    icon: "🔨",
+    messages: [
+      { role: "aria",   text: "Pinnacle Construction, this is Jordan. How can I help you today?" },
+      { role: "caller", text: "Hey, I'm looking to do a full kitchen remodel. I've been getting some estimates and a friend recommended you guys." },
+      { role: "aria",   text: "You came to the right place — kitchens are actually our specialty. We've done over 200 of them in the Austin area. Are you looking at a full gut and remodel, or more of an upgrade — new cabinets, countertops, that kind of thing?" },
+      { role: "caller", text: "Full gut. We want to take it down to the studs and start fresh. New layout, the whole thing." },
+      { role: "aria",   text: "I love it — that's where you really get to make it yours. Our project manager David does a free in-home consultation where he walks the space with you, talks through the vision, and gives you a detailed scope and number. No pressure, no obligation. What does your timeline look like?" },
+      { role: "caller", text: "We're hoping to start in the next 60 days or so." },
+      { role: "aria",   text: "That's actually great timing — we have availability opening up. Can I get your first and last name to get you scheduled?" },
+      { role: "caller", text: "It's Brian Torres." },
+      { role: "aria",   text: "Brian Torres. And the best email to send you some project examples and confirm the appointment time?" },
+      { role: "caller", text: "brian.torres at gmail dot com." },
+      { role: "aria",   text: "Perfect — Brian Torres, brian dot torres at gmail dot com. David is going to take great care of you. I'll have someone reach out within the hour to lock in a time. You're going to love what we can do with that kitchen, Brian." }
+    ]
+  },
+  realestate: {
+    title: "Premier Realty — ARIA (Morgan)",
+    subtitle: "Inbound call · First-time home buyer",
+    icon: "🏠",
+    messages: [
+      { role: "aria",   text: "Thank you for calling Premier Realty! This is Morgan. How can I help you today?" },
+      { role: "caller", text: "Hi, I'm looking to buy a home. Probably in the 600 to 700 thousand range, in the north Austin area. Just getting started." },
+      { role: "aria",   text: "That's an exciting step — and north Austin is a great market right now. A few pockets up there are still moving really well. Are you working with a lender yet, or are you still in the early stages of figuring out financing?" },
+      { role: "caller", text: "Still early. I know I want to buy, I just don't know all the steps yet." },
+      { role: "aria",   text: "That is completely fine — honestly, that's the best time to call. Our agents walk you through everything from pre-approval to close. There's zero pressure, and the first conversation is really just about understanding what you want. Can I set you up with one of our buyer's agents for a quick intro call?" },
+      { role: "caller", text: "Yeah, that sounds good actually." },
+      { role: "aria",   text: "Wonderful. Can I get your first and last name?" },
+      { role: "caller", text: "James Holloway." },
+      { role: "aria",   text: "James Holloway. And the best email to send you a few current listings in that north Austin range while you wait?" },
+      { role: "caller", text: "james.holloway at icloud dot com." },
+      { role: "aria",   text: "Got it — James Holloway, james dot holloway at icloud dot com. I'm sending those listings right now and one of our agents will be in touch within the hour. This is going to be a great process, James. We find our buyers the right home — not just any home. Talk soon." }
+    ]
+  },
+  auto: {
+    title: "Mercedes-Benz of Austin — ARIA (Devon)",
+    subtitle: "Inbound call · AMG vehicle inquiry",
+    icon: "🚗",
+    messages: [
+      { role: "aria",   text: "Good afternoon, thank you for calling Mercedes-Benz of Austin. This is Devon. How may I assist you today?" },
+      { role: "caller", text: "Hi, I'm interested in the GLE 53 AMG. I saw one on your website — the Obsidian Black one with the Macchiato Beige interior." },
+      { role: "aria",   text: "Excellent taste — the GLE 53 is a stunning vehicle, especially in that combination. That particular one just came in last week. Are you looking to come in for a drive today, or would you like me to hold it while we get some details sorted out first?" },
+      { role: "caller", text: "I'd love to come in for a drive. I've been driving a BMW X5 for the last few years and I think it's time for something different." },
+      { role: "aria",   text: "The 53 is going to feel like a completely different world — the AMG-tuned inline six, the air suspension, the way it responds. Once you drive it I think you'll know. Let me get you with one of our AMG specialists. Can I get your name?" },
+      { role: "caller", text: "It's Marcus Reed." },
+      { role: "aria",   text: "Marcus Reed. And the best email so I can send you the full spec sheet and have your paperwork ready before you arrive?" },
+      { role: "caller", text: "marcus.reed at outlook dot com." },
+      { role: "aria",   text: "Perfect — Marcus Reed, marcus dot reed at outlook dot com. I'll have the GLE 53 pulled up front and ready for you. What time works today? We have availability this afternoon, and I want to make sure we give you the full experience you deserve, Marcus. This is a big decision and we take that seriously." }
     ]
   }
 };
 
 let currentDemo = 'dental';
 let isPlaying = false;
-let playTimeout = [];
+let msgIndex = 0;
+let currentMsgs = [];
+let currentAudio = null;
+
+// Map demo messages to pre-generated Chirp 3 HD MP3 files
+const AUDIO_FILES = {
+  dental:  ['dental_00_aria','dental_01_caller','dental_02_aria','dental_03_caller','dental_04_aria','dental_05_caller','dental_06_aria','dental_07_caller','dental_08_aria','dental_09_caller','dental_10_aria','dental_11_caller','dental_12_aria'],
+  funeral: ['funeral_00_aria','funeral_01_caller','funeral_02_aria','funeral_03_caller','funeral_04_aria','funeral_05_caller','funeral_06_aria','funeral_07_aria','funeral_08_caller','funeral_09_aria'],
+  hvac:    ['hvac_00_aria','hvac_01_caller','hvac_02_aria','hvac_03_caller','hvac_04_aria','hvac_05_caller','hvac_06_aria','hvac_07_caller','hvac_08_aria','hvac_09_caller','hvac_10_aria','hvac_11_caller','hvac_12_aria'],
+  medspa:  ['medspa_00_aria','medspa_01_caller','medspa_02_aria','medspa_03_caller','medspa_04_aria','medspa_05_caller','medspa_06_aria','medspa_07_caller','medspa_08_aria','medspa_09_caller','medspa_10_aria'],
+  law:          ['law_00_aria','law_01_caller','law_02_aria','law_03_caller','law_04_aria','law_05_caller','law_06_aria','law_07_caller','law_08_aria','law_09_caller','law_10_aria'],
+  construction: ['construction_00_aria','construction_01_caller','construction_02_aria','construction_03_caller','construction_04_aria','construction_05_caller','construction_06_aria','construction_07_caller','construction_08_aria','construction_09_caller','construction_10_aria'],
+  realestate:   ['realestate_00_aria','realestate_01_caller','realestate_02_aria','realestate_03_caller','realestate_04_aria','realestate_05_caller','realestate_06_aria','realestate_07_caller','realestate_08_aria','realestate_09_caller','realestate_10_aria'],
+  auto:         ['auto_00_aria','auto_01_caller','auto_02_aria','auto_03_caller','auto_04_aria','auto_05_caller','auto_06_aria','auto_07_caller','auto_08_aria'],
+};
 
 function loadDemo(industry) {
   document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
@@ -317,64 +411,63 @@ function loadDemo(industry) {
 }
 
 function stopDemo() {
-  playTimeout.forEach(t => clearTimeout(t));
-  playTimeout = [];
   isPlaying = false;
+  msgIndex = 0;
+  if (currentAudio) { currentAudio.pause(); currentAudio.src = ''; currentAudio = null; }
+}
+
+function showMessage(msg) {
+  const transcript = document.getElementById('transcript');
+  const el = document.createElement('div');
+  el.className = `msg msg-${msg.role}`;
+  const avatar = msg.role === 'aria' ? '🤖' : '👤';
+  el.innerHTML = `<div class="msg-avatar">${avatar}</div><div class="msg-bubble">${msg.text}</div>`;
+  transcript.appendChild(el);
+  setTimeout(() => el.classList.add('visible'), 30);
+  transcript.scrollTop = transcript.scrollHeight;
+}
+
+function nextMessage() {
+  if (!isPlaying || msgIndex >= currentMsgs.length) {
+    if (isPlaying) {
+      isPlaying = false;
+      document.getElementById('playBtn').textContent = '↺ Replay';
+      document.getElementById('playBtn').classList.remove('playing');
+      document.getElementById('call-status-text').textContent = 'Complete';
+    }
+    return;
+  }
+
+  const msg = currentMsgs[msgIndex];
+  const audioKey = AUDIO_FILES[currentDemo][msgIndex];
+  msgIndex++;
+
+  showMessage(msg);
+
+  // Play pre-generated Chirp 3 HD MP3
+  const audio = new Audio(`audio/${audioKey}.mp3`);
+  currentAudio = audio;
+  audio.onended = () => { if (isPlaying) setTimeout(nextMessage, 300); };
+  audio.onerror = () => { if (isPlaying) setTimeout(nextMessage, 400); };
+  audio.play().catch(() => { if (isPlaying) setTimeout(nextMessage, 400); });
 }
 
 function playDemo() {
-  if (isPlaying) { stopDemo(); document.getElementById('playBtn').textContent = '▶ Play Demo Call'; document.getElementById('playBtn').classList.remove('playing'); document.getElementById('call-status-text').textContent = 'Ready'; return; }
+  if (isPlaying) {
+    stopDemo();
+    document.getElementById('playBtn').textContent = '▶ Play Demo Call';
+    document.getElementById('playBtn').classList.remove('playing');
+    document.getElementById('call-status-text').textContent = 'Ready';
+    return;
+  }
   isPlaying = true;
+  msgIndex = 0;
+  currentMsgs = DEMOS[currentDemo].messages;
   document.getElementById('transcript').innerHTML = '';
   document.getElementById('playBtn').textContent = '⏹ Stop';
   document.getElementById('playBtn').classList.add('playing');
   document.getElementById('call-status-text').textContent = 'Live';
-
-  const msgs = DEMOS[currentDemo].messages;
-  let delay = 300;
-
-  msgs.forEach((msg, i) => {
-    const showTyping = playTimeout.length;
-    playTimeout.push(setTimeout(() => {
-      if (!isPlaying) return;
-      const transcript = document.getElementById('transcript');
-
-      // Show typing indicator for ARIA messages
-      if (msg.role === 'aria' && i > 0) {
-        const typing = document.createElement('div');
-        typing.className = 'msg msg-aria visible';
-        typing.id = 'typing-indicator';
-        typing.innerHTML = '<div class="msg-avatar">🤖</div><div class="typing"><span></span><span></span><span></span></div>';
-        transcript.appendChild(typing);
-        transcript.scrollTop = transcript.scrollHeight;
-      }
-
-      playTimeout.push(setTimeout(() => {
-        if (!isPlaying) return;
-        const typingEl = document.getElementById('typing-indicator');
-        if (typingEl) typingEl.remove();
-
-        const el = document.createElement('div');
-        el.className = `msg msg-${msg.role}`;
-        const avatar = msg.role === 'aria' ? '🤖' : '👤';
-        el.innerHTML = `<div class="msg-avatar">${avatar}</div><div class="msg-bubble">${msg.text}</div>`;
-        transcript.appendChild(el);
-        setTimeout(() => el.classList.add('visible'), 50);
-        transcript.scrollTop = transcript.scrollHeight;
-
-        if (i === msgs.length - 1) {
-          setTimeout(() => {
-            isPlaying = false;
-            document.getElementById('playBtn').textContent = '↺ Replay';
-            document.getElementById('playBtn').classList.remove('playing');
-            document.getElementById('call-status-text').textContent = 'Complete';
-          }, 800);
-        }
-      }, msg.role === 'aria' && i > 0 ? 1400 : 0));
-    }, delay));
-
-    delay += msg.text.length * 28 + (msg.role === 'aria' ? 1800 : 800);
-  });
+  setTimeout(nextMessage, 300);
 }
 </script>
 </body>

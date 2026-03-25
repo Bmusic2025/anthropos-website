@@ -438,9 +438,7 @@ var KB={
   }
 };
 
-// ── Gemini AI Chatbot ──────────────────────────────────────
-var GEMINI_KEY="AIzaSyD6tJ0OYgx5cUcanDTiCj5QZxJ6iJl7M5U";
-var chatHistory=[];
+// ── Oracle AI (Claude via Railway) ──────────────────────────
 
 var SYSTEM_PROMPT=`You are the AI assistant for ANTHRŌPOS Alpha Intelligence, an AI consulting company in Austin, Texas. Founded by Brittain — $50M+ in luxury automotive sales (Mercedes-Benz, Porsche, BMW, Jaguar Land Rover) and tech background at Dell and Apple. Author and musician.
 
@@ -459,30 +457,21 @@ LOCATION: Austin, Texas — serving local and nationwide clients
 Keep responses warm, confident, concise (2-4 sentences). Always offer the free audit as next step. If they want to talk to Brittain directly, give his email.`;
 
 async function sendToGemini(userMsg){
-  chatHistory.push({role:"user",parts:[{text:userMsg}]});
   try{
-    var res=await fetch("https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key="+GEMINI_KEY,{
+    var res=await fetch("https://splendid-laughter-production-7b93.up.railway.app/api/oracle",{
       method:"POST",
       headers:{"Content-Type":"application/json"},
-      body:JSON.stringify({
-        system_instruction:{parts:[{text:SYSTEM_PROMPT}]},
-        contents:chatHistory
-      })
+      body:JSON.stringify({message:userMsg})
     });
     var data=await res.json();
-    var reply=data.candidates[0].content.parts[0].text;
-    chatHistory.push({role:"model",parts:[{text:reply}]});
-    return reply;
+    return data.reply||"Ask me anything about ANTHROPOS.";
   }catch(e){
     return "Having trouble connecting right now. Reach Brittain directly at b@anthroposalphaintelligence.com — he'll get back to you fast.";
   }
 }
 
 // ── Voice ───────────────────────────────────────────────────
-var voices=[];
-function loadVoices(){voices=window.speechSynthesis.getVoices();}
-loadVoices();
-if(window.speechSynthesis) window.speechSynthesis.onvoiceschanged=loadVoices;
+
 
 var currentAudio=null;
 async function speakResponse(text){

@@ -511,7 +511,7 @@ async function sendMessage(){
   inp.value="";
   // Unlock AudioContext on iOS — must happen sync inside user gesture
   try{var ac=_getAC();if(ac.state==="suspended")ac.resume();}catch(e){}
-  if(status)status.textContent="...";
+  if(status)status.textContent="The Oracle is consulting the intelligence...";
   if(resp){resp.classList.remove("visible");resp.textContent="";}
   var reply=await sendToGemini(msg);
   if(resp){resp.textContent=reply;resp.classList.add("visible");}

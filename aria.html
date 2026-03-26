@@ -126,6 +126,7 @@ header{position:fixed;top:0;width:100%;background:rgba(0,0,0,0.92);backdrop-filt
       <div class="tab" onclick="loadDemo('construction')">🔨 Construction</div>
       <div class="tab" onclick="loadDemo('realestate')">🏠 Real Estate</div>
       <div class="tab" onclick="loadDemo('auto')">🚗 Luxury Auto</div>
+      <div class="tab" onclick="loadDemo('lawn')">🌿 Lawn & Property</div>
     </div>
 
     <div class="demo-player">
@@ -213,6 +214,7 @@ header{position:fixed;top:0;width:100%;background:rgba(0,0,0,0.92);backdrop-filt
       <div class="industry-card"><div class="icon">🕊️</div><strong>Funeral Homes</strong><p>Empathy-first protocols, immediate human handoff triggers</p></div>
       <div class="industry-card"><div class="icon">⛪</div><strong>Churches</strong><p>Visitor welcome, event info, pastoral care routing</p></div>
       <div class="industry-card"><div class="icon">🏠</div><strong>Real Estate</strong><p>Lead qualification, showing scheduling, market FAQs</p></div>
+      <div class="industry-card"><div class="icon">🌿</div><strong>Lawn & Property</strong><p>Multi-property scheduling, tenant turnover requests, estimate booking</p></div>
     </div>
   </div>
 </section>
@@ -374,6 +376,26 @@ const DEMOS = {
       { role: "caller", text: "marcus.reed at outlook dot com." },
       { role: "aria",   text: "Perfect — Marcus Reed, marcus dot reed at outlook dot com. I'll have the GLE 53 pulled up front and ready for you. What time works today? We have availability this afternoon, and I want to make sure we give you the full experience you deserve, Marcus. This is a big decision and we take that seriously." }
     ]
+  },
+  lawn: {
+    title: "Austin Lawn & Property — ARIA (Sierra)",
+    subtitle: "Inbound call · Multi-property service inquiry",
+    icon: "🌿",
+    messages: [
+      { role: "aria",   text: "Thank you for calling Austin Lawn and Property — this is Sierra. How can I help you today?" },
+      { role: "caller", text: "Hi, I've got three rental houses and I've been trying to find a reliable lawn service. My last company just stopped showing up." },
+      { role: "aria",   text: "I completely understand that frustration — reliability is everything with rental properties. We specialize in multi-property accounts, and all our clients get a dedicated crew that shows up every time. Can I get your name and the zip codes for those three properties?" },
+      { role: "caller", text: "Sure, I'm David. They're all in the 78745 and 78748 area." },
+      { role: "aria",   text: "Perfect, David — both of those are in our service zone. Are you looking for standard weekly mowing, or the full package — mowing, edging, blowing, and seasonal treatments?" },
+      { role: "caller", text: "Probably the full package. And I might want fertilization too." },
+      { role: "aria",   text: "Smart move, especially with rentals — curb appeal directly affects the quality of tenants you attract. Let me get our property coordinator to build you a custom quote. What's the best phone number and email for you?" },
+      { role: "caller", text: "Number is 512-555-0142 and email is david at rentalsatx dot com." },
+      { role: "aria",   text: "Got it, David. We typically turn quotes around within 24 hours, and if everything looks good, we can start as early as next week. Is there anything urgent at any of the three properties right now?" },
+      { role: "caller", text: "Actually yeah — one just had a tenant move out and the yard is a mess. Can you do a one-time cleanup first?" },
+      { role: "aria",   text: "Absolutely — tenant turnover cleanups are something we do regularly. I'll flag that as priority for the coordinator. Is there a gate code or access note for that property?" },
+      { role: "caller", text: "Gate code is 1847." },
+      { role: "aria",   text: "Perfect, I've got that noted. You'll hear from our team within the hour on the cleanup, and the full ongoing quote by tomorrow morning. We're going to take great care of your properties, David — you've got the right crew now." }
+    ]
   }
 };
 
@@ -393,6 +415,7 @@ const AUDIO_FILES = {
   construction: ['construction_00_aria','construction_01_caller','construction_02_aria','construction_03_caller','construction_04_aria','construction_05_caller','construction_06_aria','construction_07_caller','construction_08_aria','construction_09_caller','construction_10_aria'],
   realestate:   ['realestate_00_aria','realestate_01_caller','realestate_02_aria','realestate_03_caller','realestate_04_aria','realestate_05_caller','realestate_06_aria','realestate_07_caller','realestate_08_aria','realestate_09_caller','realestate_10_aria'],
   auto:         ['auto_00_aria','auto_01_caller','auto_02_aria','auto_03_caller','auto_04_aria','auto_05_caller','auto_06_aria','auto_07_caller','auto_08_aria'],
+  lawn:         ['lawn_00_aria','lawn_01_caller','lawn_02_aria','lawn_03_caller','lawn_04_aria','lawn_05_caller','lawn_06_aria','lawn_07_caller','lawn_08_aria','lawn_09_caller','lawn_10_aria','lawn_11_caller','lawn_12_aria'],
 };
 
 function loadDemo(industry) {

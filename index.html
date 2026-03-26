@@ -445,15 +445,21 @@ LOCATION: Austin, Texas — serving local and national clients
 
 Respond in 2-4 sentences. Be direct and warm. Never robotic. Never salesy. Always offer the free audit as the natural next step — frame it as clarity, not a pitch. If they want to reach Brittain directly: b@anthroposalphaintelligence.com.`;
 
+var oracleHistory=[];
+
 async function sendToGemini(userMsg){
   try{
     var res=await fetch("https://splendid-laughter-production-7b93.up.railway.app/api/oracle",{
       method:"POST",
       headers:{"Content-Type":"application/json"},
-      body:JSON.stringify({message:userMsg})
+      body:JSON.stringify({message:userMsg,history:oracleHistory})
     });
     var data=await res.json();
-    return data.reply||"Ask me anything about ANTHROPOS.";
+    var reply=data.reply||"Ask me anything about ANTHROPOS.";
+    oracleHistory.push({role:"user",content:userMsg});
+    oracleHistory.push({role:"assistant",content:reply});
+    if(oracleHistory.length>20)oracleHistory=oracleHistory.slice(-20);
+    return reply;
   }catch(e){
     return "Having trouble connecting right now. Reach Brittain directly at b@anthroposalphaintelligence.com — he'll get back to you fast.";
   }

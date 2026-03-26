@@ -459,9 +459,24 @@ async function sendToGemini(userMsg){
     oracleHistory.push({role:"user",content:userMsg});
     oracleHistory.push({role:"assistant",content:reply});
     if(oracleHistory.length>20)oracleHistory=oracleHistory.slice(-20);
+    // Show booking link as clickable button — not read aloud by TTS
+    if(data.booking_link){
+      var resp=document.getElementById("oracleResponse");
+      if(resp){
+        var btn=document.createElement("a");
+        btn.href=data.booking_link;
+        btn.target="_blank";
+        btn.rel="noopener noreferrer";
+        btn.textContent="\uD83D\uDCC5 Book Your Free AI Audit";
+        btn.style.cssText="display:block;margin-top:12px;padding:12px 20px;background:rgba(66,133,244,0.15);border:1px solid rgba(66,133,244,0.5);border-radius:25px;color:#4285F4;text-decoration:none;font-size:0.9rem;font-weight:600;letter-spacing:0.05em;text-align:center;transition:all 0.3s";
+        btn.onmouseover=function(){this.style.background="rgba(66,133,244,0.28)";}
+        btn.onmouseout=function(){this.style.background="rgba(66,133,244,0.15)";}
+        setTimeout(function(){resp.appendChild(btn);},100);
+      }
+    }
     return reply;
   }catch(e){
-    return "Having trouble connecting right now. Reach Brittain directly at b@anthroposalphaintelligence.com — he'll get back to you fast.";
+    return "I'm having a moment — reach the ANTHROPOS team at b@anthroposalphaintelligence.com and someone will get back to you fast.";
   }
 }
 

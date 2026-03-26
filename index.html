@@ -468,32 +468,60 @@ async function sendToGemini(userMsg){
 // ── Voice ───────────────────────────────────────────────────
 
 
-var _ac=null,_acSrc=null;
+var _ac=null,_acSrc=null,_playSession=0;
 function _getAC(){if(!_ac)_ac=new(window.AudioContext||window.webkitAudioContext)();return _ac;}
-function stopOracle(){if(_acSrc){try{_acSrc.stop();}catch(e){}}_acSrc=null;document.getElementById("oracleStop").style.display="none";}
+function stopOracle(){_playSession++;if(_acSrc){try{_acSrc.stop();}catch(e){}}_acSrc=null;document.getElementById("oracleStop").style.display="none";}
+
+// Split response into sentences for parallel TTS fetching
+function _splitSentences(text){
+  var parts=text.match(/[^.!?]+[.!?]+\s*/g)||[];
+  parts=parts.map(function(s){return s.trim();}).filter(function(s){return s.length>3;});
+  return parts.length>=2?parts:[text];
+}
+
+// Fetch a single TTS chunk → AudioBuffer
+async function _fetchTTSBuffer(text,ac){
+  var resp=await fetch("https://splendid-laughter-production-7b93.up.railway.app/api/tts",{
+    method:"POST",headers:{"Content-Type":"application/json"},
+    body:JSON.stringify({text:text,voice:"en-AU-Chirp3-HD-Aoede"})
+  });
+  var data=await resp.json();
+  if(!data.audioContent)throw new Error("no audio");
+  var bin=atob(data.audioContent),bytes=new Uint8Array(bin.length);
+  for(var i=0;i<bin.length;i++)bytes[i]=bin.charCodeAt(i);
+  return new Promise(function(res,rej){ac.decodeAudioData(bytes.buffer,res,rej);});
+}
+
 async function speakResponse(text){
+  var session=++_playSession;
   try{
     var ac=_getAC();
     if(ac.state==="suspended")await ac.resume();
-    var resp=await fetch("https://splendid-laughter-production-7b93.up.railway.app/api/tts",{
-      method:"POST",headers:{"Content-Type":"application/json"},
-      body:JSON.stringify({text:text,voice:"en-AU-Chirp3-HD-Aoede"})
+    var chunks=_splitSentences(text);
+    // Fire ALL TTS requests in parallel — while chunk 1 plays, chunks 2+ are already loading
+    var promises=chunks.map(function(c){
+      return _fetchTTSBuffer(c,ac).catch(function(){return null;});
     });
-    var data=await resp.json();
-    if(data.audioContent){
-      var bin=atob(data.audioContent),bytes=new Uint8Array(bin.length);
-      for(var i=0;i<bin.length;i++)bytes[i]=bin.charCodeAt(i);
-      ac.decodeAudioData(bytes.buffer,function(buf){
+    document.getElementById("oracleStop").style.display="inline-block";
+    // Play each chunk sequentially as its promise resolves
+    for(var i=0;i<promises.length;i++){
+      if(session!==_playSession)return;
+      var buf=await promises[i];
+      if(!buf||session!==_playSession)continue;
+      await new Promise(function(resolve){
         if(_acSrc)try{_acSrc.stop();}catch(e){}
         _acSrc=ac.createBufferSource();
         _acSrc.buffer=buf;
         _acSrc.connect(ac.destination);
-        _acSrc.onended=function(){document.getElementById("oracleStop").style.display="none";_acSrc=null;};
+        _acSrc.onended=resolve;
         _acSrc.start(0);
-        document.getElementById("oracleStop").style.display="inline-block";
       });
     }
-  }catch(e){console.warn("TTS:",e);}
+    if(session===_playSession){document.getElementById("oracleStop").style.display="none";_acSrc=null;}
+  }catch(e){
+    console.warn("TTS:",e);
+    if(session===_playSession)document.getElementById("oracleStop").style.display="none";
+  }
 }
 
 async function sendMessage(){
@@ -510,6 +538,7 @@ async function sendMessage(){
   var reply=await sendToGemini(msg);
   if(resp){resp.textContent=reply;resp.classList.add("visible");}
   if(status)status.textContent="";
+  stopOracle();
   speakResponse(reply);
 }
 

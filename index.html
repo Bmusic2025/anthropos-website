@@ -487,6 +487,20 @@ var _ac=null,_acSrc=null,_playSession=0;
 function _getAC(){if(!_ac)_ac=new(window.AudioContext||window.webkitAudioContext)();return _ac;}
 function stopOracle(){_playSession++;if(_acSrc){try{_acSrc.stop();}catch(e){}}_acSrc=null;document.getElementById("oracleStop").style.display="none";}
 
+// Preprocess text so emails and .com don't get split as sentence boundaries
+function _ttsPreprocess(text){
+  // Convert emails: user@gmail.com → user at gmail dot com
+  text=text.replace(/[\w.+-]+@[\w.-]+\.[a-zA-Z]{2,}/g,function(m){
+    var at=m.indexOf('@');
+    var user=m.slice(0,at);
+    var domain=m.slice(at+1).replace(/\./g,' dot ');
+    return user+' at '+domain;
+  });
+  // Convert standalone .com/.org/.net etc → dot com
+  text=text.replace(/\.(com|org|net|io|co|us|biz)\b/g,' dot $1');
+  return text;
+}
+
 // Split response into sentences for parallel TTS fetching
 function _splitSentences(text){
   var parts=text.match(/[^.!?]+[.!?]+\s*/g)||[];
@@ -512,6 +526,7 @@ async function speakResponse(text){
   try{
     var ac=_getAC();
     if(ac.state==="suspended")await ac.resume();
+    text=_ttsPreprocess(text);
     var chunks=_splitSentences(text);
     // Fire ALL TTS requests in parallel — while chunk 1 plays, chunks 2+ are already loading
     var promises=chunks.map(function(c){

@@ -484,7 +484,12 @@ async function sendToGemini(userMsg){
 
 
 var _ac=null,_acSrc=null,_playSession=0;
-function _getAC(){if(!_ac)_ac=new(window.AudioContext||window.webkitAudioContext)();return _ac;}
+function _getAC(){
+  if(!_ac||_ac.state==="closed"){
+    _ac=new(window.AudioContext||window.webkitAudioContext)();
+  }
+  return _ac;
+}
 function stopOracle(){_playSession++;if(_acSrc){try{_acSrc.stop();}catch(e){}}_acSrc=null;document.getElementById("oracleStop").style.display="none";}
 
 // Preprocess text so emails and .com don't get split as sentence boundaries
@@ -538,6 +543,7 @@ async function speakResponse(text){
       if(session!==_playSession)return;
       var buf=await promises[i];
       if(!buf||session!==_playSession)continue;
+      if(ac.state==="suspended")await ac.resume();
       await new Promise(function(resolve){
         if(_acSrc)try{_acSrc.stop();}catch(e){}
         _acSrc=ac.createBufferSource();

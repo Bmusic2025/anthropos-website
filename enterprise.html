@@ -1,0 +1,726 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>ANTHRŌPOS Enterprise — AI Infrastructure That Never Falls Behind</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+html{overflow-x:hidden;scroll-behavior:smooth}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#060810;color:#d4dae8;overflow-x:hidden}
+
+/* ── GRID CANVAS ── */
+#gridCanvas{position:fixed;top:0;left:0;width:100vw;height:100vh;z-index:0;pointer-events:none;opacity:0.18}
+
+header,section,footer,.hero-ent{position:relative;z-index:10}
+
+/* ── HEADER ── */
+header{position:fixed;top:0;width:100%;background:rgba(6,8,16,0.92);backdrop-filter:blur(12px);padding:4px 24px;z-index:100;border-bottom:1px solid rgba(192,200,216,0.1)}
+.header-content{max-width:1200px;margin:0 auto;display:flex;justify-content:space-between;align-items:center}
+.logo-ent{font-family:'Space Grotesk',sans-serif;font-size:1rem;font-weight:700;letter-spacing:3px;color:#c0c8d8;text-decoration:none;text-transform:uppercase}
+.logo-ent span{color:#4a9eff}
+nav.ent-nav{display:flex;gap:28px;align-items:center}
+nav.ent-nav a{color:#8892a4;text-decoration:none;font-size:0.82rem;letter-spacing:1px;text-transform:uppercase;transition:color 0.3s}
+nav.ent-nav a:hover{color:#c0c8d8}
+.btn-assess{background:transparent;border:1px solid #4a9eff;color:#4a9eff;padding:7px 18px;border-radius:4px;font-size:0.78rem;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;cursor:pointer;transition:all 0.3s;text-decoration:none}
+.btn-assess:hover{background:#4a9eff;color:#060810}
+.back-link{color:#8892a4;font-size:0.78rem;text-decoration:none;letter-spacing:1px;text-transform:uppercase;transition:color 0.3s}
+.back-link:hover{color:#c0c8d8}
+
+/* ── HERO ── */
+.hero-ent{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:100px 24px 60px;background:radial-gradient(ellipse 70% 60% at 50% 40%,rgba(74,158,255,0.06) 0%,transparent 70%)}
+.ent-eyebrow{font-family:'Space Grotesk',sans-serif;font-size:0.72rem;letter-spacing:5px;text-transform:uppercase;color:#4a9eff;margin-bottom:24px;opacity:0.9}
+.ent-h1{font-family:'Space Grotesk',sans-serif;font-size:clamp(2.4rem,5vw,4.2rem);font-weight:700;line-height:1.12;color:#eef0f5;margin-bottom:24px;max-width:820px}
+.ent-h1 .silver{background:linear-gradient(135deg,#c0c8d8 0%,#ffffff 50%,#8892a4 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.ent-h1 .blue{color:#4a9eff}
+.ent-sub{font-size:1.1rem;color:#8892a4;max-width:600px;line-height:1.75;margin-bottom:48px}
+.hero-ctas{display:flex;gap:16px;flex-wrap:wrap;justify-content:center}
+.btn-primary-ent{background:#4a9eff;color:#060810;padding:14px 32px;border-radius:4px;font-size:0.88rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;cursor:pointer;transition:all 0.3s;border:none;text-decoration:none}
+.btn-primary-ent:hover{background:#6ab4ff;box-shadow:0 0 30px rgba(74,158,255,0.35)}
+.btn-ghost-ent{background:transparent;border:1px solid rgba(192,200,216,0.3);color:#c0c8d8;padding:14px 32px;border-radius:4px;font-size:0.88rem;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;cursor:pointer;transition:all 0.3s;text-decoration:none}
+.btn-ghost-ent:hover{border-color:#c0c8d8;background:rgba(192,200,216,0.06)}
+
+/* ── STATS BAR ── */
+.stats-bar{background:rgba(74,158,255,0.04);border-top:1px solid rgba(74,158,255,0.12);border-bottom:1px solid rgba(74,158,255,0.12);padding:36px 24px}
+.stats-grid{max-width:1000px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:40px;text-align:center}
+.stat-num{font-family:'Space Grotesk',sans-serif;font-size:2.4rem;font-weight:700;color:#4a9eff;display:block;line-height:1}
+.stat-label{font-size:0.78rem;color:#8892a4;letter-spacing:1.5px;text-transform:uppercase;margin-top:8px;display:block}
+
+/* ── SECTIONS ── */
+section{padding:90px 24px}
+.container{max-width:1200px;margin:0 auto}
+.section-eye{font-family:'Space Grotesk',sans-serif;font-size:0.68rem;letter-spacing:5px;text-transform:uppercase;color:#4a9eff;margin-bottom:16px;display:block}
+.section-h2{font-family:'Space Grotesk',sans-serif;font-size:clamp(1.8rem,3.5vw,2.8rem);font-weight:700;color:#eef0f5;line-height:1.2;margin-bottom:20px}
+.section-desc{font-size:1.05rem;color:#8892a4;line-height:1.8;max-width:600px}
+
+/* ── PROBLEM SECTION ── */
+.problem-section{background:rgba(255,60,60,0.02);border-top:1px solid rgba(255,60,60,0.08)}
+.problem-grid{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center;margin-top:20px}
+.problem-list{list-style:none;margin-top:28px}
+.problem-list li{display:flex;gap:14px;align-items:flex-start;padding:16px 0;border-bottom:1px solid rgba(255,255,255,0.05)}
+.problem-list li:last-child{border-bottom:none}
+.prob-icon{font-size:1.1rem;flex-shrink:0;margin-top:2px}
+.prob-text{font-size:0.95rem;color:#8892a4;line-height:1.6}
+.prob-text strong{color:#d4dae8;display:block;margin-bottom:4px;font-size:1rem}
+.the-trap{background:rgba(255,60,60,0.06);border:1px solid rgba(255,60,60,0.15);border-radius:8px;padding:28px 32px;margin-top:20px}
+.trap-label{font-size:0.7rem;letter-spacing:4px;text-transform:uppercase;color:rgba(255,100,100,0.8);margin-bottom:12px}
+.trap-text{font-size:1.15rem;color:#eef0f5;line-height:1.7;font-style:italic}
+
+/* ── DIFFERENCE SECTION ── */
+.diff-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:24px;margin-top:48px}
+.diff-card{background:rgba(74,158,255,0.03);border:1px solid rgba(74,158,255,0.12);border-radius:8px;padding:32px;transition:all 0.3s}
+.diff-card:hover{border-color:rgba(74,158,255,0.3);background:rgba(74,158,255,0.06);transform:translateY(-4px)}
+.diff-icon{font-size:1.8rem;margin-bottom:16px;display:block}
+.diff-title{font-family:'Space Grotesk',sans-serif;font-size:1.1rem;font-weight:700;color:#eef0f5;margin-bottom:10px}
+.diff-body{font-size:0.9rem;color:#8892a4;line-height:1.7}
+
+/* ── SERVICES ── */
+.services-section{background:rgba(192,200,216,0.02)}
+.services-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:28px;margin-top:48px}
+.service-card{background:rgba(6,8,16,0.8);border:1px solid rgba(192,200,216,0.1);border-radius:8px;padding:36px;position:relative;overflow:hidden;transition:all 0.3s}
+.service-card::before{content:"";position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,#4a9eff,transparent);opacity:0;transition:opacity 0.3s}
+.service-card:hover{border-color:rgba(192,200,216,0.2);transform:translateY(-4px)}
+.service-card:hover::before{opacity:1}
+.service-tag{font-size:0.65rem;letter-spacing:4px;text-transform:uppercase;color:#4a9eff;margin-bottom:14px;display:block}
+.service-name{font-family:'Space Grotesk',sans-serif;font-size:1.3rem;font-weight:700;color:#eef0f5;margin-bottom:12px}
+.service-desc{font-size:0.88rem;color:#8892a4;line-height:1.7;margin-bottom:20px}
+.service-features{list-style:none}
+.service-features li{font-size:0.82rem;color:#6a7585;padding:6px 0;border-bottom:1px solid rgba(255,255,255,0.04);display:flex;gap:8px;align-items:flex-start}
+.service-features li:last-child{border-bottom:none}
+.service-features li::before{content:"—";color:#4a9eff;flex-shrink:0}
+.service-price{margin-top:24px;padding-top:20px;border-top:1px solid rgba(255,255,255,0.06)}
+.price-from{font-size:0.7rem;letter-spacing:2px;text-transform:uppercase;color:#6a7585}
+.price-num{font-family:'Space Grotesk',sans-serif;font-size:1.6rem;font-weight:700;color:#c0c8d8}
+.price-period{font-size:0.8rem;color:#6a7585}
+
+/* ── COMPARISON ── */
+.compare-section{background:rgba(74,158,255,0.02);border-top:1px solid rgba(74,158,255,0.08);border-bottom:1px solid rgba(74,158,255,0.08)}
+.compare-table{width:100%;max-width:900px;margin:48px auto 0;border-collapse:collapse}
+.compare-table th{padding:16px 24px;font-size:0.72rem;letter-spacing:3px;text-transform:uppercase;font-weight:600;border-bottom:1px solid rgba(255,255,255,0.08)}
+.compare-table th:nth-child(2){color:#ff6060;text-align:center}
+.compare-table th:nth-child(3){color:#4a9eff;text-align:center}
+.compare-table th:first-child{color:#8892a4;text-align:left}
+.compare-table td{padding:18px 24px;font-size:0.9rem;border-bottom:1px solid rgba(255,255,255,0.05)}
+.compare-table td:first-child{color:#8892a4}
+.compare-table td:nth-child(2){text-align:center;color:#ff6060}
+.compare-table td:nth-child(3){text-align:center;color:#4a9eff;font-weight:600}
+.compare-table tr:last-child td{border-bottom:none}
+.compare-table tr:hover td{background:rgba(74,158,255,0.03)}
+
+/* ── COMPLIANCE ── */
+.compliance-section{}
+.compliance-badges{display:flex;flex-wrap:wrap;gap:16px;margin-top:40px}
+.badge{background:rgba(192,200,216,0.04);border:1px solid rgba(192,200,216,0.15);border-radius:6px;padding:14px 24px;font-size:0.78rem;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:#c0c8d8}
+.compliance-note{margin-top:24px;font-size:0.85rem;color:#6a7585;line-height:1.7;max-width:560px}
+
+/* ── PODCAST ── */
+.podcast-section{background:rgba(6,8,16,0.9)}
+.podcast-card{background:rgba(74,158,255,0.04);border:1px solid rgba(74,158,255,0.15);border-radius:12px;padding:52px;max-width:800px;margin:48px auto 0;text-align:center;position:relative;overflow:hidden}
+.podcast-card::before{content:"";position:absolute;top:-60px;right:-60px;width:200px;height:200px;background:radial-gradient(circle,rgba(74,158,255,0.08),transparent 70%);pointer-events:none}
+.podcast-name{font-family:'Space Grotesk',sans-serif;font-size:1.8rem;font-weight:700;color:#eef0f5;margin-bottom:12px}
+.podcast-tagline{font-size:0.85rem;letter-spacing:3px;text-transform:uppercase;color:#4a9eff;margin-bottom:24px;display:block}
+.podcast-desc{font-size:1rem;color:#8892a4;line-height:1.8;margin-bottom:32px}
+.podcast-topics{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-bottom:32px}
+.topic-pill{background:rgba(74,158,255,0.08);border:1px solid rgba(74,158,255,0.2);border-radius:20px;padding:6px 16px;font-size:0.75rem;color:#8892a4;letter-spacing:1px}
+.podcast-coming{font-size:0.72rem;letter-spacing:4px;text-transform:uppercase;color:#6a7585}
+
+/* ── ORACLE ENTERPRISE ── */
+.oracle-ent-section{padding:90px 24px;text-align:center}
+.oracle-ent-wrap{max-width:600px;margin:0 auto}
+.oracle-ent-label{font-size:0.72rem;letter-spacing:5px;text-transform:uppercase;color:#4a9eff;margin-bottom:32px;display:block}
+.oracle-ent-h2{font-family:'Space Grotesk',sans-serif;font-size:clamp(1.6rem,3vw,2.2rem);font-weight:700;color:#eef0f5;margin-bottom:16px}
+.oracle-ent-sub{font-size:0.95rem;color:#8892a4;margin-bottom:40px;line-height:1.7}
+
+/* Oracle UI — enterprise variant */
+.oracle-ent-orb{width:96px;height:96px;border-radius:50%;background:radial-gradient(circle at 38% 33%,rgba(74,158,255,0.5),rgba(30,80,160,0.2) 45%,rgba(6,8,16,0.95));box-shadow:0 0 16px rgba(74,158,255,0.2),0 0 40px rgba(74,158,255,0.06);animation:orbEntIdle 4s ease-in-out infinite;cursor:pointer;display:flex;align-items:center;justify-content:center;margin:0 auto 20px;position:relative;transition:all 0.4s}
+.oracle-ent-orb::before{content:"";position:absolute;inset:5px;border-radius:50%;border:1px solid rgba(74,158,255,0.18)}
+.oracle-ent-orb::after{content:"";position:absolute;inset:16px;border-radius:50%;border:1px solid rgba(74,158,255,0.09)}
+.oracle-ent-orb.listening{background:radial-gradient(circle at 38% 33%,rgba(167,139,250,0.7),rgba(109,40,217,0.3) 45%,rgba(6,8,16,0.95));box-shadow:0 0 18px rgba(139,92,246,0.35),0 0 40px rgba(139,92,246,0.1);animation:orbListen 0.65s ease-in-out infinite}
+.oracle-ent-orb.speaking{animation:orbSpeak 0.45s ease-in-out infinite alternate;box-shadow:0 0 22px rgba(74,158,255,0.5),0 0 50px rgba(74,158,255,0.12)}
+@keyframes orbEntIdle{0%,100%{transform:scale(1);box-shadow:0 0 16px rgba(74,158,255,0.2),0 0 40px rgba(74,158,255,0.06)}50%{transform:scale(1.03);box-shadow:0 0 22px rgba(74,158,255,0.3),0 0 55px rgba(74,158,255,0.1)}}
+@keyframes orbListen{0%,100%{transform:scale(1)}50%{transform:scale(1.07)}}
+@keyframes orbSpeak{0%{transform:scale(1)}100%{transform:scale(1.055)}}
+.ent-mic-icon{font-size:2rem;opacity:0.85;user-select:none}
+.oracle-ent-response{width:100%;min-height:56px;text-align:center;font-size:1rem;color:#c0c8d8;line-height:1.75;padding:0 10px;opacity:0;transition:opacity 0.6s;font-style:italic;margin-bottom:16px}
+.oracle-ent-response.visible{opacity:1}
+.oracle-ent-input-row{display:flex;align-items:center;gap:10px;background:rgba(255,255,255,0.03);border:1px solid rgba(74,158,255,0.18);border-radius:4px;padding:10px 10px 10px 20px;transition:all 0.3s}
+.oracle-ent-input-row:focus-within{border-color:rgba(74,158,255,0.5);box-shadow:0 0 24px rgba(74,158,255,0.08)}
+.oracle-ent-input{flex:1;background:transparent;border:none;outline:none;color:#d4dae8;font-size:0.95rem;font-family:inherit}
+.oracle-ent-input::placeholder{color:rgba(212,218,232,0.25)}
+.ent-send-btn{width:40px;height:40px;border-radius:2px;border:none;background:rgba(74,158,255,0.85);color:#060810;cursor:pointer;font-size:0.9rem;font-weight:800;display:flex;align-items:center;justify-content:center;transition:all 0.3s;flex-shrink:0}
+.ent-send-btn:hover{background:#4a9eff;box-shadow:0 0 18px rgba(74,158,255,0.4)}
+.ent-mic-btn{width:40px;height:40px;border-radius:2px;border:1px solid rgba(74,158,255,0.3);background:transparent;color:rgba(74,158,255,0.7);cursor:pointer;font-size:1rem;display:flex;align-items:center;justify-content:center;transition:all 0.3s;flex-shrink:0}
+.ent-mic-btn:hover{background:rgba(74,158,255,0.1);border-color:#4a9eff;color:#4a9eff}
+.ent-mic-btn.active{border-color:rgba(139,92,246,0.8);color:rgba(167,139,250,0.9);background:rgba(139,92,246,0.12);animation:mic-pulse 1s ease-in-out infinite}
+@keyframes mic-pulse{0%,100%{box-shadow:0 0 0 0 rgba(139,92,246,0.4)}50%{box-shadow:0 0 0 8px rgba(139,92,246,0)}}
+.oracle-ent-status{font-size:0.7rem;color:rgba(212,218,232,0.25);letter-spacing:2px;text-align:center;margin-top:10px}
+.ent-booking-link-wrap{margin-top:16px}
+.ent-booking-btn{display:inline-block;background:rgba(74,158,255,0.1);border:1px solid rgba(74,158,255,0.3);color:#4a9eff;padding:10px 24px;border-radius:4px;text-decoration:none;font-size:0.82rem;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;transition:all 0.3s}
+.ent-booking-btn:hover{background:rgba(74,158,255,0.2);border-color:#4a9eff}
+
+/* ── FOOTER ── */
+footer.ent-footer{background:rgba(4,6,12,0.98);border-top:1px solid rgba(192,200,216,0.08);padding:48px 24px;text-align:center}
+.footer-logo{font-family:'Space Grotesk',sans-serif;font-size:0.9rem;font-weight:700;letter-spacing:4px;color:#8892a4;text-transform:uppercase;margin-bottom:20px}
+.footer-logo span{color:#4a9eff}
+.footer-links{display:flex;gap:28px;justify-content:center;flex-wrap:wrap;margin-bottom:28px}
+.footer-links a{color:#6a7585;text-decoration:none;font-size:0.78rem;letter-spacing:1.5px;text-transform:uppercase;transition:color 0.3s}
+.footer-links a:hover{color:#c0c8d8}
+.footer-copy{font-size:0.72rem;color:#3a4050;letter-spacing:1px}
+
+/* ── RESPONSIVE ── */
+@media(max-width:768px){
+  nav.ent-nav{display:none}
+  .problem-grid{grid-template-columns:1fr}
+  .compare-table{font-size:0.8rem}
+  .compare-table th,.compare-table td{padding:12px 14px}
+  .podcast-card{padding:32px 24px}
+  .hero-ctas{flex-direction:column;align-items:center}
+}
+</style>
+</head>
+<body>
+
+<canvas id="gridCanvas"></canvas>
+
+<!-- HEADER -->
+<header>
+  <div class="header-content">
+    <a href="/" class="logo-ent">ANTHRŌPOS <span>ENTERPRISE</span></a>
+    <nav class="ent-nav">
+      <a href="#capabilities">Capabilities</a>
+      <a href="#compare">How We Compare</a>
+      <a href="#compliance">Compliance</a>
+      <a href="#intelligence-brief">Intelligence Brief</a>
+      <a href="#assess" class="btn-assess">Request Assessment</a>
+    </nav>
+  </div>
+</header>
+
+<!-- HERO -->
+<div class="hero-ent">
+  <p class="ent-eyebrow">ANTHRŌPOS Alpha Intelligence — Enterprise Division</p>
+  <h1 class="ent-h1">
+    The Last AI Infrastructure<br>
+    <span class="silver">You'll Ever Have to Rebuild.</span>
+  </h1>
+  <p class="ent-sub">
+    Most enterprise AI projects are outdated before they launch. We build fast, stay current, and grow with your operation — so your competitive edge never expires.
+  </p>
+  <div class="hero-ctas">
+    <a href="#assess" class="btn-primary-ent">Request a Strategic Assessment</a>
+    <a href="#intelligence-brief" class="btn-ghost-ent">The Intelligence Brief</a>
+  </div>
+</div>
+
+<!-- STATS BAR -->
+<div class="stats-bar">
+  <div class="stats-grid">
+    <div>
+      <span class="stat-num">6 wks</span>
+      <span class="stat-label">Average implementation time</span>
+    </div>
+    <div>
+      <span class="stat-num">24/7</span>
+      <span class="stat-label">AI operational coverage</span>
+    </div>
+    <div>
+      <span class="stat-num">100%</span>
+      <span class="stat-label">Calls recorded, transcribed, searchable</span>
+    </div>
+    <div>
+      <span class="stat-num">Quarterly</span>
+      <span class="stat-label">Competitor intelligence audits</span>
+    </div>
+  </div>
+</div>
+
+<!-- THE PROBLEM -->
+<section class="problem-section" id="problem">
+  <div class="container">
+    <div class="problem-grid">
+      <div>
+        <span class="section-eye">The Enterprise AI Trap</span>
+        <h2 class="section-h2">By the time they approve it, it's already outdated.</h2>
+        <p class="section-desc">Fortune 500 companies aren't losing the AI race because they lack resources. They're losing it because their own processes kill their speed.</p>
+        <div class="the-trap" style="margin-top:32px">
+          <p class="trap-label">The pattern we see</p>
+          <p class="trap-text">"We spent $4M, took 8 months to clear compliance and procurement — and by the time we launched, two newer solutions had already passed us."</p>
+        </div>
+      </div>
+      <div>
+        <ul class="problem-list">
+          <li>
+            <span class="prob-icon">⏳</span>
+            <div class="prob-text">
+              <strong>6–18 month implementation cycles</strong>
+              AI technology advances every 90 days. A plan written in January is behind by April.
+            </div>
+          </li>
+          <li>
+            <span class="prob-icon">🏛️</span>
+            <div class="prob-text">
+              <strong>Compliance layers that multiply delay</strong>
+              Legal, IT security, procurement, and executive sign-off — each adds weeks. Compounded, they add quarters.
+            </div>
+          </li>
+          <li>
+            <span class="prob-icon">🔒</span>
+            <div class="prob-text">
+              <strong>Locked into legacy vendors</strong>
+              Multi-year contracts with firms that haven't updated their core product since the engagement started.
+            </div>
+          </li>
+          <li>
+            <span class="prob-icon">📉</span>
+            <div class="prob-text">
+              <strong>No competitive benchmarking</strong>
+              Most organizations don't know where they stand relative to competitors until they've already lost ground.
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- THE DIFFERENCE -->
+<section id="capabilities">
+  <div class="container">
+    <span class="section-eye">The ANTHRŌPOS Difference</span>
+    <h2 class="section-h2">We move at the speed of AI — not the speed of procurement.</h2>
+    <div class="diff-cards">
+      <div class="diff-card">
+        <span class="diff-icon">⚡</span>
+        <p class="diff-title">Deployed in 6 Weeks, Not 6 Months</p>
+        <p class="diff-body">We architect, build, and deploy your AI infrastructure in the time most enterprise firms spend writing their statement of work. Your competitors are still in kickoff meetings. You're already live.</p>
+      </div>
+      <div class="diff-card">
+        <span class="diff-icon">🔄</span>
+        <p class="diff-title">You Never Fall Behind</p>
+        <p class="diff-body">AI is not a one-time build. It's a living system. Your ANTHROPOS engagement is structured to evolve with the technology — what we deploy today gets better every quarter, automatically.</p>
+      </div>
+      <div class="diff-card">
+        <span class="diff-icon">🔍</span>
+        <p class="diff-title">Quarterly Competitive Intelligence</p>
+        <p class="diff-body">Every quarter, we audit your competitive landscape — what your competitors are deploying, where you're ahead, where the gap is closing. Strategic intelligence, not just operations.</p>
+      </div>
+      <div class="diff-card">
+        <span class="diff-icon">🏗️</span>
+        <p class="diff-title">Custom-Built, Not Off-the-Shelf</p>
+        <p class="diff-body">Every system is trained on your verified business data — your products, your policies, your voice. Not a generic template with your logo on it.</p>
+      </div>
+      <div class="diff-card">
+        <span class="diff-icon">🛡️</span>
+        <p class="diff-title">Compliance-Ready Architecture</p>
+        <p class="diff-body">HIPAA-aligned workflows for healthcare-adjacent operations. Cloud-hosted or on-premises deployment. Data sovereignty options. Built to clear your compliance requirements, not fight them.</p>
+      </div>
+      <div class="diff-card">
+        <span class="diff-icon">👁️</span>
+        <p class="diff-title">White-Glove Execution</p>
+        <p class="diff-body">One dedicated point of contact. Direct line to the architect. No ticket queues, no offshore support rotations, no six-week response windows. You get us.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section class="services-section" id="services">
+  <div class="container">
+    <span class="section-eye">Enterprise Capabilities</span>
+    <h2 class="section-h2">A complete AI operations stack for organizations that move at scale.</h2>
+    <div class="services-grid">
+
+      <div class="service-card">
+        <span class="service-tag">AI Communications</span>
+        <p class="service-name">ARIA Enterprise</p>
+        <p class="service-desc">24/7 AI receptionist trained exclusively on your business data. Multi-location capable. Handles call volume spikes that would overwhelm any human team — without adding headcount.</p>
+        <ul class="service-features">
+          <li>Multi-location routing and management</li>
+          <li>Department-level call intelligence</li>
+          <li>CRM integration and auto-booking</li>
+          <li>Every call transcribed — permanent, searchable record</li>
+          <li>Escalation protocols with compliance documentation</li>
+          <li>HIPAA-aligned data handling available</li>
+        </ul>
+        <div class="service-price">
+          <span class="price-from">Starting at</span><br>
+          <span class="price-num">$897</span><span class="price-period"> / mo</span>
+        </div>
+      </div>
+
+      <div class="service-card">
+        <span class="service-tag">Intelligence</span>
+        <p class="service-name">GUARDIAN Enterprise</p>
+        <p class="service-desc">Reputation management and business intelligence at scale. Detects patterns across locations, teams, and timeframes. Catches problems before they become public — and benchmarks you against competitors quarterly.</p>
+        <ul class="service-features">
+          <li>Multi-location reputation monitoring</li>
+          <li>Pattern detection — same complaint, same team, same shift</li>
+          <li>Quarterly competitive benchmarking report</li>
+          <li>Review response at scale with brand voice consistency</li>
+          <li>Executive-level intelligence dashboard</li>
+        </ul>
+        <div class="service-price">
+          <span class="price-from">Starting at</span><br>
+          <span class="price-num">$697</span><span class="price-period"> / mo</span>
+        </div>
+      </div>
+
+      <div class="service-card">
+        <span class="service-tag">Automation</span>
+        <p class="service-name">NEO — Workflow Intelligence</p>
+        <p class="service-desc">Full enterprise workflow automation. Lead management, internal operations, customer lifecycle, team coordination — mapped, built, and deployed as interconnected AI systems.</p>
+        <ul class="service-features">
+          <li>End-to-end workflow architecture</li>
+          <li>ERP and CRM system integration</li>
+          <li>AI-driven internal operations</li>
+          <li>Custom compliance documentation workflows</li>
+          <li>Quarterly optimization and expansion</li>
+        </ul>
+        <div class="service-price">
+          <span class="price-from">Custom pricing</span><br>
+          <span class="price-num" style="font-size:1.1rem;color:#8892a4">Scoped at assessment</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- COMPARISON TABLE -->
+<section class="compare-section" id="compare">
+  <div class="container" style="text-align:center">
+    <span class="section-eye">Side by Side</span>
+    <h2 class="section-h2">The honest comparison.</h2>
+    <table class="compare-table">
+      <thead>
+        <tr>
+          <th style="text-align:left">Capability</th>
+          <th>Traditional Enterprise AI Firm</th>
+          <th>ANTHRŌPOS Enterprise</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Implementation timeline</td>
+          <td>6–18 months</td>
+          <td>4–6 weeks</td>
+        </tr>
+        <tr>
+          <td>Technology currency</td>
+          <td>Locked at contract date</td>
+          <td>Continuously updated</td>
+        </tr>
+        <tr>
+          <td>Competitor benchmarking</td>
+          <td>Not included</td>
+          <td>Quarterly, included</td>
+        </tr>
+        <tr>
+          <td>Customization</td>
+          <td>Template-based</td>
+          <td>Fully custom-built</td>
+        </tr>
+        <tr>
+          <td>On-premises deployment</td>
+          <td>Premium add-on</td>
+          <td>Available, scoped at audit</td>
+        </tr>
+        <tr>
+          <td>Call documentation</td>
+          <td>Varies</td>
+          <td>100% transcribed, permanent</td>
+        </tr>
+        <tr>
+          <td>Point of contact</td>
+          <td>Account rotation</td>
+          <td>Dedicated architect</td>
+        </tr>
+        <tr>
+          <td>HIPAA-aligned options</td>
+          <td>Separate engagement</td>
+          <td>Built into architecture</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- COMPLIANCE -->
+<section class="compliance-section" id="compliance">
+  <div class="container">
+    <span class="section-eye">Compliance & Deployment</span>
+    <h2 class="section-h2">Built to clear your requirements, not fight them.</h2>
+    <p class="section-desc">We architect for compliance from the ground up — not as an afterthought. Whether you operate in healthcare, finance, legal, or multi-state regulated environments, your system is designed to meet your governance requirements before deployment.</p>
+    <div class="compliance-badges">
+      <span class="badge">HIPAA-Aligned</span>
+      <span class="badge">SOC 2 Roadmap</span>
+      <span class="badge">Cloud-Hosted</span>
+      <span class="badge">On-Premises Available</span>
+      <span class="badge">Data Sovereignty Options</span>
+      <span class="badge">Call Documentation</span>
+      <span class="badge">Audit-Ready Transcripts</span>
+    </div>
+    <p class="compliance-note" style="margin-top:28px">Compliance architecture is scoped during your Strategic Assessment. We will not promise what we have not confirmed — every engagement is designed around your specific regulatory environment.</p>
+  </div>
+</section>
+
+<!-- INTELLIGENCE BRIEF PODCAST -->
+<section class="podcast-section" id="intelligence-brief">
+  <div class="container" style="text-align:center">
+    <span class="section-eye">Coming Soon</span>
+    <h2 class="section-h2">The ANTHRŌPOS Intelligence Brief</h2>
+    <div class="podcast-card">
+      <span class="podcast-tagline">Quarterly Enterprise AI Intelligence</span>
+      <p class="podcast-name">The Intelligence Brief</p>
+      <p class="podcast-desc">
+        A quarterly briefing for operators and executives who can't afford to fall behind. No hype, no demos — just what's actually moving in enterprise AI, what your competitors are deploying, and what you should be doing in the next 90 days.
+      </p>
+      <div class="podcast-topics">
+        <span class="topic-pill">Implementation case studies</span>
+        <span class="topic-pill">Competitive landscape shifts</span>
+        <span class="topic-pill">The 90-day AI watch list</span>
+        <span class="topic-pill">What Fortune 500 is getting wrong</span>
+        <span class="topic-pill">Agility vs. compliance</span>
+      </div>
+      <p class="podcast-coming">Launching Q2 2026 — Register for early access below</p>
+    </div>
+  </div>
+</section>
+
+<!-- ORACLE ENTERPRISE — REQUEST ASSESSMENT -->
+<section class="oracle-ent-section" id="assess">
+  <div class="oracle-ent-wrap">
+    <span class="oracle-ent-label">Strategic Intelligence</span>
+    <h2 class="oracle-ent-h2">Talk to The Oracle.</h2>
+    <p class="oracle-ent-sub">Describe your operation, your challenge, or what you're trying to build. We'll map the architecture and come back with a real assessment — not a sales deck.</p>
+
+    <div class="oracle-ent-orb" id="entOrb" onclick="entOrbClick()">
+      <span class="ent-mic-icon" id="entMicIcon">◈</span>
+    </div>
+
+    <div class="oracle-ent-response" id="entResp"></div>
+
+    <div class="oracle-ent-input-row">
+      <input class="oracle-ent-input" id="entInput" type="text" placeholder="Describe your operation..." autocomplete="off" />
+      <button class="ent-mic-btn" id="entMicBtn" onclick="entMicToggle()" title="Voice input">🎙</button>
+      <button class="ent-send-btn" onclick="entSend()">→</button>
+    </div>
+    <p class="oracle-ent-status" id="entStatus"></p>
+    <div class="ent-booking-link-wrap" id="entBookingWrap" style="display:none">
+      <a href="https://api.leadconnectorhq.com/widget/booking/z1420Dk0TaxuFLbJJMby" target="_blank" class="ent-booking-btn">Schedule Strategic Assessment →</a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="ent-footer">
+  <p class="footer-logo">ANTHRŌPOS <span>Alpha Intelligence</span></p>
+  <div class="footer-links">
+    <a href="/">Back to Main Site</a>
+    <a href="/about.html">About</a>
+    <a href="#assess">Request Assessment</a>
+    <a href="mailto:b@anthroposalphaintelligence.com">Contact</a>
+  </div>
+  <p class="footer-copy">© 2026 ANTHRŌPOS Alpha Intelligence. Austin, TX. All rights reserved.</p>
+</footer>
+
+<!-- GRID BACKGROUND ANIMATION -->
+<script>
+(function(){
+  var c=document.getElementById('gridCanvas');
+  var ctx=c.getContext('2d');
+  function resize(){c.width=window.innerWidth;c.height=window.innerHeight;}
+  resize();
+  window.addEventListener('resize',resize);
+  function draw(){
+    ctx.clearRect(0,0,c.width,c.height);
+    ctx.strokeStyle='rgba(74,158,255,0.12)';
+    ctx.lineWidth=0.5;
+    var sz=60;
+    for(var x=0;x<c.width;x+=sz){
+      ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,c.height);ctx.stroke();
+    }
+    for(var y=0;y<c.height;y+=sz){
+      ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(c.width,y);ctx.stroke();
+    }
+  }
+  draw();
+  window.addEventListener('resize',draw);
+})();
+</script>
+
+<!-- ORACLE ENTERPRISE LOGIC -->
+<script>
+var entHistory=[];
+var entPlaySession=0;
+var entAC=null;
+var entACSrc=null;
+var entListening=false;
+var entRecognition=null;
+
+function _entGetAC(){
+  if(!entAC||entAC.state==="closed"){
+    entAC=new(window.AudioContext||window.webkitAudioContext)();
+  }
+  return entAC;
+}
+
+// Seed with enterprise context on load
+window.addEventListener('load',function(){
+  setTimeout(function(){
+    var r=document.getElementById('entResp');
+    if(r){
+      r.textContent="Enterprise operations come with complexity most AI firms aren't built to handle. Tell me about your organization — I'll tell you exactly where we fit.";
+      r.classList.add('visible');
+    }
+  },1200);
+});
+
+function entOrbClick(){
+  try{var ac=_entGetAC();if(ac.state==="suspended")ac.resume();}catch(e){}
+  entMicToggle();
+}
+
+function entMicToggle(){
+  if(!('webkitSpeechRecognition' in window||'SpeechRecognition' in window)){
+    document.getElementById('entInput').focus();
+    return;
+  }
+  if(entListening){
+    if(entRecognition)entRecognition.stop();
+    entListening=false;
+    document.getElementById('entOrb').classList.remove('listening');
+    document.getElementById('entMicBtn').classList.remove('active');
+    return;
+  }
+  var SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+  entRecognition=new SR();
+  entRecognition.continuous=false;
+  entRecognition.interimResults=false;
+  entRecognition.lang='en-US';
+  entRecognition.onstart=function(){
+    entListening=true;
+    document.getElementById('entOrb').classList.add('listening');
+    document.getElementById('entMicBtn').classList.add('active');
+    document.getElementById('entStatus').textContent='Listening...';
+  };
+  entRecognition.onresult=function(e){
+    var t=e.results[0][0].transcript;
+    document.getElementById('entInput').value=t;
+    entListening=false;
+    document.getElementById('entOrb').classList.remove('listening');
+    document.getElementById('entMicBtn').classList.remove('active');
+    document.getElementById('entStatus').textContent='';
+    entSend();
+  };
+  entRecognition.onerror=function(){
+    entListening=false;
+    document.getElementById('entOrb').classList.remove('listening');
+    document.getElementById('entMicBtn').classList.remove('active');
+    document.getElementById('entStatus').textContent='';
+  };
+  entRecognition.onend=function(){
+    entListening=false;
+    document.getElementById('entOrb').classList.remove('listening');
+    document.getElementById('entMicBtn').classList.remove('active');
+  };
+  entRecognition.start();
+}
+
+async function entSend(){
+  var inp=document.getElementById('entInput');
+  var msg=inp.value.trim();
+  if(!msg)return;
+  inp.value='';
+  try{var ac=_entGetAC();if(ac.state==="suspended")ac.resume();}catch(e){}
+  var status=document.getElementById('entStatus');
+  var resp=document.getElementById('entResp');
+  if(status)status.textContent='Consulting the intelligence...';
+  if(resp){resp.classList.remove('visible');resp.textContent='';}
+
+  try{
+    var res=await fetch("https://splendid-laughter-production-7b93.up.railway.app/api/oracle",{
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({message:msg,history:entHistory,context:"enterprise"})
+    });
+    var data=await res.json();
+    var reply=data.reply||"Tell me more about your operation.";
+    entHistory.push({role:"user",content:msg});
+    entHistory.push({role:"assistant",content:reply});
+    if(entHistory.length>20)entHistory=entHistory.slice(-20);
+    if(resp){resp.textContent=reply;resp.classList.add('visible');}
+    if(status)status.textContent='';
+    if(data.booking_link){
+      document.getElementById('entBookingWrap').style.display='block';
+    }
+    entSpeakResponse(reply);
+  }catch(err){
+    if(resp){resp.textContent="Give me a moment — try that again.";resp.classList.add('visible');}
+    if(status)status.textContent='';
+  }
+}
+
+document.getElementById('entInput').addEventListener('keydown',function(e){
+  if(e.key==='Enter')entSend();
+});
+
+function _entTtsPreprocess(text){
+  text=text.replace(/[\w.+-]+@[\w.-]+\.[a-zA-Z]{2,}/g,function(m){
+    var at=m.indexOf('@');
+    var user=m.slice(0,at);
+    var domain=m.slice(at+1).replace(/\./g,' dot ');
+    return user+' at '+domain;
+  });
+  text=text.replace(/\.(com|org|net|io|co|us|biz)\b/g,' dot $1');
+  return text;
+}
+
+function _entSplitSentences(text){
+  var chunks=text.match(/[^.!?]+[.!?]+\s*/g)||[text];
+  return chunks.map(function(c){return c.trim();}).filter(function(c){return c.length>0;});
+}
+
+async function entSpeakResponse(text){
+  var session=++entPlaySession;
+  try{
+    var ac=_entGetAC();
+    if(ac.state==="suspended")await ac.resume();
+    text=_entTtsPreprocess(text);
+    var chunks=_entSplitSentences(text);
+    var orb=document.getElementById('entOrb');
+    if(orb)orb.classList.add('speaking');
+    var promises=chunks.map(function(chunk){
+      return fetch("https://splendid-laughter-production-7b93.up.railway.app/api/tts",{
+        method:"POST",
+        headers:{"Content-Type":"application/json"},
+        body:JSON.stringify({text:chunk})
+      }).then(function(r){return r.arrayBuffer();})
+        .then(function(buf){return ac.decodeAudioData(buf);})
+        .catch(function(){return null;});
+    });
+    for(var i=0;i<promises.length;i++){
+      if(session!==entPlaySession)break;
+      var buf=await promises[i];
+      if(!buf||session!==entPlaySession)continue;
+      if(ac.state==="suspended")await ac.resume();
+      await new Promise(function(resolve){
+        if(entACSrc)try{entACSrc.stop();}catch(e){}
+        entACSrc=ac.createBufferSource();
+        entACSrc.buffer=buf;
+        entACSrc.connect(ac.destination);
+        entACSrc.onended=resolve;
+        entACSrc.start(0);
+      });
+    }
+    if(orb)orb.classList.remove('speaking');
+  }catch(e){
+    var orb=document.getElementById('entOrb');
+    if(orb)orb.classList.remove('speaking');
+  }
+}
+</script>
+
+</body>
+</html>

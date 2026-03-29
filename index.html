@@ -777,72 +777,77 @@ document.querySelectorAll('a[href^="#"]').forEach(function(l){l.addEventListener
 
 /* ---- Speech Recognition (Microphone) ---- */
 var isListening=false;
+var _SpeechClass=window.SpeechRecognition||window.webkitSpeechRecognition||null;
 var recognition=null;
 var _silenceTimer=null;
-var _silenceDelay=1800; // ms of silence before auto-send — long enough for natural pauses
+var _silenceDelay=1800;
 var _lastTranscript='';
-if('webkitSpeechRecognition' in window || 'SpeechRecognition' in window){
-  var SpeechRecognition=window.SpeechRecognition||window.webkitSpeechRecognition;
-  recognition=new SpeechRecognition();
-  recognition.continuous=true;   // don't stop on short pauses
-  recognition.interimResults=true;
-  recognition.lang='en-US';
-  recognition.maxAlternatives=1;
-  recognition.onresult=function(e){
+
+function _buildRecognition(){
+  if(!_SpeechClass)return null;
+  var r=new _SpeechClass();
+  r.continuous=true;
+  r.interimResults=true;
+  r.lang='en-US';
+  r.maxAlternatives=1;
+  r.onresult=function(e){
     var transcript='';
-    for(var i=0;i<e.results.length;i++){
-      transcript+=e.results[i][0].transcript;
-    }
+    for(var i=0;i<e.results.length;i++){transcript+=e.results[i][0].transcript;}
     _lastTranscript=transcript;
     document.getElementById("chatInput").value=transcript;
-    // Reset silence timer on every new word — only send after real pause
     if(_silenceTimer)clearTimeout(_silenceTimer);
     _silenceTimer=setTimeout(function(){
-      if(_lastTranscript.trim()){
-        stopMic();
-        sendMessage();
-      }
+      if(_lastTranscript.trim()){stopMic();sendMessage();}
     },_silenceDelay);
   };
-  recognition.onerror=function(e){
-    if(e.error==='no-speech')return; // ignore brief silence errors — continuous mode handles it
-    stopMic();
-    document.getElementById("chatStatus").textContent="Couldn't hear that — try again or type your question.";
+  r.onerror=function(e){
+    if(e.error==='no-speech')return;
+    isListening=false;
+    var btn=document.getElementById("oracleMicBtn");
+    if(btn)btn.classList.remove("active");
+    document.getElementById("chatStatus").textContent=
+      e.error==='not-allowed'?"Mic blocked — check browser permissions and try again.":"Couldn't hear that — try again or type below.";
   };
-  recognition.onend=function(){
-    // On mobile the browser stops recognition unexpectedly — restart if still listening
+  r.onend=function(){
     if(isListening){
-      try{recognition.start();}catch(ex){}
+      // browser stopped unexpectedly — rebuild and restart
+      recognition=_buildRecognition();
+      if(recognition)try{recognition.start();}catch(ex){}
     }
   };
+  return r;
 }
+
 function toggleOracleMic(){if(isListening){stopMicAndSend();}else{startMic();}}
 function toggleMic(){toggleOracleMic();}
 function stopMicAndSend(){
-  // User tapped mic to stop — send whatever was captured
   stopMic();
   if(_lastTranscript.trim()){sendMessage();}
 }
 function startMic(){
-  if(!recognition){document.getElementById("chatStatus").textContent="Voice not supported — try Chrome";return;}
+  if(!_SpeechClass){document.getElementById("chatStatus").textContent="Voice not supported — please use Chrome";return;}
   _lastTranscript='';
+  // Rebuild recognition fresh every tap — fixes macOS/Chrome stale-focus bug
+  if(recognition){try{recognition.abort();}catch(ex){}}
+  recognition=_buildRecognition();
   isListening=true;
-  var orb=document.getElementById("oracleOrb");
   var btn=document.getElementById("oracleMicBtn");
-  if(orb)orb.classList.add("listening");
   if(btn)btn.classList.add("active");
   document.getElementById("chatStatus").textContent="Listening... speak now";
-  // Scroll oracle widget into view and prevent page from jumping on mobile
   var widget=document.getElementById("oracleWidget");
-  if(widget){
-    widget.scrollIntoView({behavior:"smooth",block:"center"});
-  }
-  // Lock viewport scroll position during voice on mobile
+  if(widget)widget.scrollIntoView({behavior:"smooth",block:"center"});
   if(window.innerWidth<=768){
     document.body.style.overflow='hidden';
     document.documentElement.style.overflow='hidden';
   }
-  try{recognition.start();}catch(e){}
+  // Small delay lets macOS focus context settle before starting
+  setTimeout(function(){
+    if(isListening&&recognition)try{recognition.start();}catch(e){
+      isListening=false;
+      if(btn)btn.classList.remove("active");
+      document.getElementById("chatStatus").textContent="Mic blocked — check browser permissions and try again.";
+    }
+  },120);
 }
 function stopMic(){
   if(_silenceTimer){clearTimeout(_silenceTimer);_silenceTimer=null;}

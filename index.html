@@ -153,7 +153,35 @@ footer{
     border-top:1px solid rgba(255,255,255,0.05) !important;
     padding-bottom:60px !important;
 }
-@media(max-width:768px){html,body{overflow-x:hidden!important;max-width:100vw!important}section,.container{overflow-x:hidden!important}a{word-break:break-all}.grid{grid-template-columns:1fr!important}.character{max-width:100%!important;width:100%!important}}
+@media(max-width:768px){
+  html,body{overflow-x:hidden!important;max-width:100vw!important}
+  section,.container{overflow-x:hidden!important}
+  a{word-break:break-all}
+  .grid{grid-template-columns:1fr!important}
+  .character{max-width:100%!important;width:100%!important}
+  /* Oracle voice UI — prevent layout shift during mic use */
+  #oracleWidget{
+    position:relative;
+    z-index:10;
+    /* Reserve space so keyboard open doesn't collapse the widget */
+    padding-bottom:env(keyboard-inset-height,0px);
+  }
+  .oracle-input-row{
+    width:96%!important;
+    max-width:100%!important;
+  }
+  .oracle-mic-btn,.oracle-mic-btn *{
+    /* Bigger tap target on mobile */
+    min-width:48px!important;
+    min-height:48px!important;
+    font-size:1.3rem!important;
+  }
+  /* Prevent iOS bounce/scroll from moving the orb */
+  .oracle-section{
+    -webkit-overflow-scrolling:touch;
+    touch-action:pan-y;
+  }
+}
 </style>
 </head>
 <body>
@@ -746,49 +774,84 @@ document.querySelectorAll('a[href^="#"]').forEach(function(l){l.addEventListener
 /* ---- Speech Recognition (Microphone) ---- */
 var isListening=false;
 var recognition=null;
+var _silenceTimer=null;
+var _silenceDelay=1800; // ms of silence before auto-send — long enough for natural pauses
+var _lastTranscript='';
 if('webkitSpeechRecognition' in window || 'SpeechRecognition' in window){
   var SpeechRecognition=window.SpeechRecognition||window.webkitSpeechRecognition;
   recognition=new SpeechRecognition();
-  recognition.continuous=false;
+  recognition.continuous=true;   // don't stop on short pauses
   recognition.interimResults=true;
   recognition.lang='en-US';
+  recognition.maxAlternatives=1;
   recognition.onresult=function(e){
     var transcript='';
-    for(var i=e.resultIndex;i<e.results.length;i++){
+    for(var i=0;i<e.results.length;i++){
       transcript+=e.results[i][0].transcript;
     }
+    _lastTranscript=transcript;
     document.getElementById("chatInput").value=transcript;
-    if(e.results[e.results.length-1].isFinal){
-      stopMic();
-      sendMessage();
-    }
+    // Reset silence timer on every new word — only send after real pause
+    if(_silenceTimer)clearTimeout(_silenceTimer);
+    _silenceTimer=setTimeout(function(){
+      if(_lastTranscript.trim()){
+        stopMic();
+        sendMessage();
+      }
+    },_silenceDelay);
   };
   recognition.onerror=function(e){
+    if(e.error==='no-speech')return; // ignore brief silence errors — continuous mode handles it
     stopMic();
     document.getElementById("chatStatus").textContent="Couldn't hear that — try again or type your question.";
   };
-  recognition.onend=function(){stopMic()};
+  recognition.onend=function(){
+    // On mobile the browser stops recognition unexpectedly — restart if still listening
+    if(isListening){
+      try{recognition.start();}catch(ex){}
+    }
+  };
 }
-function toggleOracleMic(){if(isListening){stopMic()}else{startMic()}}
+function toggleOracleMic(){if(isListening){stopMicAndSend();}else{startMic();}}
 function toggleMic(){toggleOracleMic();}
+function stopMicAndSend(){
+  // User tapped mic to stop — send whatever was captured
+  stopMic();
+  if(_lastTranscript.trim()){sendMessage();}
+}
 function startMic(){
   if(!recognition){document.getElementById("chatStatus").textContent="Voice not supported — try Chrome";return;}
+  _lastTranscript='';
   isListening=true;
   var orb=document.getElementById("oracleOrb");
   var btn=document.getElementById("oracleMicBtn");
   if(orb)orb.classList.add("listening");
   if(btn)btn.classList.add("active");
   document.getElementById("chatStatus").textContent="Listening... speak now";
-  recognition.start();
+  // Scroll oracle widget into view and prevent page from jumping on mobile
+  var widget=document.getElementById("oracleWidget");
+  if(widget){
+    widget.scrollIntoView({behavior:"smooth",block:"center"});
+  }
+  // Lock viewport scroll position during voice on mobile
+  if(window.innerWidth<=768){
+    document.body.style.overflow='hidden';
+    document.documentElement.style.overflow='hidden';
+  }
+  try{recognition.start();}catch(e){}
 }
 function stopMic(){
+  if(_silenceTimer){clearTimeout(_silenceTimer);_silenceTimer=null;}
   isListening=false;
-  if(recognition)try{recognition.stop()}catch(e){}
+  try{if(recognition)recognition.stop();}catch(e){}
   var orb=document.getElementById("oracleOrb");
   var btn=document.getElementById("oracleMicBtn");
   if(orb)orb.classList.remove("listening");
   if(btn)btn.classList.remove("active");
   document.getElementById("chatStatus").textContent="Tap the orb or type your question";
+  // Restore scroll on mobile
+  document.body.style.overflow='';
+  document.documentElement.style.overflow='';
 }
 
 

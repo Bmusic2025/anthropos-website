@@ -81,7 +81,7 @@ h2{font-size:2.5rem;text-align:center;margin-bottom:40px;font-weight:bold}
 /* ── Small phones (portrait, up to 480px) ─────────────── */
 @media(max-width:480px){
   nav{display:none}.mobile-nav{display:flex}
-  .hero{padding:44px 6px 6px;min-height:100vh;justify-content:flex-start}
+  .hero{padding:44px 6px 6px;min-height:100dvh;min-height:100vh;justify-content:flex-start}
   .brand{font-size:2rem;letter-spacing:-0.5px}
   .tagline{font-size:0.75rem;margin:6px auto;max-width:320px}
   .character{max-width:100%;width:100%;max-height:62vh;object-fit:contain;margin-top:auto}
@@ -100,7 +100,7 @@ h2{font-size:2.5rem;text-align:center;margin-bottom:40px;font-weight:bold}
 /* ── Large phones + landscape phones (481px–768px) ──── */
 @media(min-width:481px) and (max-width:768px){
   nav{display:none}.mobile-nav{display:flex}
-  .hero{padding:44px 10px 6px;min-height:100vh;justify-content:flex-start}
+  .hero{padding:44px 10px 6px;min-height:100dvh;min-height:100vh;justify-content:flex-start}
   .brand{font-size:2.4rem}
   .tagline{font-size:0.85rem;max-width:380px}
   .character{max-width:96vw;width:96vw;max-height:60vh;object-fit:contain;margin-top:auto}
@@ -957,5 +957,19 @@ Continue with Facebook
   ping(); // fire immediately on page load
   setInterval(ping, 4*60*1000); // keep warm every 4 minutes
 })();
+
+// ── Back-forward cache fix — reset layout when returning to page ──
+window.addEventListener('pageshow',function(e){
+  if(e.persisted){
+    // Page restored from bfcache — force a clean repaint so hero proportions reset
+    document.body.style.display='none';
+    // eslint-disable-next-line no-unused-expressions
+    document.body.offsetHeight; // trigger reflow
+    document.body.style.display='';
+    // Resize matrix canvas to match current viewport
+    var canvas=document.getElementById('matrixCanvas');
+    if(canvas){canvas.width=window.innerWidth;canvas.height=window.innerHeight;}
+  }
+});
 </body>
 </html>

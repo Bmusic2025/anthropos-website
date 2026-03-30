@@ -710,7 +710,7 @@ function _splitSentences(text){
 async function _fetchTTSBuffer(text,ac){
   var resp=await fetch("https://splendid-laughter-production-7b93.up.railway.app/api/tts",{
     method:"POST",headers:{"Content-Type":"application/json"},
-    body:JSON.stringify({text:text,voice:"en-AU-Chirp3-HD-Aoede"})
+    body:JSON.stringify({text:text,voice:"en-GB-Chirp3-HD-Aoede"})
   });
   var data=await resp.json();
   if(!data.audioContent)throw new Error("no audio");

@@ -700,10 +700,19 @@ function _ttsPreprocess(text){
 }
 
 // Split response into sentences for parallel TTS fetching
+// Merge short chunks (< 60 chars) with the next sentence so greetings
+// like "Good morning." don't play alone and sound clipped.
 function _splitSentences(text){
   var parts=text.match(/[^.!?]+[.!?]+\s*/g)||[];
   parts=parts.map(function(s){return s.trim();}).filter(function(s){return s.length>3;});
-  return parts.length>=2?parts:[text];
+  if(parts.length<2) return [text];
+  var merged=[];
+  var buf='';
+  for(var i=0;i<parts.length;i++){
+    buf=buf?buf+' '+parts[i]:parts[i];
+    if(buf.length>=60||i===parts.length-1) { merged.push(buf); buf=''; }
+  }
+  return merged.length?merged:[text];
 }
 
 // Fetch a single TTS chunk → AudioBuffer

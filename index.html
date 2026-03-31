@@ -271,8 +271,11 @@ footer{
   <p style="font-size:clamp(1rem,2.5vw,1.35rem);color:rgba(212,175,55,0.7);letter-spacing:.12em;text-transform:uppercase;font-weight:500;margin-bottom:16px">Your right hand.</p>
   <p style="font-size:.95rem;color:rgba(255,255,255,0.4);letter-spacing:.06em;margin-bottom:48px">He's always got your best interest at heart. Always looking out for you.</p>
 
-  <p style="font-size:clamp(1rem,2vw,1.2rem);color:#d1d5db;line-height:1.9;max-width:700px;margin:0 auto 56px">ARIA answers your phones. Your Chief of Staff answers to <em>you</em>. There are problems you need to think through at 11pm. Decisions too big to make alone. Ideas that need someone who knows your whole story — not just the last conversation. Your Chief of Staff carries all of it. Your goals. Your deals. Your history. Your vision. Available around the clock, completely private, and always in your corner.</p>
+  <p style="font-size:clamp(1rem,2vw,1.2rem);color:#d1d5db;line-height:1.9;max-width:700px;margin:0 auto 32px">ARIA answers your phones. Your Chief of Staff answers to <em>you</em>. Available around the clock, completely private, and always in your corner.</p>
 
+  <button onclick="toggleSection('cos-detail','cos-btn')" id="cos-btn" style="display:inline-flex;align-items:center;gap:8px;background:transparent;border:1px solid rgba(212,175,55,0.35);border-radius:30px;color:rgba(212,175,55,0.8);padding:11px 28px;font-size:.88rem;font-weight:700;letter-spacing:.08em;cursor:pointer;margin-bottom:48px;transition:all .3s" onmouseover="this.style.background='rgba(212,175,55,0.08)'" onmouseout="this.style.background='transparent'">Learn More <span style="font-size:.75rem;transition:transform .3s" id="cos-arrow">▼</span></button>
+
+  <div id="cos-detail" style="overflow:hidden;max-height:0;transition:max-height .5s ease">
   <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:20px;margin-bottom:56px;text-align:left">
     <div style="background:rgba(212,175,55,0.04);border:1px solid rgba(212,175,55,0.12);border-radius:16px;padding:22px 20px">
       <div style="font-size:1.5rem;margin-bottom:10px">🧠</div>
@@ -367,6 +370,7 @@ footer{
   </div>
 
   <a href="https://app.anthroposalphaintelligence.com/agent/demo-confidant" target="_blank" style="display:inline-block;background:linear-gradient(135deg,rgba(212,175,55,0.15),rgba(212,175,55,0.05));border:1px solid rgba(212,175,55,0.35);border-radius:14px;color:rgba(212,175,55,0.9);padding:16px 36px;font-size:1rem;font-weight:700;text-decoration:none;letter-spacing:.06em;transition:all .3s" onmouseover="this.style.background='rgba(212,175,55,0.15)'" onmouseout="this.style.background='linear-gradient(135deg,rgba(212,175,55,0.15),rgba(212,175,55,0.05))'">Meet Your Chief of Staff →</a>
+  </div><!-- /cos-detail -->
 </div>
 </section>
 
@@ -378,12 +382,10 @@ footer{
   <p style="font-size:0.68rem;letter-spacing:5px;text-transform:uppercase;color:#4a9eff;margin-bottom:16px">ANTHRŌPOS Enterprise Division</p>
   <h2 style="font-family:'Space Grotesk',sans-serif;font-size:clamp(1.9rem,4vw,3.2rem);font-weight:700;color:#eef0f5;line-height:1.15;margin-bottom:20px">The Last AI Infrastructure<br>You'll Ever Have to Rebuild.</h2>
   <p style="font-size:1.05rem;color:#8892a4;max-width:580px;margin:0 auto 32px;line-height:1.8">Most enterprise AI projects are outdated before they launch. We build fast, stay current, and grow with your operation — so your competitive edge never expires.</p>
-  <div style="display:inline-block;background:rgba(255,60,60,0.06);border:1px solid rgba(255,80,80,0.18);border-radius:8px;padding:20px 32px;max-width:620px">
-    <p style="font-size:0.65rem;letter-spacing:4px;text-transform:uppercase;color:rgba(255,100,100,0.8);margin-bottom:10px">The pattern we see</p>
-    <p style="font-size:1rem;color:#d4dae8;line-height:1.7;font-style:italic">"We spent months clearing compliance and procurement — and by the time we launched, two newer solutions had already passed us."</p>
-  </div>
+  <button onclick="toggleSection('ent-detail','ent-btn')" id="ent-btn" style="display:inline-flex;align-items:center;gap:8px;background:transparent;border:1px solid rgba(74,158,255,0.35);border-radius:30px;color:rgba(74,158,255,0.8);padding:11px 28px;font-size:.88rem;font-weight:700;letter-spacing:.08em;cursor:pointer;margin-bottom:0;transition:all .3s" onmouseover="this.style.background='rgba(74,158,255,0.08)'" onmouseout="this.style.background='transparent'">Learn More <span style="font-size:.75rem;transition:transform .3s" id="ent-arrow">▼</span></button>
 </div>
 
+<div id="ent-detail" style="overflow:hidden;max-height:0;transition:max-height .5s ease">
 <!-- DIFFERENTIATORS -->
 <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:20px;margin-bottom:64px">
   <div style="background:rgba(74,158,255,0.03);border:1px solid rgba(74,158,255,0.12);border-radius:8px;padding:28px;transition:all 0.3s" onmouseover="this.style.borderColor='rgba(74,158,255,0.3)';this.style.background='rgba(74,158,255,0.06)'" onmouseout="this.style.borderColor='rgba(74,158,255,0.12)';this.style.background='rgba(74,158,255,0.03)'">
@@ -447,6 +449,7 @@ footer{
   <a href="enterprise.html" style="display:inline-block;background:#4a9eff;color:#060810;padding:15px 36px;border-radius:4px;font-size:0.88rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;text-decoration:none;margin-right:16px;transition:all 0.3s" onmouseover="this.style.background='#6ab4ff';this.style.boxShadow='0 0 30px rgba(74,158,255,0.35)'" onmouseout="this.style.background='#4a9eff';this.style.boxShadow='none'">Full Enterprise Overview →</a>
   <a href="#contact" style="display:inline-block;background:transparent;border:1px solid rgba(192,200,216,0.3);color:#c0c8d8;padding:15px 36px;border-radius:4px;font-size:0.88rem;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;text-decoration:none;transition:all 0.3s" onmouseover="this.style.borderColor='#c0c8d8'" onmouseout="this.style.borderColor='rgba(192,200,216,0.3)'">Request Assessment</a>
 </div>
+</div><!-- /ent-detail -->
 
 </div>
 </section>
@@ -512,6 +515,20 @@ footer{
 </section>
 
 <script>
+function toggleSection(detailId, btnId){
+  var d=document.getElementById(detailId);
+  var btn=document.getElementById(btnId);
+  var arrow=btn.querySelector('span');
+  if(d.style.maxHeight==='0px'||d.style.maxHeight===''){
+    d.style.maxHeight=d.scrollHeight+'px';
+    btn.innerHTML=btn.innerHTML.replace('Learn More','Show Less');
+    arrow.style.transform='rotate(180deg)';
+  } else {
+    d.style.maxHeight='0px';
+    btn.innerHTML=btn.innerHTML.replace('Show Less','Learn More');
+    arrow.style.transform='rotate(0deg)';
+  }
+}
 async function submitContact(e){
   e.preventDefault();
   var btn=document.getElementById('cfSubmitBtn');

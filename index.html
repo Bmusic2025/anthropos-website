@@ -283,9 +283,9 @@ footer{
   <!-- 1. INTERACTIVE DEMO — first thing they see -->
   <p style="font-size:.72rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:rgba(212,175,55,0.45);margin-bottom:20px">See It In Action</p>
   <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:10px;margin-bottom:24px">
-    <button class="cos-tab" onclick="_unlockCosAudio();cosDemo('hedge')" id="tab-hedge" style="background:rgba(212,175,55,0.12);border:1px solid rgba(212,175,55,0.4);border-radius:30px;color:rgba(212,175,55,0.9);padding:9px 20px;font-size:.78rem;font-weight:700;cursor:pointer;letter-spacing:.05em;transition:all .2s">APEX CAPITAL<br><span style="font-weight:400;opacity:.7;font-size:.72rem">Hedge Fund Partner</span></button>
-    <button class="cos-tab" onclick="_unlockCosAudio();cosDemo('tech')" id="tab-tech" style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.12);border-radius:30px;color:rgba(255,255,255,0.4);padding:9px 20px;font-size:.78rem;font-weight:700;cursor:pointer;letter-spacing:.05em;transition:all .2s">NEXUS TECH<br><span style="font-weight:400;opacity:.7;font-size:.72rem">CEO</span></button>
-    <button class="cos-tab" onclick="_unlockCosAudio();cosDemo('realty')" id="tab-realty" style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.12);border-radius:30px;color:rgba(255,255,255,0.4);padding:9px 20px;font-size:.78rem;font-weight:700;cursor:pointer;letter-spacing:.05em;transition:all .2s">VANTAGE GROUP<br><span style="font-weight:400;opacity:.7;font-size:.72rem">Principal Broker</span></button>
+    <button class="cos-tab" onclick="cosDemo('hedge')" id="tab-hedge" style="background:rgba(212,175,55,0.12);border:1px solid rgba(212,175,55,0.4);border-radius:30px;color:rgba(212,175,55,0.9);padding:9px 20px;font-size:.78rem;font-weight:700;cursor:pointer;letter-spacing:.05em;transition:all .2s">APEX CAPITAL<br><span style="font-weight:400;opacity:.7;font-size:.72rem">Hedge Fund Partner</span></button>
+    <button class="cos-tab" onclick="cosDemo('tech')" id="tab-tech" style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.12);border-radius:30px;color:rgba(255,255,255,0.4);padding:9px 20px;font-size:.78rem;font-weight:700;cursor:pointer;letter-spacing:.05em;transition:all .2s">NEXUS TECH<br><span style="font-weight:400;opacity:.7;font-size:.72rem">CEO</span></button>
+    <button class="cos-tab" onclick="cosDemo('realty')" id="tab-realty" style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.12);border-radius:30px;color:rgba(255,255,255,0.4);padding:9px 20px;font-size:.78rem;font-weight:700;cursor:pointer;letter-spacing:.05em;transition:all .2s">VANTAGE GROUP<br><span style="font-weight:400;opacity:.7;font-size:.72rem">Principal Broker</span></button>
   </div>
   <div id="cos-chat" style="background:rgba(0,0,0,0.6);border:1px solid rgba(212,175,55,0.18);border-radius:20px;padding:24px 20px;max-width:680px;margin:0 auto 40px;min-height:300px;text-align:left">
     <div id="cos-messages" style="display:flex;flex-direction:column;gap:14px"></div>
@@ -533,39 +533,6 @@ footer{
 
 <script>
 // ── Chief of Staff Interactive Demo ───────────────────────────────────────
-// Tiny WAV beeps encoded as base64 — play reliably on iOS/Android/desktop
-// user ping: short high blip | cos chime: lower two-note tone
-var _cosBeepUser='data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YQAAAAA=';
-var _cosBeepCos ='data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YQAAAAA=';
-var _cosAudioUnlocked=false;
-function _unlockCosAudio(){
-  // Pre-create and immediately play a silent audio on the gesture so iOS allows subsequent plays
-  try{
-    var a=new Audio(_cosBeepUser);
-    a.volume=0;
-    a.play().catch(function(){});
-    _cosAudioUnlocked=true;
-  }catch(e){}
-}
-function _cosChime(isCoS){
-  try{
-    var ctx=new(window.AudioContext||window.webkitAudioContext)();
-    ctx.resume().then(function(){
-      var o=ctx.createOscillator();
-      var g=ctx.createGain();
-      o.connect(g); g.connect(ctx.destination);
-      o.type='sine';
-      o.frequency.setValueAtTime(isCoS?587:1047, ctx.currentTime);
-      if(isCoS) o.frequency.linearRampToValueAtTime(523, ctx.currentTime+0.15);
-      g.gain.setValueAtTime(0.001, ctx.currentTime);
-      g.gain.linearRampToValueAtTime(isCoS?0.35:0.22, ctx.currentTime+0.03);
-      g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime+(isCoS?0.55:0.22));
-      o.start(ctx.currentTime);
-      o.stop(ctx.currentTime+(isCoS?0.6:0.25));
-      o.onended=function(){ctx.close();};
-    });
-  }catch(e){}
-}
 var _cosTimer=null;
 var _cosScenarios={
   hedge:[
@@ -595,7 +562,6 @@ var _cosScenarios={
 };
 function cosDemo(scenario){
   if(_cosTimer) clearTimeout(_cosTimer);
-  // update tabs
   document.querySelectorAll('.cos-tab').forEach(function(t){
     t.style.background='rgba(255,255,255,0.03)';
     t.style.border='1px solid rgba(255,255,255,0.12)';
@@ -608,6 +574,31 @@ function cosDemo(scenario){
   box.innerHTML=''; typing.style.display='none';
   var msgs=_cosScenarios[scenario]||[];
   var delays=[0,1200,2600,3900,5400,6700];
+  // ── Schedule ALL audio synchronously NOW (inside gesture window) ──────────
+  // iOS Safari blocks audio in setTimeout. We pre-schedule every chime using
+  // AudioContext timing so they fire at the right moment without needing the
+  // gesture to still be active. setTimeout is only used for DOM updates below.
+  try{
+    var ctx=new(window.AudioContext||window.webkitAudioContext)();
+    ctx.resume();
+    msgs.forEach(function(m,i){
+      var t0=ctx.currentTime+(delays[i]!=null?delays[i]:i*1400)/1000;
+      var isCoS=m.role==='cos';
+      var o=ctx.createOscillator();
+      var g=ctx.createGain();
+      o.connect(g); g.connect(ctx.destination);
+      o.type='sine';
+      o.frequency.setValueAtTime(isCoS?587:1047,t0);
+      if(isCoS) o.frequency.linearRampToValueAtTime(523,t0+0.15);
+      g.gain.setValueAtTime(0.001,t0);
+      g.gain.linearRampToValueAtTime(isCoS?0.32:0.2,t0+0.03);
+      g.gain.exponentialRampToValueAtTime(0.001,t0+(isCoS?0.55:0.22));
+      o.start(t0);
+      o.stop(t0+(isCoS?0.6:0.25));
+      if(i===msgs.length-1) o.onended=function(){try{ctx.close();}catch(e){}};
+    });
+  }catch(e){}
+  // ── DOM updates via setTimeout (audio already pre-scheduled above) ────────
   msgs.forEach(function(m,i){
     _cosTimer=setTimeout(function(){
       typing.style.display='none';
@@ -623,12 +614,10 @@ function cosDemo(scenario){
       }
       box.appendChild(wrap);
       box.scrollTop=box.scrollHeight;
-      _cosChime(m.role==='cos');
-      // show typing indicator before next cos message
       if(msgs[i+1]&&msgs[i+1].role==='cos'){
         setTimeout(function(){typing.style.display='block';box.scrollTop=box.scrollHeight;},200);
       }
-    },delays[i]||i*1400);
+    },delays[i]!=null?delays[i]:i*1400);
   });
 }
 // auto-play first scenario on section open
@@ -640,8 +629,8 @@ function toggleSection(detailId, btnId){
     d.style.maxHeight=d.scrollHeight+'px';
     btn.innerHTML=btn.innerHTML.replace('Learn More','Show Less');
     arrow.style.transform='rotate(180deg)';
-    // auto-play demo when COS section opens — unlock audio NOW (inside gesture), play after delay
-    if(detailId==='cos-detail'){_unlockCosAudio();setTimeout(function(){cosDemo('hedge');},400);}
+    // auto-play demo when COS section opens — call cosDemo synchronously (inside gesture) so audio schedules now
+    if(detailId==='cos-detail'){cosDemo('hedge');}
   } else {
     d.style.maxHeight='0px';
     btn.innerHTML=btn.innerHTML.replace('Show Less','Learn More');

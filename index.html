@@ -275,116 +275,115 @@ footer{
 
   <button onclick="toggleSection('cos-detail','cos-btn')" id="cos-btn" style="display:inline-flex;align-items:center;gap:8px;background:transparent;border:1px solid rgba(212,175,55,0.35);border-radius:30px;color:rgba(212,175,55,0.8);padding:11px 28px;font-size:.88rem;font-weight:700;letter-spacing:.08em;cursor:pointer;margin-bottom:48px;transition:all .3s" onmouseover="this.style.background='rgba(212,175,55,0.08)'" onmouseout="this.style.background='transparent'">Learn More <span style="font-size:.75rem;transition:transform .3s" id="cos-arrow">▼</span></button>
 
-  <div id="cos-detail" style="overflow:hidden;max-height:0;transition:max-height .5s ease">
-  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:20px;margin-bottom:56px;text-align:left">
-    <div style="background:rgba(212,175,55,0.04);border:1px solid rgba(212,175,55,0.12);border-radius:16px;padding:22px 20px">
-      <div style="font-size:1.5rem;margin-bottom:10px">🧠</div>
-      <div style="font-weight:700;color:#fff;margin-bottom:6px;font-size:.95rem">Carries Your Context</div>
-      <div style="color:#9ca3af;font-size:.85rem;line-height:1.6">What you said last week. What you're building. What stalled. Persistent memory means you never repeat yourself.</div>
-    </div>
-    <div style="background:rgba(212,175,55,0.04);border:1px solid rgba(212,175,55,0.12);border-radius:16px;padding:22px 20px">
-      <div style="font-size:1.5rem;margin-bottom:10px">🎙️</div>
-      <div style="font-weight:700;color:#fff;margin-bottom:6px;font-size:.95rem">Voice-First</div>
-      <div style="color:#9ca3af;font-size:.85rem;line-height:1.6">Full voice conversation. No typing. Think out loud and get real, sharp responses — the way decisions actually get made.</div>
-    </div>
-    <div style="background:rgba(212,175,55,0.04);border:1px solid rgba(212,175,55,0.12);border-radius:16px;padding:22px 20px">
-      <div style="font-size:1.5rem;margin-bottom:10px">📎</div>
-      <div style="font-weight:700;color:#fff;margin-bottom:6px;font-size:.95rem">Sees What You See</div>
-      <div style="color:#9ca3af;font-size:.85rem;line-height:1.6">Send a photo of anything — a contract, a job site, a proposal — and think it through together in real time.</div>
-    </div>
-    <div style="background:rgba(212,175,55,0.04);border:1px solid rgba(212,175,55,0.12);border-radius:16px;padding:22px 20px">
-      <div style="font-size:1.5rem;margin-bottom:10px">🔒</div>
-      <div style="font-weight:700;color:#fff;margin-bottom:6px;font-size:.95rem">Your Safe Room</div>
-      <div style="color:#9ca3af;font-size:.85rem;line-height:1.6">What stays in this conversation stays here. A private space to think, plan, and strategize without an audience.</div>
-    </div>
-    <div style="background:rgba(212,175,55,0.04);border:1px solid rgba(212,175,55,0.12);border-radius:16px;padding:22px 20px">
-      <div style="font-size:1.5rem;margin-bottom:10px">⚡</div>
-      <div style="font-weight:700;color:#fff;margin-bottom:6px;font-size:.95rem">Always Three Steps Ahead</div>
-      <div style="color:#9ca3af;font-size:.85rem;line-height:1.6">Surfaces what matters before you ask. Flags risks you haven't seen yet. Keeps you focused when the noise gets loud.</div>
-    </div>
-    <div style="background:rgba(212,175,55,0.04);border:1px solid rgba(212,175,55,0.12);border-radius:16px;padding:22px 20px">
-      <div style="font-size:1.5rem;margin-bottom:10px">✏️</div>
-      <div style="font-weight:700;color:#fff;margin-bottom:6px;font-size:.95rem">Name Them Anything</div>
-      <div style="color:#9ca3af;font-size:.85rem;line-height:1.6">Call yours whatever fits — Marcus, Sage, whoever. The name is yours. The intelligence is ANTHRŌPOS.</div>
-    </div>
+  <div id="cos-detail" style="overflow:hidden;max-height:0;transition:max-height .6s ease">
+  <div style="padding-top:8px">
+
+  <!-- 1. INTERACTIVE DEMO — first thing they see -->
+  <p style="font-size:.72rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:rgba(212,175,55,0.45);margin-bottom:20px">See It In Action</p>
+  <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:10px;margin-bottom:24px">
+    <button class="cos-tab" onclick="cosDemo('hedge')" id="tab-hedge" style="background:rgba(212,175,55,0.12);border:1px solid rgba(212,175,55,0.4);border-radius:30px;color:rgba(212,175,55,0.9);padding:9px 20px;font-size:.78rem;font-weight:700;cursor:pointer;letter-spacing:.05em;transition:all .2s">APEX CAPITAL<br><span style="font-weight:400;opacity:.7;font-size:.72rem">Hedge Fund Partner</span></button>
+    <button class="cos-tab" onclick="cosDemo('tech')" id="tab-tech" style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.12);border-radius:30px;color:rgba(255,255,255,0.4);padding:9px 20px;font-size:.78rem;font-weight:700;cursor:pointer;letter-spacing:.05em;transition:all .2s">NEXUS TECH<br><span style="font-weight:400;opacity:.7;font-size:.72rem">CEO</span></button>
+    <button class="cos-tab" onclick="cosDemo('realty')" id="tab-realty" style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.12);border-radius:30px;color:rgba(255,255,255,0.4);padding:9px 20px;font-size:.78rem;font-weight:700;cursor:pointer;letter-spacing:.05em;transition:all .2s">VANTAGE GROUP<br><span style="font-weight:400;opacity:.7;font-size:.72rem">Principal Broker</span></button>
+  </div>
+  <div id="cos-chat" style="background:rgba(0,0,0,0.6);border:1px solid rgba(212,175,55,0.18);border-radius:20px;padding:24px 20px;max-width:680px;margin:0 auto 40px;min-height:300px;text-align:left">
+    <div id="cos-messages" style="display:flex;flex-direction:column;gap:14px"></div>
+    <div id="cos-typing" style="display:none;padding:8px 0;color:rgba(212,175,55,0.4);font-size:.8rem;font-style:italic">Chief of Staff is thinking...</div>
   </div>
 
-  <!-- Pricing tiers -->
-  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;margin-bottom:56px;text-align:center">
-    <div style="background:rgba(212,175,55,0.04);border:1px solid rgba(212,175,55,0.15);border-radius:20px;padding:28px 20px">
+  <!-- 2. PRICING — right after demo while excitement is high -->
+  <p style="font-size:.75rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:rgba(212,175,55,0.5);margin-bottom:24px">Choose Your Level</p>
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin-bottom:52px;text-align:center">
+    <div style="background:rgba(212,175,55,0.04);border:1px solid rgba(212,175,55,0.15);border-radius:20px;padding:26px 18px">
       <div style="font-size:.7rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:rgba(212,175,55,0.5);margin-bottom:12px">Essential</div>
-      <div style="font-size:2.2rem;font-weight:800;color:#fff;margin-bottom:4px">$497<span style="font-size:.95rem;font-weight:400;color:#9ca3af">/mo</span></div>
-      <div style="font-size:.8rem;color:#9ca3af;line-height:1.7;margin-top:12px">Voice + persistent memory<br>24/7 availability<br>Full conversation history</div>
+      <div style="font-size:2rem;font-weight:800;color:#fff;margin-bottom:4px">$497<span style="font-size:.9rem;font-weight:400;color:#9ca3af">/mo</span></div>
+      <div style="font-size:.78rem;color:#9ca3af;line-height:1.7;margin-top:10px">Voice + persistent memory<br>24/7 availability<br>Full conversation history</div>
     </div>
-    <div style="background:rgba(212,175,55,0.08);border:2px solid rgba(212,175,55,0.35);border-radius:20px;padding:28px 20px;position:relative">
-      <div style="position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:#D4AF37;color:#000;font-size:.65rem;font-weight:800;letter-spacing:.15em;text-transform:uppercase;padding:4px 14px;border-radius:20px">Most Popular</div>
+    <div style="background:rgba(212,175,55,0.08);border:2px solid rgba(212,175,55,0.35);border-radius:20px;padding:26px 18px;position:relative">
+      <div style="position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:#D4AF37;color:#000;font-size:.62rem;font-weight:800;letter-spacing:.15em;text-transform:uppercase;padding:4px 14px;border-radius:20px">Most Popular</div>
       <div style="font-size:.7rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:rgba(212,175,55,0.7);margin-bottom:12px">Executive</div>
-      <div style="font-size:2.2rem;font-weight:800;color:#fff;margin-bottom:4px">$797<span style="font-size:.95rem;font-weight:400;color:#9ca3af">/mo</span></div>
-      <div style="font-size:.8rem;color:#9ca3af;line-height:1.7;margin-top:12px">Everything in Essential<br>+ CRM & pipeline integration<br>+ Calendar & briefings</div>
+      <div style="font-size:2rem;font-weight:800;color:#fff;margin-bottom:4px">$797<span style="font-size:.9rem;font-weight:400;color:#9ca3af">/mo</span></div>
+      <div style="font-size:.78rem;color:#9ca3af;line-height:1.7;margin-top:10px">Everything in Essential<br>+ CRM & pipeline integration<br>+ Calendar & briefings</div>
     </div>
-    <div style="background:rgba(212,175,55,0.04);border:1px solid rgba(212,175,55,0.15);border-radius:20px;padding:28px 20px">
+    <div style="background:rgba(212,175,55,0.04);border:1px solid rgba(212,175,55,0.15);border-radius:20px;padding:26px 18px">
       <div style="font-size:.7rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:rgba(212,175,55,0.5);margin-bottom:12px">Command</div>
-      <div style="font-size:2.2rem;font-weight:800;color:#fff;margin-bottom:4px">$1,497<span style="font-size:.95rem;font-weight:400;color:#9ca3af">/mo</span></div>
-      <div style="font-size:.8rem;color:#9ca3af;line-height:1.7;margin-top:12px">Everything in Executive<br>+ Custom persona & training<br>+ Team access</div>
+      <div style="font-size:2rem;font-weight:800;color:#fff;margin-bottom:4px">$1,497<span style="font-size:.9rem;font-weight:400;color:#9ca3af">/mo</span></div>
+      <div style="font-size:.78rem;color:#9ca3af;line-height:1.7;margin-top:10px">Everything in Executive<br>+ Custom persona & training<br>+ Team access</div>
     </div>
   </div>
 
-  <!-- ROI Comparison Block -->
-  <div style="margin-bottom:56px">
-    <p style="font-size:.75rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:rgba(212,175,55,0.5);margin-bottom:28px">The Real Cost Comparison</p>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;max-width:680px;margin:0 auto 32px">
-      <!-- Human CoS -->
-      <div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:20px;padding:28px 20px;text-align:center">
-        <div style="font-size:.7rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:rgba(255,255,255,0.3);margin-bottom:16px">Human Chief of Staff</div>
-        <div style="font-size:2rem;font-weight:800;color:rgba(255,255,255,0.5);margin-bottom:4px">$15,000<span style="font-size:.9rem;font-weight:400">/mo</span></div>
-        <div style="font-size:.72rem;color:rgba(255,255,255,0.25);margin-bottom:20px">$180K+ per year — entry level</div>
-        <div style="text-align:left;font-size:.78rem;color:rgba(255,255,255,0.3);line-height:2">
-          <div>⚠ &nbsp;Works 40 hrs/week. Goes home.</div>
-          <div>⚠ &nbsp;Has bad days. Gets overwhelmed.</div>
-          <div>⚠ &nbsp;Knows what you've told them.</div>
-          <div>⚠ &nbsp;Can't access everything instantly.</div>
-          <div>⚠ &nbsp;Leaves when a better offer comes.</div>
+  <!-- 3. FEATURES — what justifies the price -->
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:18px;margin-bottom:52px;text-align:left">
+    <div style="background:rgba(212,175,55,0.04);border:1px solid rgba(212,175,55,0.12);border-radius:16px;padding:20px">
+      <div style="font-size:1.4rem;margin-bottom:8px">🧠</div>
+      <div style="font-weight:700;color:#fff;margin-bottom:5px;font-size:.92rem">Carries Your Context</div>
+      <div style="color:#9ca3af;font-size:.83rem;line-height:1.6">What you said last week. What stalled. Persistent memory — you never repeat yourself.</div>
+    </div>
+    <div style="background:rgba(212,175,55,0.04);border:1px solid rgba(212,175,55,0.12);border-radius:16px;padding:20px">
+      <div style="font-size:1.4rem;margin-bottom:8px">🎙️</div>
+      <div style="font-weight:700;color:#fff;margin-bottom:5px;font-size:.92rem">Voice-First</div>
+      <div style="color:#9ca3af;font-size:.83rem;line-height:1.6">Think out loud. Real responses. The way decisions actually get made.</div>
+    </div>
+    <div style="background:rgba(212,175,55,0.04);border:1px solid rgba(212,175,55,0.12);border-radius:16px;padding:20px">
+      <div style="font-size:1.4rem;margin-bottom:8px">📎</div>
+      <div style="font-weight:700;color:#fff;margin-bottom:5px;font-size:.92rem">Sees What You See</div>
+      <div style="color:#9ca3af;font-size:.83rem;line-height:1.6">Photo a contract, a job site, a proposal. Talk it through together in real time.</div>
+    </div>
+    <div style="background:rgba(212,175,55,0.04);border:1px solid rgba(212,175,55,0.12);border-radius:16px;padding:20px">
+      <div style="font-size:1.4rem;margin-bottom:8px">🔒</div>
+      <div style="font-weight:700;color:#fff;margin-bottom:5px;font-size:.92rem">Your Safe Room</div>
+      <div style="color:#9ca3af;font-size:.83rem;line-height:1.6">Private. No audience. Think, plan, and strategize without filters.</div>
+    </div>
+    <div style="background:rgba(212,175,55,0.04);border:1px solid rgba(212,175,55,0.12);border-radius:16px;padding:20px">
+      <div style="font-size:1.4rem;margin-bottom:8px">⚡</div>
+      <div style="font-weight:700;color:#fff;margin-bottom:5px;font-size:.92rem">Three Steps Ahead</div>
+      <div style="color:#9ca3af;font-size:.83rem;line-height:1.6">Surfaces what matters before you ask. Keeps you focused when the noise gets loud.</div>
+    </div>
+    <div style="background:rgba(212,175,55,0.04);border:1px solid rgba(212,175,55,0.12);border-radius:16px;padding:20px">
+      <div style="font-size:1.4rem;margin-bottom:8px">✏️</div>
+      <div style="font-weight:700;color:#fff;margin-bottom:5px;font-size:.92rem">Name Them Anything</div>
+      <div style="color:#9ca3af;font-size:.83rem;line-height:1.6">Marcus. Sage. Whatever fits. The name is yours — the intelligence is ANTHRŌPOS.</div>
+    </div>
+  </div>
+
+  <!-- 4. ROI COMPARISON — close the deal -->
+  <div style="margin-bottom:48px">
+    <p style="font-size:.75rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:rgba(212,175,55,0.5);margin-bottom:24px">The Real Cost Comparison</p>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;max-width:660px;margin:0 auto 28px">
+      <div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:18px;padding:24px 18px;text-align:center">
+        <div style="font-size:.68rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,0.3);margin-bottom:14px">Human Chief of Staff</div>
+        <div style="font-size:1.8rem;font-weight:800;color:rgba(255,255,255,0.4);margin-bottom:4px">$15,000<span style="font-size:.85rem;font-weight:400">/mo</span></div>
+        <div style="font-size:.7rem;color:rgba(255,255,255,0.2);margin-bottom:16px">$180K+ per year — entry level</div>
+        <div style="text-align:left;font-size:.76rem;color:rgba(255,255,255,0.28);line-height:2">
+          <div>⚠ Works 40 hrs/week. Goes home.</div>
+          <div>⚠ Has bad days. Gets overwhelmed.</div>
+          <div>⚠ Leaves for a better offer.</div>
         </div>
       </div>
-      <!-- ANTHROPOS CoS -->
-      <div style="background:rgba(212,175,55,0.06);border:2px solid rgba(212,175,55,0.3);border-radius:20px;padding:28px 20px;text-align:center;position:relative">
-        <div style="position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:#D4AF37;color:#000;font-size:.62rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;padding:4px 14px;border-radius:20px;white-space:nowrap">ANTHRŌPOS</div>
-        <div style="font-size:.7rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:rgba(212,175,55,0.6);margin-bottom:16px">Your Chief of Staff</div>
-        <div style="font-size:2rem;font-weight:800;color:#D4AF37;margin-bottom:4px">$1,497<span style="font-size:.9rem;font-weight:400;color:rgba(212,175,55,0.6)">/mo</span></div>
-        <div style="font-size:.72rem;color:rgba(212,175,55,0.4);margin-bottom:20px">That's $2.05 per hour. 24/7.</div>
-        <div style="text-align:left;font-size:.78rem;color:rgba(212,175,55,0.7);line-height:2">
-          <div>✓ &nbsp;Available every hour of every day.</div>
-          <div>✓ &nbsp;Never overwhelmed. Never off.</div>
-          <div>✓ &nbsp;Remembers <em>everything</em> you've said.</div>
-          <div>✓ &nbsp;Instant answers with full reasoning.</div>
-          <div>✓ &nbsp;Yours for life. Loyalty is built in.</div>
+      <div style="background:rgba(212,175,55,0.06);border:2px solid rgba(212,175,55,0.28);border-radius:18px;padding:24px 18px;text-align:center;position:relative">
+        <div style="position:absolute;top:-11px;left:50%;transform:translateX(-50%);background:#D4AF37;color:#000;font-size:.6rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;padding:3px 12px;border-radius:20px;white-space:nowrap">ANTHRŌPOS</div>
+        <div style="font-size:.68rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:rgba(212,175,55,0.6);margin-bottom:14px">Your Chief of Staff</div>
+        <div style="font-size:1.8rem;font-weight:800;color:#D4AF37;margin-bottom:4px">$1,497<span style="font-size:.85rem;font-weight:400;color:rgba(212,175,55,0.6)">/mo</span></div>
+        <div style="font-size:.7rem;color:rgba(212,175,55,0.4);margin-bottom:16px">$2.05 per hour. 24/7.</div>
+        <div style="text-align:left;font-size:.76rem;color:rgba(212,175,55,0.7);line-height:2">
+          <div>✓ Every hour. Every day. Never off.</div>
+          <div>✓ Remembers everything you've said.</div>
+          <div>✓ Loyalty is built in.</div>
         </div>
       </div>
     </div>
-    <p style="font-size:.95rem;color:rgba(255,255,255,0.5);max-width:600px;margin:0 auto;line-height:1.8">If you knew someone this competent — who knew every layer of your business and could give you the answer <em>and</em> explain exactly why — how much would that cost you? Not $1,400 a month. We're talking five figures. Minimum. And they still couldn't do this from your pocket at 2am.</p>
+    <p style="font-size:.92rem;color:rgba(255,255,255,0.45);max-width:580px;margin:0 auto;line-height:1.8">If you knew someone this competent — who knew every layer of your business and could give you the answer <em>and</em> explain why — how much would that person cost? Not $1,400 a month. We're talking five figures. Minimum. And they still couldn't answer from your pocket at 2am.</p>
   </div>
 
-  <div style="background:rgba(212,175,55,0.06);border:1px solid rgba(212,175,55,0.18);border-radius:20px;padding:32px;margin-bottom:48px;max-width:600px;margin-left:auto;margin-right:auto">
-    <p style="font-size:1.1rem;color:#fff;font-style:italic;line-height:1.8;margin-bottom:16px">"ARIA answers your phones.<br>Your Chief of Staff answers to you."</p>
-    <p style="font-size:.8rem;color:rgba(212,175,55,0.5);letter-spacing:.1em;text-transform:uppercase">ANTHRŌPOS Alpha Intelligence</p>
+  <!-- Quote -->
+  <div style="background:rgba(212,175,55,0.06);border:1px solid rgba(212,175,55,0.16);border-radius:18px;padding:28px;margin-bottom:36px;max-width:580px;margin-left:auto;margin-right:auto">
+    <p style="font-size:1.05rem;color:#fff;font-style:italic;line-height:1.8;margin-bottom:14px">"ARIA answers your phones.<br>Your Chief of Staff answers to you."</p>
+    <p style="font-size:.75rem;color:rgba(212,175,55,0.45);letter-spacing:.1em;text-transform:uppercase">ANTHRŌPOS Alpha Intelligence</p>
   </div>
 
-  <!-- INTERACTIVE DEMO -->
-  <div style="margin-top:16px">
-    <p style="font-size:.72rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:rgba(212,175,55,0.45);margin-bottom:20px">See It In Action</p>
-    <!-- Scenario tabs -->
-    <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:10px;margin-bottom:28px">
-      <button class="cos-tab active" onclick="cosDemo('hedge')" id="tab-hedge" style="background:rgba(212,175,55,0.12);border:1px solid rgba(212,175,55,0.4);border-radius:30px;color:rgba(212,175,55,0.9);padding:9px 20px;font-size:.78rem;font-weight:700;cursor:pointer;letter-spacing:.05em;transition:all .2s">APEX CAPITAL<br><span style="font-weight:400;opacity:.7;font-size:.72rem">Hedge Fund Partner</span></button>
-      <button class="cos-tab" onclick="cosDemo('tech')" id="tab-tech" style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.12);border-radius:30px;color:rgba(255,255,255,0.4);padding:9px 20px;font-size:.78rem;font-weight:700;cursor:pointer;letter-spacing:.05em;transition:all .2s">NEXUS TECH<br><span style="font-weight:400;opacity:.7;font-size:.72rem">CEO</span></button>
-      <button class="cos-tab" onclick="cosDemo('realty')" id="tab-realty" style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.12);border-radius:30px;color:rgba(255,255,255,0.4);padding:9px 20px;font-size:.78rem;font-weight:700;cursor:pointer;letter-spacing:.05em;transition:all .2s">VANTAGE GROUP<br><span style="font-weight:400;opacity:.7;font-size:.72rem">Principal Broker</span></button>
-    </div>
-    <!-- Chat window -->
-    <div id="cos-chat" style="background:rgba(0,0,0,0.6);border:1px solid rgba(212,175,55,0.18);border-radius:20px;padding:28px 24px;max-width:680px;margin:0 auto 32px;min-height:320px;text-align:left;position:relative">
-      <div id="cos-messages" style="display:flex;flex-direction:column;gap:16px"></div>
-      <div id="cos-typing" style="display:none;padding:8px 0;color:rgba(212,175,55,0.4);font-size:.8rem;font-style:italic">Chief of Staff is thinking...</div>
-    </div>
-    <p style="font-size:.75rem;color:rgba(255,255,255,0.25);margin-bottom:8px">Ready for the real thing?</p>
-    <a href="#contact" style="display:inline-block;background:transparent;border:1px solid rgba(212,175,55,0.3);border-radius:30px;color:rgba(212,175,55,0.7);padding:11px 28px;font-size:.85rem;font-weight:700;text-decoration:none;letter-spacing:.06em;transition:all .3s" onmouseover="this.style.background='rgba(212,175,55,0.08)'" onmouseout="this.style.background='transparent'">Request Your Chief of Staff →</a>
+  <!-- CTA -->
+  <p style="font-size:.75rem;color:rgba(255,255,255,0.25);margin-bottom:10px">Ready to get started?</p>
+  <a href="#contact" style="display:inline-block;background:rgba(212,175,55,0.1);border:1px solid rgba(212,175,55,0.35);border-radius:30px;color:rgba(212,175,55,0.85);padding:13px 32px;font-size:.9rem;font-weight:700;text-decoration:none;letter-spacing:.06em;transition:all .3s;margin-bottom:48px" onmouseover="this.style.background='rgba(212,175,55,0.18)'" onmouseout="this.style.background='rgba(212,175,55,0.1)'">Request Your Chief of Staff →</a>
+
   </div>
   </div><!-- /cos-detail -->
 </div>
@@ -532,6 +531,23 @@ footer{
 
 <script>
 // ── Chief of Staff Interactive Demo ───────────────────────────────────────
+var _cosAudio=null;
+function _cosChime(isCoS){
+  try{
+    var ctx=new(window.AudioContext||window.webkitAudioContext)();
+    var o=ctx.createOscillator();
+    var g=ctx.createGain();
+    o.connect(g); g.connect(ctx.destination);
+    o.type='sine';
+    // CoS: warm gold tone (D5). User: soft higher ping (A5).
+    o.frequency.setValueAtTime(isCoS?587:880, ctx.currentTime);
+    if(isCoS) o.frequency.linearRampToValueAtTime(523, ctx.currentTime+0.12);
+    g.gain.setValueAtTime(0, ctx.currentTime);
+    g.gain.linearRampToValueAtTime(isCoS?0.18:0.10, ctx.currentTime+0.02);
+    g.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime+(isCoS?0.45:0.25));
+    o.start(ctx.currentTime); o.stop(ctx.currentTime+(isCoS?0.5:0.3));
+  }catch(e){}
+}
 var _cosTimer=null;
 var _cosScenarios={
   hedge:[
@@ -589,6 +605,7 @@ function cosDemo(scenario){
       }
       box.appendChild(wrap);
       box.scrollTop=box.scrollHeight;
+      _cosChime(m.role==='cos');
       // show typing indicator before next cos message
       if(msgs[i+1]&&msgs[i+1].role==='cos'){
         setTimeout(function(){typing.style.display='block';box.scrollTop=box.scrollHeight;},200);

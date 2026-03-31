@@ -283,9 +283,9 @@ footer{
   <!-- 1. INTERACTIVE DEMO — first thing they see -->
   <p style="font-size:.72rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:rgba(212,175,55,0.45);margin-bottom:20px">See It In Action</p>
   <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:10px;margin-bottom:24px">
-    <button class="cos-tab" onclick="cosDemo('hedge')" id="tab-hedge" style="background:rgba(212,175,55,0.12);border:1px solid rgba(212,175,55,0.4);border-radius:30px;color:rgba(212,175,55,0.9);padding:9px 20px;font-size:.78rem;font-weight:700;cursor:pointer;letter-spacing:.05em;transition:all .2s">APEX CAPITAL<br><span style="font-weight:400;opacity:.7;font-size:.72rem">Hedge Fund Partner</span></button>
-    <button class="cos-tab" onclick="cosDemo('tech')" id="tab-tech" style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.12);border-radius:30px;color:rgba(255,255,255,0.4);padding:9px 20px;font-size:.78rem;font-weight:700;cursor:pointer;letter-spacing:.05em;transition:all .2s">NEXUS TECH<br><span style="font-weight:400;opacity:.7;font-size:.72rem">CEO</span></button>
-    <button class="cos-tab" onclick="cosDemo('realty')" id="tab-realty" style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.12);border-radius:30px;color:rgba(255,255,255,0.4);padding:9px 20px;font-size:.78rem;font-weight:700;cursor:pointer;letter-spacing:.05em;transition:all .2s">VANTAGE GROUP<br><span style="font-weight:400;opacity:.7;font-size:.72rem">Principal Broker</span></button>
+    <button class="cos-tab" onclick="_unlockCosAudio();cosDemo('hedge')" id="tab-hedge" style="background:rgba(212,175,55,0.12);border:1px solid rgba(212,175,55,0.4);border-radius:30px;color:rgba(212,175,55,0.9);padding:9px 20px;font-size:.78rem;font-weight:700;cursor:pointer;letter-spacing:.05em;transition:all .2s">APEX CAPITAL<br><span style="font-weight:400;opacity:.7;font-size:.72rem">Hedge Fund Partner</span></button>
+    <button class="cos-tab" onclick="_unlockCosAudio();cosDemo('tech')" id="tab-tech" style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.12);border-radius:30px;color:rgba(255,255,255,0.4);padding:9px 20px;font-size:.78rem;font-weight:700;cursor:pointer;letter-spacing:.05em;transition:all .2s">NEXUS TECH<br><span style="font-weight:400;opacity:.7;font-size:.72rem">CEO</span></button>
+    <button class="cos-tab" onclick="_unlockCosAudio();cosDemo('realty')" id="tab-realty" style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.12);border-radius:30px;color:rgba(255,255,255,0.4);padding:9px 20px;font-size:.78rem;font-weight:700;cursor:pointer;letter-spacing:.05em;transition:all .2s">VANTAGE GROUP<br><span style="font-weight:400;opacity:.7;font-size:.72rem">Principal Broker</span></button>
   </div>
   <div id="cos-chat" style="background:rgba(0,0,0,0.6);border:1px solid rgba(212,175,55,0.18);border-radius:20px;padding:24px 20px;max-width:680px;margin:0 auto 40px;min-height:300px;text-align:left">
     <div id="cos-messages" style="display:flex;flex-direction:column;gap:14px"></div>
@@ -533,15 +533,22 @@ footer{
 
 <script>
 // ── Chief of Staff Interactive Demo ───────────────────────────────────────
-var _cosAudio=null;
+var _cosCtx=null;
+function _unlockCosAudio(){
+  // Must be called synchronously inside a user gesture tap
+  try{
+    if(!_cosCtx) _cosCtx=new(window.AudioContext||window.webkitAudioContext)();
+    if(_cosCtx.state==='suspended') _cosCtx.resume();
+  }catch(e){}
+}
 function _cosChime(isCoS){
   try{
-    var ctx=new(window.AudioContext||window.webkitAudioContext)();
+    if(!_cosCtx||_cosCtx.state==='closed') return;
+    var ctx=_cosCtx;
     var o=ctx.createOscillator();
     var g=ctx.createGain();
     o.connect(g); g.connect(ctx.destination);
     o.type='sine';
-    // CoS: warm gold tone (D5). User: soft higher ping (A5).
     o.frequency.setValueAtTime(isCoS?587:880, ctx.currentTime);
     if(isCoS) o.frequency.linearRampToValueAtTime(523, ctx.currentTime+0.12);
     g.gain.setValueAtTime(0, ctx.currentTime);
@@ -624,8 +631,8 @@ function toggleSection(detailId, btnId){
     d.style.maxHeight=d.scrollHeight+'px';
     btn.innerHTML=btn.innerHTML.replace('Learn More','Show Less');
     arrow.style.transform='rotate(180deg)';
-    // auto-play demo when COS section opens
-    if(detailId==='cos-detail') setTimeout(function(){cosDemo('hedge');},400);
+    // auto-play demo when COS section opens — unlock audio NOW (inside gesture), play after delay
+    if(detailId==='cos-detail'){_unlockCosAudio();setTimeout(function(){cosDemo('hedge');},400);}
   } else {
     d.style.maxHeight='0px';
     btn.innerHTML=btn.innerHTML.replace('Show Less','Learn More');

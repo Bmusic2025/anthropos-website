@@ -188,6 +188,7 @@ footer.ent-footer{background:rgba(4,6,12,0.98);border-top:1px solid rgba(192,200
   <div class="header-content">
     <a href="index.html" class="logo-ent">ANTHRŌPOS <span>ENTERPRISE</span></a>
     <nav class="ent-nav">
+      <a href="javascript:void(0)" onclick="goBack('index.html#enterprise')" class="back-link" style="margin-right:8px">← Back</a>
       <a href="#capabilities">Capabilities</a>
       <a href="#compare">How We Compare</a>
       <a href="#compliance">Compliance</a>
@@ -517,7 +518,7 @@ footer.ent-footer{background:rgba(4,6,12,0.98);border-top:1px solid rgba(192,200
 <footer class="ent-footer">
   <p class="footer-logo">ANTHRŌPOS <span>Alpha Intelligence</span></p>
   <div class="footer-links">
-    <a href="index.html">Back to Main Site</a>
+    <a href="javascript:void(0)" onclick="goBack('index.html#enterprise')">← Back</a>
     <a href="/about.html">About</a>
     <a href="#assess">Request Assessment</a>
     <a href="mailto:b@anthroposalphaintelligence.com">Contact</a>
@@ -718,6 +719,17 @@ async function entSpeakResponse(text){
   }catch(e){
     var orb=document.getElementById('entOrb');
     if(orb)orb.classList.remove('speaking');
+  }
+}
+// ── Scroll to top + smart back ──
+if('scrollRestoration' in history) history.scrollRestoration='manual';
+window.scrollTo(0,0);
+window.addEventListener('pageshow',function(e){if(e.persisted) window.scrollTo(0,0);});
+function goBack(fallback){
+  if(history.length>1 && document.referrer && document.referrer.indexOf(location.hostname)>-1){
+    history.back();
+  } else {
+    location.href=fallback||'index.html#enterprise';
   }
 }
 </script>

@@ -92,7 +92,7 @@ header{position:fixed;top:0;width:100%;background:rgba(0,0,0,0.92);backdrop-filt
 
 <header>
   <a href="index.html" class="logo">ANTHRŌPOS</a>
-  <a href="index.html" class="back-btn">← Back to Home</a>
+  <a href="javascript:void(0)" onclick="goBack('index.html')" class="back-btn">← Back</a>
 </header>
 
 <!-- HERO -->
@@ -343,6 +343,17 @@ document.getElementById('founderModal').addEventListener('click',function(e){
   if(e.target===this)closeFounderVideo();
 });
 document.addEventListener('keydown',function(e){if(e.key==='Escape')closeFounderVideo();});
+// ── Scroll to top + smart back ──
+if('scrollRestoration' in history) history.scrollRestoration='manual';
+window.scrollTo(0,0);
+window.addEventListener('pageshow',function(e){if(e.persisted) window.scrollTo(0,0);});
+function goBack(fallback){
+  if(history.length>1 && document.referrer && document.referrer.indexOf(location.hostname)>-1){
+    history.back();
+  } else {
+    location.href=fallback||'index.html';
+  }
+}
 </script>
 </body>
 </html>

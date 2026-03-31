@@ -533,28 +533,37 @@ footer{
 
 <script>
 // ── Chief of Staff Interactive Demo ───────────────────────────────────────
-var _cosCtx=null;
+// Tiny WAV beeps encoded as base64 — play reliably on iOS/Android/desktop
+// user ping: short high blip | cos chime: lower two-note tone
+var _cosBeepUser='data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YQAAAAA=';
+var _cosBeepCos ='data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YQAAAAA=';
+var _cosAudioUnlocked=false;
 function _unlockCosAudio(){
-  // Must be called synchronously inside a user gesture tap
+  // Pre-create and immediately play a silent audio on the gesture so iOS allows subsequent plays
   try{
-    if(!_cosCtx) _cosCtx=new(window.AudioContext||window.webkitAudioContext)();
-    if(_cosCtx.state==='suspended') _cosCtx.resume();
+    var a=new Audio(_cosBeepUser);
+    a.volume=0;
+    a.play().catch(function(){});
+    _cosAudioUnlocked=true;
   }catch(e){}
 }
 function _cosChime(isCoS){
   try{
-    if(!_cosCtx||_cosCtx.state==='closed') return;
-    var ctx=_cosCtx;
-    var o=ctx.createOscillator();
-    var g=ctx.createGain();
-    o.connect(g); g.connect(ctx.destination);
-    o.type='sine';
-    o.frequency.setValueAtTime(isCoS?587:880, ctx.currentTime);
-    if(isCoS) o.frequency.linearRampToValueAtTime(523, ctx.currentTime+0.12);
-    g.gain.setValueAtTime(0, ctx.currentTime);
-    g.gain.linearRampToValueAtTime(isCoS?0.18:0.10, ctx.currentTime+0.02);
-    g.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime+(isCoS?0.45:0.25));
-    o.start(ctx.currentTime); o.stop(ctx.currentTime+(isCoS?0.5:0.3));
+    var ctx=new(window.AudioContext||window.webkitAudioContext)();
+    ctx.resume().then(function(){
+      var o=ctx.createOscillator();
+      var g=ctx.createGain();
+      o.connect(g); g.connect(ctx.destination);
+      o.type='sine';
+      o.frequency.setValueAtTime(isCoS?587:1047, ctx.currentTime);
+      if(isCoS) o.frequency.linearRampToValueAtTime(523, ctx.currentTime+0.15);
+      g.gain.setValueAtTime(0.001, ctx.currentTime);
+      g.gain.linearRampToValueAtTime(isCoS?0.35:0.22, ctx.currentTime+0.03);
+      g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime+(isCoS?0.55:0.22));
+      o.start(ctx.currentTime);
+      o.stop(ctx.currentTime+(isCoS?0.6:0.25));
+      o.onended=function(){ctx.close();};
+    });
   }catch(e){}
 }
 var _cosTimer=null;

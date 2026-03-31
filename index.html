@@ -369,7 +369,23 @@ footer{
     <p style="font-size:.8rem;color:rgba(212,175,55,0.5);letter-spacing:.1em;text-transform:uppercase">ANTHRŌPOS Alpha Intelligence</p>
   </div>
 
-  <a href="https://app.anthroposalphaintelligence.com/agent/demo-confidant" target="_blank" style="display:inline-block;background:linear-gradient(135deg,rgba(212,175,55,0.15),rgba(212,175,55,0.05));border:1px solid rgba(212,175,55,0.35);border-radius:14px;color:rgba(212,175,55,0.9);padding:16px 36px;font-size:1rem;font-weight:700;text-decoration:none;letter-spacing:.06em;transition:all .3s" onmouseover="this.style.background='rgba(212,175,55,0.15)'" onmouseout="this.style.background='linear-gradient(135deg,rgba(212,175,55,0.15),rgba(212,175,55,0.05))'">Meet Your Chief of Staff →</a>
+  <!-- INTERACTIVE DEMO -->
+  <div style="margin-top:16px">
+    <p style="font-size:.72rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:rgba(212,175,55,0.45);margin-bottom:20px">See It In Action</p>
+    <!-- Scenario tabs -->
+    <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:10px;margin-bottom:28px">
+      <button class="cos-tab active" onclick="cosDemo('hedge')" id="tab-hedge" style="background:rgba(212,175,55,0.12);border:1px solid rgba(212,175,55,0.4);border-radius:30px;color:rgba(212,175,55,0.9);padding:9px 20px;font-size:.78rem;font-weight:700;cursor:pointer;letter-spacing:.05em;transition:all .2s">APEX CAPITAL<br><span style="font-weight:400;opacity:.7;font-size:.72rem">Hedge Fund Partner</span></button>
+      <button class="cos-tab" onclick="cosDemo('tech')" id="tab-tech" style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.12);border-radius:30px;color:rgba(255,255,255,0.4);padding:9px 20px;font-size:.78rem;font-weight:700;cursor:pointer;letter-spacing:.05em;transition:all .2s">NEXUS TECH<br><span style="font-weight:400;opacity:.7;font-size:.72rem">CEO</span></button>
+      <button class="cos-tab" onclick="cosDemo('realty')" id="tab-realty" style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.12);border-radius:30px;color:rgba(255,255,255,0.4);padding:9px 20px;font-size:.78rem;font-weight:700;cursor:pointer;letter-spacing:.05em;transition:all .2s">VANTAGE GROUP<br><span style="font-weight:400;opacity:.7;font-size:.72rem">Principal Broker</span></button>
+    </div>
+    <!-- Chat window -->
+    <div id="cos-chat" style="background:rgba(0,0,0,0.6);border:1px solid rgba(212,175,55,0.18);border-radius:20px;padding:28px 24px;max-width:680px;margin:0 auto 32px;min-height:320px;text-align:left;position:relative">
+      <div id="cos-messages" style="display:flex;flex-direction:column;gap:16px"></div>
+      <div id="cos-typing" style="display:none;padding:8px 0;color:rgba(212,175,55,0.4);font-size:.8rem;font-style:italic">Chief of Staff is thinking...</div>
+    </div>
+    <p style="font-size:.75rem;color:rgba(255,255,255,0.25);margin-bottom:8px">Ready for the real thing?</p>
+    <a href="#contact" style="display:inline-block;background:transparent;border:1px solid rgba(212,175,55,0.3);border-radius:30px;color:rgba(212,175,55,0.7);padding:11px 28px;font-size:.85rem;font-weight:700;text-decoration:none;letter-spacing:.06em;transition:all .3s" onmouseover="this.style.background='rgba(212,175,55,0.08)'" onmouseout="this.style.background='transparent'">Request Your Chief of Staff →</a>
+  </div>
   </div><!-- /cos-detail -->
 </div>
 </section>
@@ -515,6 +531,72 @@ footer{
 </section>
 
 <script>
+// ── Chief of Staff Interactive Demo ───────────────────────────────────────
+var _cosTimer=null;
+var _cosScenarios={
+  hedge:[
+    {role:'user',name:'Marcus Chen — Managing Partner',text:'Quick — where are we sitting on the Northfield position? Board call in 20 minutes.'},
+    {role:'cos',text:'You\'re up 4.2% on Northfield since the August entry. Thesis is holding — their Q3 guidance revised upward last week, which you flagged as the trigger. One flag: sector volatility is elevated heading into the Fed decision Thursday. You mentioned last session you wanted to trim if it crossed 18% of the book. It\'s at 16.4 right now.'},
+    {role:'user',name:'Marcus Chen',text:'Good. Remind me what I said about Chen after the last partners call.'},
+    {role:'cos',text:'You said he\'s sharp but doesn\'t push back enough in rooms with senior partners — that you\'d want to test him with a hard mandate before promoting. Your exact note was: "talent, not yet conviction."'},
+    {role:'user',name:'Marcus Chen',text:'That\'s exactly right. Pull that into the board deck notes.'},
+    {role:'cos',text:'Done. Added to your board prep under Personnel — flagged for the Q4 review conversation. Anything else before the call?'}
+  ],
+  tech:[
+    {role:'user',name:'Jordan Davis — CEO',text:'I need to think through the Series B timing. Talk me through where we are.'},
+    {role:'cos',text:'Last time we talked about this you said you\'d move when ARR crossed $4M and churn dropped below 3%. You\'re at $3.7M ARR and churn is sitting at 3.4% — close but not quite. The macro for B rounds has tightened, but your category is still getting funded. If you close the two enterprise deals in the pipeline, you hit both numbers inside 60 days and raise from strength instead of need.'},
+    {role:'user',name:'Jordan Davis',text:'Which two deals are we talking?'},
+    {role:'cos',text:'Meridian Health and Coventry Group. Meridian has been warm for six weeks — you mentioned their procurement slows in Q4, so there\'s a window closing. Coventry is faster-moving. Their CTO wanted a pilot before committing. You were going to follow up on that last Friday.'},
+    {role:'user',name:'Jordan Davis',text:'I didn\'t follow up. Help me draft the message.'},
+    {role:'cos',text:'On it. Draft: "Hi [CTO name] — following up on the pilot conversation. We\'ve onboarded two similar-scale clients since we spoke and the ramp time came in under two weeks both times. Happy to walk you through the setup — do you have 20 minutes this week?" Want me to adjust the tone or add anything specific?'}
+  ],
+  realty:[
+    {role:'user',name:'Sandra Wright — Principal Broker',text:'I\'ve got a tough negotiation call with the Alderman Group tomorrow. Refresh me on where this stands.'},
+    {role:'cos',text:'Alderman Group — 22,000 sq ft commercial, East Austin. They came in 90 days ago expecting $28 per square foot. Market has moved on them; comparable recent leases are closing at $24 to $25. Their timeline is firm — they need to be in by March or it affects their permit window. That\'s your leverage. They need a deal more than they need that number.'},
+    {role:'user',name:'Sandra Wright',text:'What do I know about the broker on the other side?'},
+    {role:'cos',text:'First deal together. After your intro call you noted he\'s professional but relationship-new — meaning he\'ll follow his client\'s lead since there\'s no trust built between the two of you yet. The deal has to speak for itself. Don\'t try to work him. Work the logic.'},
+    {role:'user',name:'Sandra Wright',text:'What\'s my opening number and where do I land?'},
+    {role:'cos',text:'Open at $25.50 — close enough to market that they can\'t call it unreasonable, but leaves you room to move. Your floor is $23.50 given the March constraint they\'re carrying. If they push hard on price, offer to absorb the first month\'s operating costs instead of moving the rate — protects your comp and gives them a win they can show their team.'}
+  ]
+};
+function cosDemo(scenario){
+  if(_cosTimer) clearTimeout(_cosTimer);
+  // update tabs
+  document.querySelectorAll('.cos-tab').forEach(function(t){
+    t.style.background='rgba(255,255,255,0.03)';
+    t.style.border='1px solid rgba(255,255,255,0.12)';
+    t.style.color='rgba(255,255,255,0.4)';
+  });
+  var active=document.getElementById('tab-'+scenario);
+  if(active){active.style.background='rgba(212,175,55,0.12)';active.style.border='1px solid rgba(212,175,55,0.4)';active.style.color='rgba(212,175,55,0.9)';}
+  var box=document.getElementById('cos-messages');
+  var typing=document.getElementById('cos-typing');
+  box.innerHTML=''; typing.style.display='none';
+  var msgs=_cosScenarios[scenario]||[];
+  var delays=[0,1200,2600,3900,5400,6700];
+  msgs.forEach(function(m,i){
+    _cosTimer=setTimeout(function(){
+      typing.style.display='none';
+      var wrap=document.createElement('div');
+      if(m.role==='user'){
+        wrap.style.cssText='display:flex;flex-direction:column;align-items:flex-end;gap:4px';
+        wrap.innerHTML='<span style="font-size:.68rem;color:rgba(255,255,255,0.3);letter-spacing:.05em">'+m.name+'</span>'
+          +'<div style="background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.1);border-radius:16px 16px 4px 16px;padding:12px 16px;max-width:82%;font-size:.88rem;color:#e5e7eb;line-height:1.6">'+m.text+'</div>';
+      } else {
+        wrap.style.cssText='display:flex;flex-direction:column;align-items:flex-start;gap:4px';
+        wrap.innerHTML='<span style="font-size:.68rem;color:rgba(212,175,55,0.5);letter-spacing:.05em">Chief of Staff</span>'
+          +'<div style="background:rgba(212,175,55,0.07);border:1px solid rgba(212,175,55,0.2);border-radius:16px 16px 16px 4px;padding:12px 16px;max-width:88%;font-size:.88rem;color:#e5e7eb;line-height:1.6">'+m.text+'</div>';
+      }
+      box.appendChild(wrap);
+      box.scrollTop=box.scrollHeight;
+      // show typing indicator before next cos message
+      if(msgs[i+1]&&msgs[i+1].role==='cos'){
+        setTimeout(function(){typing.style.display='block';box.scrollTop=box.scrollHeight;},200);
+      }
+    },delays[i]||i*1400);
+  });
+}
+// auto-play first scenario on section open
 function toggleSection(detailId, btnId){
   var d=document.getElementById(detailId);
   var btn=document.getElementById(btnId);
@@ -523,6 +605,8 @@ function toggleSection(detailId, btnId){
     d.style.maxHeight=d.scrollHeight+'px';
     btn.innerHTML=btn.innerHTML.replace('Learn More','Show Less');
     arrow.style.transform='rotate(180deg)';
+    // auto-play demo when COS section opens
+    if(detailId==='cos-detail') setTimeout(function(){cosDemo('hedge');},400);
   } else {
     d.style.maxHeight='0px';
     btn.innerHTML=btn.innerHTML.replace('Show Less','Learn More');

@@ -55,15 +55,15 @@ SCRIPTS = {
         (EXEC_ORUS,  "Get IT on the calendar today and mark it executive priority."),
         (COS_VOICE,  "Done — flagged as executive priority with a 48-hour resolution window. I'll follow up directly if it's not closed. You'll want to loop Dr. Vasquez in personally once it's resolved — the fix matters, but so does her knowing you moved on it. Want me to draft a short note from you to her for after?"),
     ],
-    "music": [
-        (EXEC_FENRIR, "Where are we with Marcus on the renewal? His team has gone quiet."),
-        (COS_VOICE,   "Marcus's deal expires in 60 days. His manager Terrell went quiet after the December label meeting — your note says he was unhappy with the streaming split structure. The industry has shifted toward 50-50 net receipts for artists at Marcus's catalog size. You're currently at 60-40 in the label's favor. His last two albums generated 18 million combined. He knows his number. The silence is negotiating."),
-        (EXEC_FENRIR, "What did I say about Terrell after that meeting?"),
-        (COS_VOICE,   "You said Terrell is sharp and loyal to Marcus first — he won't be moved by a relationship conversation. He needs to see a deal. You also noted he responds better to directness than charm — that a real offer respects his time more than a dinner. Your word was: lead with the number, not the relationship."),
-        (EXEC_FENRIR, "Who else is circling? Be straight with me."),
-        (COS_VOICE,   "Sony had Marcus at their LA office in January — that's in the trades. Republic hasn't moved yet but signed two comparable artists last quarter. The window where Marcus stays because he's comfortable is closing. The window where he stays because you made the best offer is still open — but it won't be after his next meeting with Sony."),
-        (EXEC_FENRIR, "Draft the deal framework. I want to go to Marcus directly."),
-        (COS_VOICE,   "Here's the framework: 50-50 net receipts, 4 million dollar advance against a two-album commitment, tour support clause, creative control on visual direction, and streaming bonuses at 100 million and 500 million streams. That's a market deal Terrell can defend and Marcus can respect. It says you know what he's worth. Want me to add a first-week release fund — that's the detail that signals you're serious about the launch, not just the contract."),
+    "media": [
+        (EXEC_FENRIR, "What's the status on the Apex Brands renewal? They were supposed to respond last week."),
+        (COS_VOICE,   "Apex Brands — the 18-month campaign across your top three creators. Their legal team pushed the response to this week. Based on your notes, their hesitation is around performance benchmarks — they want guaranteed minimums before committing. Your portfolio is running 340 percent above the benchmarks they're asking for. They're negotiating from fear, not data. You have the data. They don't have a better option at this reach level."),
+        (EXEC_FENRIR, "What about Jade — I heard she's talking to Elevate."),
+        (COS_VOICE,   "Your note from two weeks ago: Jade's manager reached out about her development deal structure. She's generating 4.1 million in annual brand revenue for the firm. Elevate approached her in Q1 2026 — your source confirmed a meeting happened. What Jade actually wants isn't money. She told you in December she wants a production fund for her own content IP. You haven't moved on that conversation."),
+        (EXEC_FENRIR, "What does it cost us if she walks?"),
+        (COS_VOICE,   "Jade is your top earner and your most visible talent. If she walks, Apex Brands sees it — and that renewal gets harder. Three other creators on your roster are watching how you handle her. The production fund she's asking for is 200,000 dollars. Her annual revenue to the firm is 4.1 million. This is not a financial decision. It's a signal."),
+        (EXEC_FENRIR, "Draft the offer. I want her in the room this week."),
+        (COS_VOICE,   "Framework: 200,000 dollar production fund against her next two IP projects, co-ownership at 30 percent to the firm on IP revenue, two-year extension with quarterly performance reviews. That gives her the creative freedom she's asking for and ties her upside to yours. Want me to add a first-look clause for brand integration on her original content — that's where the long-term revenue is, and it's what turns this from a retention deal into a partnership."),
     ],
 }
 

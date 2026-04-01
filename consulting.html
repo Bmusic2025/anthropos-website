@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Consulting — ANTHRŌPOS Alpha Intelligence</title>
+<meta name="description" content="AI strategy consulting from someone who's actually been in the room. 25 years. $285M closed. Now that experience is available to your business.">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#000;color:#fff;overflow-x:hidden}
+header{position:fixed;top:0;width:100%;background:rgba(0,0,0,0.92);backdrop-filter:blur(10px);padding:14px 24px;z-index:100;border-bottom:1px solid rgba(255,255,255,0.08);display:flex;align-items:center;justify-content:space-between}
+.logo{font-family:'Space Grotesk',sans-serif;font-size:1.1rem;font-weight:700;letter-spacing:2px;color:#4285F4;text-decoration:none}
+.back-btn{color:#9ca3af;text-decoration:none;font-size:0.85rem;transition:color 0.3s}
+.back-btn:hover{color:#fff}
+.container{max-width:1000px;margin:0 auto;padding:0 24px}
+
+/* Hero */
+.hero{min-height:72vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:130px 24px 90px;background:radial-gradient(ellipse 80% 60% at 50% 40%,rgba(212,175,55,0.06) 0%,transparent 70%)}
+.hero-eyebrow{font-size:0.7rem;letter-spacing:5px;color:rgba(212,175,55,0.7);text-transform:uppercase;margin-bottom:22px}
+.hero-title{font-family:'Space Grotesk',sans-serif;font-size:clamp(2.2rem,5.5vw,4rem);font-weight:700;line-height:1.1;margin-bottom:28px;max-width:820px}
+.hero-title .accent{color:#D4AF37}
+.hero-sub{font-size:1.1rem;color:#9ca3af;max-width:600px;line-height:1.8;margin-bottom:44px}
+.hero-cta{display:inline-block;padding:16px 44px;background:#D4AF37;color:#000;font-size:0.95rem;font-weight:700;letter-spacing:.08em;border-radius:30px;text-decoration:none;transition:all .3s}
+.hero-cta:hover{background:#e8c547;transform:translateY(-2px);box-shadow:0 10px 30px rgba(212,175,55,0.3)}
+
+/* Divider */
+.divider{height:1px;background:linear-gradient(90deg,transparent,rgba(212,175,55,0.2),transparent)}
+
+/* Section base */
+.section{padding:100px 24px}
+.section-label{font-size:0.68rem;letter-spacing:5px;text-transform:uppercase;color:rgba(212,175,55,0.6);margin-bottom:16px;display:block}
+.section-title{font-family:'Space Grotesk',sans-serif;font-size:clamp(1.8rem,4vw,2.8rem);font-weight:700;line-height:1.15;margin-bottom:20px}
+.section-sub{color:#9ca3af;font-size:1rem;line-height:1.8;max-width:640px}
+
+/* Credibility */
+.cred-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1px;background:rgba(255,255,255,0.06);border-radius:16px;overflow:hidden;margin-top:56px}
+.cred-stat{background:#000;padding:40px 28px;text-align:center;transition:background .3s}
+.cred-stat:hover{background:rgba(212,175,55,0.04)}
+.cred-num{font-family:'Space Grotesk',sans-serif;font-size:3rem;font-weight:700;color:#D4AF37;line-height:1;margin-bottom:10px}
+.cred-label{font-size:0.85rem;color:#9ca3af;line-height:1.6}
+
+/* The Gap */
+.gap-section{padding:100px 24px;background:rgba(255,255,255,0.01);border-top:1px solid rgba(255,255,255,0.05);border-bottom:1px solid rgba(255,255,255,0.05)}
+.gap-inner{max-width:780px;margin:0 auto}
+.pull-quote{border-left:3px solid #D4AF37;padding:24px 32px;margin:40px 0;background:rgba(212,175,55,0.04);border-radius:0 12px 12px 0}
+.pull-quote p{font-size:1.2rem;color:#e8e3d5;line-height:1.75;font-style:italic}
+.gap-inner p{color:#9ca3af;line-height:1.85;font-size:1rem;margin-bottom:20px}
+.gap-inner p strong{color:#fff}
+
+/* Engagements */
+.engagements{padding:100px 24px}
+.eng-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:24px;margin-top:56px}
+.eng-card{background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.08);border-radius:20px;padding:36px 28px;display:flex;flex-direction:column;transition:border-color .3s,background .3s}
+.eng-card:hover{border-color:rgba(212,175,55,0.3);background:rgba(212,175,55,0.03)}
+.eng-card.featured{border:2px solid rgba(212,175,55,0.4);background:rgba(212,175,55,0.05)}
+.eng-tag{font-size:0.65rem;letter-spacing:4px;text-transform:uppercase;color:rgba(212,175,55,0.6);margin-bottom:16px;display:block}
+.eng-name{font-family:'Space Grotesk',sans-serif;font-size:1.4rem;font-weight:700;color:#fff;margin-bottom:12px}
+.eng-price{font-size:2rem;font-weight:800;color:#D4AF37;margin-bottom:6px;font-family:'Space Grotesk',sans-serif}
+.eng-price-note{font-size:0.78rem;color:#9ca3af;margin-bottom:20px}
+.eng-desc{color:#9ca3af;font-size:0.88rem;line-height:1.75;margin-bottom:24px;flex:1}
+.eng-includes{list-style:none;margin-bottom:28px;display:flex;flex-direction:column;gap:9px}
+.eng-includes li{font-size:0.83rem;color:#ccc;padding-left:18px;position:relative;line-height:1.5}
+.eng-includes li::before{content:'—';position:absolute;left:0;color:rgba(212,175,55,0.5)}
+.eng-btn{display:block;text-align:center;padding:12px 0;background:rgba(212,175,55,0.1);border:1px solid rgba(212,175,55,0.35);border-radius:20px;color:rgba(212,175,55,0.9);font-size:0.8rem;font-weight:700;letter-spacing:.08em;text-decoration:none;transition:all .2s}
+.eng-btn:hover{background:rgba(212,175,55,0.2)}
+.eng-card.featured .eng-btn{background:rgba(212,175,55,0.2);border-color:rgba(212,175,55,0.6);color:#D4AF37}
+.eng-card.featured .eng-btn:hover{background:rgba(212,175,55,0.32)}
+
+/* Speaking */
+.speaking{padding:100px 24px;background:rgba(255,255,255,0.01);border-top:1px solid rgba(255,255,255,0.05)}
+.speaking-inner{display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:center;max-width:880px;margin:0 auto}
+.speaking-topics{display:flex;flex-direction:column;gap:16px;margin-top:28px}
+.topic-item{padding:20px 24px;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.07);border-radius:14px;transition:border-color .3s}
+.topic-item:hover{border-color:rgba(212,175,55,0.25)}
+.topic-title{font-size:0.92rem;font-weight:600;color:#fff;margin-bottom:5px}
+.topic-desc{font-size:0.8rem;color:#9ca3af;line-height:1.6}
+.speaking-cta-box{background:rgba(212,175,55,0.05);border:1px solid rgba(212,175,55,0.2);border-radius:20px;padding:40px 32px;text-align:center}
+.speaking-cta-box h3{font-family:'Space Grotesk',sans-serif;font-size:1.4rem;font-weight:700;margin-bottom:12px}
+.speaking-cta-box p{color:#9ca3af;font-size:0.88rem;line-height:1.7;margin-bottom:24px}
+.speaking-cta-box .fee-range{font-size:1.8rem;font-weight:800;color:#D4AF37;font-family:'Space Grotesk',sans-serif;margin-bottom:6px}
+.speaking-cta-box .fee-note{font-size:0.75rem;color:#9ca3af;margin-bottom:28px}
+
+/* Process */
+.process{padding:100px 24px}
+.process-steps{display:flex;flex-direction:column;gap:1px;background:rgba(255,255,255,0.06);border-radius:16px;overflow:hidden;max-width:780px;margin:56px auto 0}
+.process-step{display:grid;grid-template-columns:72px 1fr;align-items:start;gap:24px;padding:32px 36px;background:#000;transition:background .3s}
+.process-step:hover{background:rgba(212,175,55,0.03)}
+.step-num{font-family:'Space Grotesk',sans-serif;font-size:2.4rem;font-weight:700;color:rgba(212,175,55,0.2);line-height:1;padding-top:4px}
+.step-content h3{font-size:1rem;font-weight:600;margin-bottom:8px}
+.step-content p{font-size:0.88rem;color:#9ca3af;line-height:1.7}
+
+/* Final CTA */
+.final-cta{padding:120px 24px;text-align:center;background:radial-gradient(ellipse 70% 50% at 50% 50%,rgba(212,175,55,0.07) 0%,transparent 70%)}
+.final-cta h2{font-family:'Space Grotesk',sans-serif;font-size:clamp(1.8rem,4vw,2.8rem);font-weight:700;margin-bottom:18px}
+.final-cta p{color:#9ca3af;font-size:1rem;max-width:500px;margin:0 auto 44px;line-height:1.8}
+.final-cta .btn-gold{display:inline-block;padding:17px 48px;background:#D4AF37;color:#000;font-size:1rem;font-weight:700;letter-spacing:.06em;border-radius:30px;text-decoration:none;margin-right:16px;transition:all .3s}
+.final-cta .btn-gold:hover{background:#e8c547;transform:translateY(-2px);box-shadow:0 10px 30px rgba(212,175,55,0.3)}
+.final-cta .btn-ghost{display:inline-block;padding:16px 40px;border:1px solid rgba(255,255,255,0.2);border-radius:30px;color:#9ca3af;font-size:1rem;font-weight:500;text-decoration:none;transition:all .3s}
+.final-cta .btn-ghost:hover{border-color:#fff;color:#fff}
+.btn-wrap{display:flex;gap:16px;justify-content:center;flex-wrap:wrap}
+
+@media(max-width:768px){
+  .speaking-inner{grid-template-columns:1fr}
+  .process-step{grid-template-columns:48px 1fr;padding:24px 20px}
+  .final-cta{padding:80px 24px}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <a href="javascript:void(0)" onclick="goBack()" class="back-btn">← Back</a>
+  <a href="index.html" class="logo">ANTHRŌPOS</a>
+  <a href="https://api.leadconnectorhq.com/widget/booking/z1420Dk0TaxuFLbJJMby" target="_blank" rel="noopener" style="display:inline-block;padding:8px 20px;background:rgba(212,175,55,0.1);border:1px solid rgba(212,175,55,0.35);border-radius:20px;color:rgba(212,175,55,0.9);font-size:0.78rem;font-weight:700;letter-spacing:.06em;text-decoration:none;transition:all .2s" onmouseover="this.style.background='rgba(212,175,55,0.2)'" onmouseout="this.style.background='rgba(212,175,55,0.1)'">Book a Session</a>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+  <span class="hero-eyebrow">ANTHRŌPOS Consulting</span>
+  <h1 class="hero-title">The Advisor Who's Actually<br>Been <span class="accent">in the Room</span></h1>
+  <p class="hero-sub">Most AI consultants have read about closing deals. Brittain has closed them — $285 million worth, across 25 years in luxury automotive and enterprise technology. That's a different conversation.</p>
+  <a href="https://api.leadconnectorhq.com/widget/booking/z1420Dk0TaxuFLbJJMby" target="_blank" rel="noopener" class="hero-cta">Book Your Strategy Session</a>
+</section>
+
+<div class="divider"></div>
+
+<!-- CREDIBILITY STATS -->
+<section class="section" style="padding-bottom:0">
+  <div class="container">
+    <div style="text-align:center;margin-bottom:0">
+      <span class="section-label">The Foundation</span>
+      <h2 class="section-title">Experience You Can't Fake</h2>
+      <p class="section-sub" style="margin:0 auto">AI strategy is only as good as the business judgment behind it. Here's what's behind ours.</p>
+    </div>
+    <div class="cred-grid">
+      <div class="cred-stat">
+        <div class="cred-num">$285M</div>
+        <div class="cred-label">In transactions closed across<br>25+ years in the field</div>
+      </div>
+      <div class="cred-stat">
+        <div class="cred-num">6</div>
+        <div class="cred-label">Premium brands represented —<br>Mercedes, BMW, Porsche, Audi,<br>Jaguar, Maserati</div>
+      </div>
+      <div class="cred-stat">
+        <div class="cred-num">2</div>
+        <div class="cred-label">Enterprise technology divisions —<br>Dell, Apple</div>
+      </div>
+      <div class="cred-stat">
+        <div class="cred-num">2026</div>
+        <div class="cred-label">Current intelligence —<br>not yesterday's AI playbook</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider" style="margin-top:80px"></div>
+
+<!-- THE GAP -->
+<section class="gap-section">
+  <div class="gap-inner">
+    <span class="section-label">Why This Is Different</span>
+    <h2 class="section-title">Most Consultants Prescribe<br>Before They Diagnose</h2>
+    <p>There is no shortage of people willing to tell you what AI tools to buy. Most of them have never run a sales floor, managed a pipeline under pressure, or sat across a table from a buyer who wasn't sold yet. They have certifications. They have slide decks. They do not have the reps.</p>
+    <div class="pull-quote">
+      <p>"A good physician never prescribes before the diagnosis is complete. We don't sell AI systems. We identify where your business is bleeding — and then we fix it."</p>
+    </div>
+    <p>Brittain spent 25 years learning what actually moves people, what closes deals, and what kills them. That's the lens every engagement runs through. <strong>The technology is the tool. The strategy is what you're buying.</strong></p>
+    <p>The result: AI systems that fit the business they're built for — not the other way around.</p>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ENGAGEMENTS -->
+<section class="engagements">
+  <div class="container">
+    <div style="text-align:center">
+      <span class="section-label">Engagements</span>
+      <h2 class="section-title">Three Ways to Work Together</h2>
+      <p class="section-sub" style="margin:0 auto">Every engagement starts with the same question: what's actually holding your business back?</p>
+    </div>
+    <div class="eng-grid">
+
+      <!-- AI Strategy Session -->
+      <div class="eng-card">
+        <span class="eng-tag">Entry Point</span>
+        <div class="eng-name">AI Strategy Session</div>
+        <div class="eng-price">$997</div>
+        <div class="eng-price-note">Flat fee · 90 minutes · One time</div>
+        <p class="eng-desc">A private, focused session to diagnose your business, identify your highest-leverage AI opportunities, and leave with a prioritized action plan. No pitch. No product push. Just the plan.</p>
+        <ul class="eng-includes">
+          <li>90-minute private strategy call</li>
+          <li>Business and revenue gap analysis</li>
+          <li>Prioritized AI opportunity map</li>
+          <li>Written action plan delivered within 48 hours</li>
+          <li>30-day follow-up check-in included</li>
+        </ul>
+        <a href="https://api.leadconnectorhq.com/widget/booking/z1420Dk0TaxuFLbJJMby" target="_blank" rel="noopener" class="eng-btn">Book Your Session →</a>
+      </div>
+
+      <!-- Fractional AI Officer -->
+      <div class="eng-card featured">
+        <span class="eng-tag" style="color:rgba(212,175,55,0.85)">Most Impactful</span>
+        <div class="eng-name">Fractional AI Officer</div>
+        <div class="eng-price">$5K–$15K</div>
+        <div class="eng-price-note">Per month · Ongoing retainer · Custom scope</div>
+        <p class="eng-desc">Brittain joins your leadership team as your Fractional AI Officer — guiding implementation, holding vendors accountable, and ensuring your AI strategy stays ahead of the market. The intelligence without the full-time salary.</p>
+        <ul class="eng-includes">
+          <li>Monthly strategy sessions with leadership</li>
+          <li>AI implementation oversight and accountability</li>
+          <li>Vendor evaluation and negotiation support</li>
+          <li>Quarterly competitive intelligence review</li>
+          <li>Direct access between sessions</li>
+          <li>Team training and AI adoption coaching</li>
+        </ul>
+        <a href="https://api.leadconnectorhq.com/widget/booking/z1420Dk0TaxuFLbJJMby" target="_blank" rel="noopener" class="eng-btn">Start the Conversation →</a>
+      </div>
+
+      <!-- Enterprise Roadmap -->
+      <div class="eng-card">
+        <span class="eng-tag">Full Transformation</span>
+        <div class="eng-name">Enterprise AI Roadmap</div>
+        <div class="eng-price" style="font-size:1.5rem;padding-top:6px">Custom</div>
+        <div class="eng-price-note">Scoped at assessment · Multi-week engagement</div>
+        <p class="eng-desc">For organizations ready to build AI into their operational infrastructure. A comprehensive assessment of your business, competitive landscape, and technology stack — delivered as a 90-day implementation roadmap your team can actually execute.</p>
+        <ul class="eng-includes">
+          <li>Full business and technology audit</li>
+          <li>Competitive AI landscape analysis</li>
+          <li>Department-by-department opportunity mapping</li>
+          <li>90-day phased implementation roadmap</li>
+          <li>Executive presentation and team briefings</li>
+          <li>60-day implementation support included</li>
+        </ul>
+        <a href="mailto:b@anthroposalphaintelligence.com" class="eng-btn">Request a Proposal →</a>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- SPEAKING -->
+<section class="speaking">
+  <div class="container">
+    <div class="speaking-inner">
+      <div>
+        <span class="section-label">Speaking & Events</span>
+        <h2 class="section-title">Bring the Conversation to Your Audience</h2>
+        <p style="color:#9ca3af;font-size:0.95rem;line-height:1.8;margin-bottom:0">Brittain speaks to executives, business owners, and leadership teams on AI strategy, the future of sales, and how to build businesses that run ahead of the market — not behind it.</p>
+        <div class="speaking-topics">
+          <div class="topic-item">
+            <div class="topic-title">The AI Shift — What's Real and What's Hype in 2026</div>
+            <div class="topic-desc">A grounded, no-nonsense breakdown of what AI actually changes for business leaders right now.</div>
+          </div>
+          <div class="topic-item">
+            <div class="topic-title">The $285M Framework — Closing in a Changed Market</div>
+            <div class="topic-desc">How the fundamentals of closing high-value deals translate directly into AI-era sales strategy.</div>
+          </div>
+          <div class="topic-item">
+            <div class="topic-title">One Human in the Loop — Building a Billion-Dollar Operation Alone</div>
+            <div class="topic-desc">The architecture behind running a full business with AI handling the infrastructure.</div>
+          </div>
+          <div class="topic-item">
+            <div class="topic-title">Executive Briefing — AI for Your Industry</div>
+            <div class="topic-desc">A custom 90-minute session tailored to your sector, your team, and your specific questions.</div>
+          </div>
+        </div>
+      </div>
+      <div class="speaking-cta-box">
+        <h3>Keynotes &amp; Corporate Events</h3>
+        <p>Available for conferences, executive retreats, corporate events, and private leadership workshops. Each engagement is prepared specifically for your audience.</p>
+        <div class="fee-range">$5K–$25K</div>
+        <div class="fee-note">Per engagement · Travel included for qualified events</div>
+        <a href="mailto:b@anthroposalphaintelligence.com?subject=Speaking%20Inquiry" style="display:block;padding:14px 0;background:rgba(212,175,55,0.12);border:1px solid rgba(212,175,55,0.4);border-radius:20px;color:rgba(212,175,55,0.9);font-size:0.82rem;font-weight:700;letter-spacing:.06em;text-decoration:none;text-align:center;margin-bottom:16px;transition:all .2s" onmouseover="this.style.background='rgba(212,175,55,0.22)'" onmouseout="this.style.background='rgba(212,175,55,0.12)'">Submit a Speaking Inquiry →</a>
+        <a href="tel:9168713281" style="display:block;padding:13px 0;background:transparent;border:1px solid rgba(255,255,255,0.12);border-radius:20px;color:#9ca3af;font-size:0.82rem;font-weight:500;text-decoration:none;text-align:center;transition:all .2s" onmouseover="this.style.borderColor='rgba(255,255,255,0.3)';this.style.color='#fff'" onmouseout="this.style.borderColor='rgba(255,255,255,0.12)';this.style.color='#9ca3af'">Call Direct: (916) 871-3281</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- HOW IT WORKS -->
+<section class="process">
+  <div class="container">
+    <div style="text-align:center">
+      <span class="section-label">The Process</span>
+      <h2 class="section-title">How Every Engagement Begins</h2>
+      <p class="section-sub" style="margin:0 auto">No templates. No generic frameworks. Every engagement is built around one specific business: yours.</p>
+    </div>
+    <div class="process-steps">
+      <div class="process-step">
+        <div class="step-num">01</div>
+        <div class="step-content">
+          <h3>The Diagnosis</h3>
+          <p>Before any recommendation is made, we listen. Where is the business today? Where is revenue leaking? Where are people and time going that could be handled by a machine? The diagnosis drives everything.</p>
+        </div>
+      </div>
+      <div class="process-step">
+        <div class="step-num">02</div>
+        <div class="step-content">
+          <h3>The Strategy</h3>
+          <p>Based on the diagnosis, we build a prioritized plan — not a list of tools, but a sequence of moves that compound on each other. Quick wins that fund long-term infrastructure. Month one looks different from month six.</p>
+        </div>
+      </div>
+      <div class="process-step">
+        <div class="step-num">03</div>
+        <div class="step-content">
+          <h3>The Build</h3>
+          <p>Strategy without implementation is just a presentation. Where the engagement calls for it, ANTHRŌPOS builds the systems — voice AI, automation, pipelines, dashboards — and hands them over running, not in progress.</p>
+        </div>
+      </div>
+      <div class="process-step">
+        <div class="step-num">04</div>
+        <div class="step-content">
+          <h3>The Accountability</h3>
+          <p>We stay at the table. Quarterly reviews, competitive updates, performance audits. The market shifts every 90 days. Your strategy should too.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FINAL CTA -->
+<section class="final-cta">
+  <div class="container">
+    <h2>The First Conversation<br>Is Always Free</h2>
+    <p>Book a free 30-minute AI audit and we'll tell you exactly where your business is leaving money on the table — and what to do about it. No pitch. Just clarity.</p>
+    <div class="btn-wrap">
+      <a href="https://api.leadconnectorhq.com/widget/booking/z1420Dk0TaxuFLbJJMby" target="_blank" rel="noopener" class="btn-gold">Book Your Free AI Audit</a>
+      <a href="mailto:b@anthroposalphaintelligence.com" class="btn-ghost">Send a Direct Email</a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer style="padding:48px 24px;border-top:1px solid rgba(255,255,255,0.06);text-align:center">
+  <a href="index.html" style="font-family:'Space Grotesk',sans-serif;font-size:1rem;font-weight:700;letter-spacing:2px;color:#4285F4;text-decoration:none;display:inline-block;margin-bottom:20px">ANTHRŌPOS</a>
+  <p style="color:#9ca3af;font-size:0.78rem;margin-bottom:20px">Alpha Intelligence — Austin, TX</p>
+  <div style="display:flex;gap:28px;justify-content:center;flex-wrap:wrap;margin-bottom:28px">
+    <a href="index.html" style="color:#9ca3af;text-decoration:none;font-size:0.82rem;transition:color .2s" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='#9ca3af'">Home</a>
+    <a href="about.html" style="color:#9ca3af;text-decoration:none;font-size:0.82rem;transition:color .2s" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='#9ca3af'">About</a>
+    <a href="consulting.html" style="color:#D4AF37;text-decoration:none;font-size:0.82rem">Consulting</a>
+    <a href="enterprise.html" style="color:#9ca3af;text-decoration:none;font-size:0.82rem;transition:color .2s" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='#9ca3af'">Enterprise</a>
+    <a href="index.html#contact" style="color:#9ca3af;text-decoration:none;font-size:0.82rem;transition:color .2s" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='#9ca3af'">Contact</a>
+    <a href="privacy-policy.html" style="color:#9ca3af;text-decoration:none;font-size:0.82rem;transition:color .2s" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='#9ca3af'">Privacy</a>
+  </div>
+  <p style="color:rgba(255,255,255,0.15);font-size:0.75rem">&copy; 2026 ANTHRŌPOS Alpha Intelligence. All rights reserved.</p>
+</footer>
+
+<script>
+if('scrollRestoration' in history) history.scrollRestoration='manual';
+window.scrollTo(0,0);
+window.addEventListener('pageshow',function(e){if(e.persisted) window.scrollTo(0,0);});
+function goBack(){
+  if(history.length>1 && document.referrer && document.referrer.indexOf(location.hostname)>-1){
+    history.back();
+  } else {
+    location.href='index.html';
+  }
+}
+</script>
+</body>
+</html>

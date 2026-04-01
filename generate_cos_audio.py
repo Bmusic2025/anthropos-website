@@ -16,8 +16,8 @@ _SSL.check_hostname = False
 _SSL.verify_mode = ssl.CERT_NONE
 
 COS_VOICE  = "en-US-Chirp3-HD-Leda"    # Chief of Staff — polished, premium female
-EXEC_FENRIR = "en-US-Chirp3-HD-Fenrir" # Marcus Chen (hedge) — sharp male
-EXEC_ORUS   = "en-US-Chirp3-HD-Orus"   # Jordan Davis (tech CEO) — deeper male
+EXEC_FENRIR = "en-US-Chirp3-HD-Fenrir" # Marcus Chen (hedge) / Devon Cross (music) — sharp male
+EXEC_ORUS   = "en-US-Chirp3-HD-Orus"   # Jordan Davis (tech CEO) / Dr. Okafor (health) — deeper male
 EXEC_AOEDE  = "en-US-Chirp3-HD-Aoede"  # Sandra Wright (broker) — confident female
 
 SCRIPTS = {
@@ -44,6 +44,26 @@ SCRIPTS = {
         (COS_VOICE,  "First deal together. After your intro call you noted he's professional but relationship-new — meaning he'll follow his client's lead since there's no trust built yet. The deal has to speak for itself. Don't try to work him. Work the logic."),
         (EXEC_AOEDE, "What's my opening number and where do I land?"),
         (COS_VOICE,  "Open at 25.50 — close enough to market they can't call it unreasonable, but leaves you room to move. Your floor is 23.50 given the March constraint they're carrying. If they push hard on price, offer to absorb the first month's operating costs instead of moving the rate — protects your comp and gives them a win they can show their team."),
+    ],
+    "health": [
+        (EXEC_ORUS,  "Where are we on the Anthem renewal? I have a call with them Thursday."),
+        (COS_VOICE,  "Anthem is your second-largest payer — 31 percent of net revenue. Their initial counter came in 8 percent below your ask across orthopedics, imaging, and primary care. At current volume that gap costs you roughly 2.1 million annually. Your leverage: patient retention is 94 percent, highest in the metro, and you have two competing payer conversations running in parallel that Anthem doesn't know about. Thursday is not the close — it's the signal call. Don't move yet."),
+        (EXEC_ORUS,  "What about Dr. Vasquez — is she still considering leaving?"),
+        (COS_VOICE,  "Your November note says she's being recruited by Lakewood Health System. Her concern isn't compensation — it's administrative load. She told you the scheduling system is costing her 90 minutes a day. You flagged it for IT. That ticket is still open. She said she'd make a decision before end of month. You have a narrow window."),
+        (EXEC_ORUS,  "What's the actual cost if she walks?"),
+        (COS_VOICE,  "Dr. Vasquez carries 680,000 dollars in annual collections plus a panel of 1,400 established patients who chose Meridian because of her specifically. Recruiting a replacement physician takes four to six months minimum and runs 40 to 60 thousand in search fees alone. The IT fix is a configuration change — not a development project. This is the highest-ROI decision on your plate right now."),
+        (EXEC_ORUS,  "Get IT on the calendar today and mark it executive priority."),
+        (COS_VOICE,  "Done — flagged as executive priority with a 48-hour resolution window. I'll follow up directly if it's not closed. You'll want to loop Dr. Vasquez in personally once it's resolved — the fix matters, but so does her knowing you moved on it. Want me to draft a short note from you to her for after?"),
+    ],
+    "music": [
+        (EXEC_FENRIR, "Where are we with Marcus on the renewal? His team has gone quiet."),
+        (COS_VOICE,   "Marcus's deal expires in 60 days. His manager Terrell went quiet after the December label meeting — your note says he was unhappy with the streaming split structure. The industry has shifted toward 50-50 net receipts for artists at Marcus's catalog size. You're currently at 60-40 in the label's favor. His last two albums generated 18 million combined. He knows his number. The silence is negotiating."),
+        (EXEC_FENRIR, "What did I say about Terrell after that meeting?"),
+        (COS_VOICE,   "You said Terrell is sharp and loyal to Marcus first — he won't be moved by a relationship conversation. He needs to see a deal. You also noted he responds better to directness than charm — that a real offer respects his time more than a dinner. Your word was: lead with the number, not the relationship."),
+        (EXEC_FENRIR, "Who else is circling? Be straight with me."),
+        (COS_VOICE,   "Sony had Marcus at their LA office in January — that's in the trades. Republic hasn't moved yet but signed two comparable artists last quarter. The window where Marcus stays because he's comfortable is closing. The window where he stays because you made the best offer is still open — but it won't be after his next meeting with Sony."),
+        (EXEC_FENRIR, "Draft the deal framework. I want to go to Marcus directly."),
+        (COS_VOICE,   "Here's the framework: 50-50 net receipts, 4 million dollar advance against a two-album commitment, tour support clause, creative control on visual direction, and streaming bonuses at 100 million and 500 million streams. That's a market deal Terrell can defend and Marcus can respect. It says you know what he's worth. Want me to add a first-week release fund — that's the detail that signals you're serious about the launch, not just the contract."),
     ],
 }
 

@@ -533,10 +533,13 @@ footer{
 
 <script>
 // ── Chief of Staff Interactive Demo ───────────────────────────────────────
-// Audio pattern mirrors agent.html: one context, unlocked once during gesture,
-// reused for all chimes even from setTimeout. iOS stays unlocked after first play.
+// Audio pattern mirrors aria.html: pre-generated MP3s, audio chain via onended.
 var _cosTimer=null;
 var _cosCtx=null;
+var _cosAudio=null;
+var _cosIdx=0;
+var _cosCurScenario='';
+var _cosRunning=false;
 
 function _cosUnlock(){
   // Call synchronously inside a gesture. Plays a real 1-sample buffer which is
@@ -597,8 +600,12 @@ var _cosScenarios={
   ]
 };
 function cosDemo(scenario){
-  _cosUnlock(); // unlock AudioContext NOW — synchronously inside gesture, before anything else
-  if(_cosTimer) clearTimeout(_cosTimer);
+  _cosUnlock(); // unlock AudioContext synchronously inside gesture
+  // Stop any running demo
+  _cosRunning=false;
+  if(_cosAudio){try{_cosAudio.pause();_cosAudio.src='';}catch(e){} _cosAudio=null;}
+  if(_cosTimer){clearTimeout(_cosTimer);_cosTimer=null;}
+  // Activate tab
   document.querySelectorAll('.cos-tab').forEach(function(t){
     t.style.background='rgba(255,255,255,0.03)';
     t.style.border='1px solid rgba(255,255,255,0.12)';
@@ -609,28 +616,62 @@ function cosDemo(scenario){
   var box=document.getElementById('cos-messages');
   var typing=document.getElementById('cos-typing');
   box.innerHTML=''; typing.style.display='none';
-  var msgs=_cosScenarios[scenario]||[];
-  var delays=[0,1200,2600,3900,5400,6700];
-  msgs.forEach(function(m,i){
-    _cosTimer=setTimeout(function(){
-      typing.style.display='none';
-      var wrap=document.createElement('div');
-      if(m.role==='user'){
-        wrap.style.cssText='display:flex;flex-direction:column;align-items:flex-end;gap:4px';
-        wrap.innerHTML='<span style="font-size:.68rem;color:rgba(255,255,255,0.3);letter-spacing:.05em">'+m.name+'</span>'
-          +'<div style="background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.1);border-radius:16px 16px 4px 16px;padding:12px 16px;max-width:82%;font-size:.88rem;color:#e5e7eb;line-height:1.6">'+m.text+'</div>';
-      } else {
-        wrap.style.cssText='display:flex;flex-direction:column;align-items:flex-start;gap:4px';
-        wrap.innerHTML='<span style="font-size:.68rem;color:rgba(212,175,55,0.5);letter-spacing:.05em">Chief of Staff</span>'
-          +'<div style="background:rgba(212,175,55,0.07);border:1px solid rgba(212,175,55,0.2);border-radius:16px 16px 16px 4px;padding:12px 16px;max-width:88%;font-size:.88rem;color:#e5e7eb;line-height:1.6">'+m.text+'</div>';
-      }
-      box.appendChild(wrap);
-      box.scrollTop=box.scrollHeight;
-      _cosChime(m.role==='cos'); // _cosCtx is already running — this works from setTimeout
-      if(msgs[i+1]&&msgs[i+1].role==='cos'){
-        setTimeout(function(){typing.style.display='block';box.scrollTop=box.scrollHeight;},200);
-      }
-    },delays[i]!=null?delays[i]:i*1400);
+  _cosCurScenario=scenario;
+  _cosIdx=0;
+  _cosRunning=true;
+  _cosNextMsg();
+}
+
+function _cosAddBubble(m){
+  var box=document.getElementById('cos-messages');
+  var wrap=document.createElement('div');
+  if(m.role==='user'){
+    wrap.style.cssText='display:flex;flex-direction:column;align-items:flex-end;gap:4px;margin-bottom:12px';
+    wrap.innerHTML='<span style="font-size:.68rem;color:rgba(255,255,255,0.3);letter-spacing:.05em">'+m.name+'</span>'
+      +'<div style="background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.1);border-radius:16px 16px 4px 16px;padding:12px 16px;max-width:82%;font-size:.88rem;color:#e5e7eb;line-height:1.6">'+m.text+'</div>';
+  } else {
+    wrap.style.cssText='display:flex;flex-direction:column;align-items:flex-start;gap:4px;margin-bottom:12px';
+    wrap.innerHTML='<span style="font-size:.68rem;color:rgba(212,175,55,0.5);letter-spacing:.05em">Chief of Staff</span>'
+      +'<div style="background:rgba(212,175,55,0.07);border:1px solid rgba(212,175,55,0.2);border-radius:16px 16px 16px 4px;padding:12px 16px;max-width:88%;font-size:.88rem;color:#e5e7eb;line-height:1.6">'+m.text+'</div>';
+  }
+  box.appendChild(wrap);
+  box.scrollTop=box.scrollHeight;
+}
+
+function _cosNextMsg(){
+  if(!_cosRunning) return;
+  var msgs=_cosScenarios[_cosCurScenario]||[];
+  var typing=document.getElementById('cos-typing');
+  typing.style.display='none';
+  if(_cosIdx>=msgs.length) return; // done
+  var m=msgs[_cosIdx];
+  _cosIdx++;
+  _cosAddBubble(m);
+  // Play audio for this line
+  var audioFile='audio/cos_'+_cosCurScenario+'_'+(_cosIdx<10?'0'+(_cosIdx-1):String(_cosIdx-1))+'.mp3';
+  var a=new Audio(audioFile);
+  _cosAudio=a;
+  a.onended=function(){
+    if(!_cosRunning) return;
+    var next=msgs[_cosIdx];
+    if(!next){return;} // all done
+    if(next.role==='cos'){
+      // Show typing indicator before COS response
+      var typing=document.getElementById('cos-messages').parentElement&&document.getElementById('cos-typing');
+      if(typing){typing.style.display='block';document.getElementById('cos-messages').scrollTop=document.getElementById('cos-messages').scrollHeight;}
+      _cosTimer=setTimeout(_cosNextMsg,700);
+    } else {
+      _cosTimer=setTimeout(_cosNextMsg,350);
+    }
+  };
+  a.onerror=function(){
+    // Audio failed — fall back to timed pacing
+    if(!_cosRunning) return;
+    _cosTimer=setTimeout(_cosNextMsg,msgs[_cosIdx-1].role==='cos'?2200:1000);
+  };
+  a.play().catch(function(){
+    if(!_cosRunning) return;
+    _cosTimer=setTimeout(_cosNextMsg,msgs[_cosIdx-1].role==='cos'?2200:1000);
   });
 }
 // auto-play first scenario on section open

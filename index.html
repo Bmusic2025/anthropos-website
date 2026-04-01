@@ -283,13 +283,18 @@ footer{
   <!-- 1. INTERACTIVE DEMO — first thing they see -->
   <p style="font-size:.72rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:rgba(212,175,55,0.45);margin-bottom:20px">See It In Action</p>
   <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:10px;margin-bottom:24px">
-    <button class="cos-tab" onclick="cosDemo('hedge')" id="tab-hedge" style="background:rgba(212,175,55,0.12);border:1px solid rgba(212,175,55,0.4);border-radius:30px;color:rgba(212,175,55,0.9);padding:9px 20px;font-size:.78rem;font-weight:700;cursor:pointer;letter-spacing:.05em;transition:all .2s">APEX CAPITAL<br><span style="font-weight:400;opacity:.7;font-size:.72rem">Hedge Fund Partner</span></button>
-    <button class="cos-tab" onclick="cosDemo('tech')" id="tab-tech" style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.12);border-radius:30px;color:rgba(255,255,255,0.4);padding:9px 20px;font-size:.78rem;font-weight:700;cursor:pointer;letter-spacing:.05em;transition:all .2s">NEXUS TECH<br><span style="font-weight:400;opacity:.7;font-size:.72rem">CEO</span></button>
-    <button class="cos-tab" onclick="cosDemo('realty')" id="tab-realty" style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.12);border-radius:30px;color:rgba(255,255,255,0.4);padding:9px 20px;font-size:.78rem;font-weight:700;cursor:pointer;letter-spacing:.05em;transition:all .2s">VANTAGE GROUP<br><span style="font-weight:400;opacity:.7;font-size:.72rem">Principal Broker</span></button>
+    <button class="cos-tab" onclick="cosSelectTab('hedge')" id="tab-hedge" style="background:rgba(212,175,55,0.12);border:1px solid rgba(212,175,55,0.4);border-radius:30px;color:rgba(212,175,55,0.9);padding:9px 20px;font-size:.78rem;font-weight:700;cursor:pointer;letter-spacing:.05em;transition:all .2s">APEX CAPITAL<br><span style="font-weight:400;opacity:.7;font-size:.72rem">Hedge Fund Partner</span></button>
+    <button class="cos-tab" onclick="cosSelectTab('tech')" id="tab-tech" style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.12);border-radius:30px;color:rgba(255,255,255,0.4);padding:9px 20px;font-size:.78rem;font-weight:700;cursor:pointer;letter-spacing:.05em;transition:all .2s">NEXUS TECH<br><span style="font-weight:400;opacity:.7;font-size:.72rem">CEO</span></button>
+    <button class="cos-tab" onclick="cosSelectTab('realty')" id="tab-realty" style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.12);border-radius:30px;color:rgba(255,255,255,0.4);padding:9px 20px;font-size:.78rem;font-weight:700;cursor:pointer;letter-spacing:.05em;transition:all .2s">VANTAGE GROUP<br><span style="font-weight:400;opacity:.7;font-size:.72rem">Principal Broker</span></button>
   </div>
-  <div id="cos-chat" style="background:rgba(0,0,0,0.6);border:1px solid rgba(212,175,55,0.18);border-radius:20px;padding:24px 20px;max-width:680px;margin:0 auto 40px;min-height:300px;text-align:left">
-    <div id="cos-messages" style="display:flex;flex-direction:column;gap:14px"></div>
+  <div id="cos-chat" style="background:rgba(0,0,0,0.6);border:1px solid rgba(212,175,55,0.18);border-radius:20px;padding:24px 20px;max-width:680px;margin:0 auto 20px;min-height:300px;text-align:left">
+    <div id="cos-messages" style="display:flex;flex-direction:column;gap:14px">
+      <div id="cos-hint" style="color:rgba(212,175,55,0.35);font-size:.82rem;text-align:center;padding:60px 0;letter-spacing:.04em">Select a scenario above, then press Play.</div>
+    </div>
     <div id="cos-typing" style="display:none;padding:8px 0;color:rgba(212,175,55,0.4);font-size:.8rem;font-style:italic">Chief of Staff is thinking...</div>
+  </div>
+  <div style="text-align:center;margin-bottom:40px">
+    <button id="cos-play-btn" onclick="cosPlayStop()" style="background:rgba(212,175,55,0.12);border:1px solid rgba(212,175,55,0.4);border-radius:30px;color:rgba(212,175,55,0.9);padding:12px 36px;font-size:.85rem;font-weight:700;cursor:pointer;letter-spacing:.08em;transition:all .2s">▶ PLAY DEMO</button>
   </div>
 
   <!-- 2. PRICING — right after demo while excitement is high -->
@@ -533,13 +538,12 @@ footer{
 
 <script>
 // ── Chief of Staff Interactive Demo ───────────────────────────────────────
-// Audio pattern mirrors aria.html: pre-generated MP3s, audio chain via onended.
 var _cosTimer=null;
 var _cosCtx=null;
 var _cosAudio=null;
 var _cosIdx=0;
-var _cosCurScenario='';
-var _cosRunning=false;
+var _cosCurScenario='hedge'; // default selected tab
+var _cosSession=0;           // incremented on every new play — kills stale callbacks
 
 function _cosUnlock(){
   // Call synchronously inside a gesture. Plays a real 1-sample buffer which is
@@ -599,13 +603,18 @@ var _cosScenarios={
     {role:'cos',text:'Open at $25.50 — close enough to market that they can\'t call it unreasonable, but leaves you room to move. Your floor is $23.50 given the March constraint they\'re carrying. If they push hard on price, offer to absorb the first month\'s operating costs instead of moving the rate — protects your comp and gives them a win they can show their team.'}
   ]
 };
-function cosDemo(scenario){
-  _cosUnlock(); // unlock AudioContext synchronously inside gesture
-  // Stop any running demo
-  _cosRunning=false;
-  if(_cosAudio){try{_cosAudio.pause();_cosAudio.src='';}catch(e){} _cosAudio=null;}
-  if(_cosTimer){clearTimeout(_cosTimer);_cosTimer=null;}
-  // Activate tab
+function _cosSetPlayBtn(state){
+  var btn=document.getElementById('cos-play-btn');
+  if(!btn) return;
+  if(state==='playing'){btn.textContent='⏹ STOP';}
+  else if(state==='replay'){btn.textContent='↺ REPLAY';}
+  else {btn.textContent='▶ PLAY DEMO';}
+}
+
+function cosSelectTab(scenario){
+  // Select tab — highlight it, reset chat, do NOT auto-play
+  _cosCurScenario=scenario;
+  _cosStop(); // stop anything currently running
   document.querySelectorAll('.cos-tab').forEach(function(t){
     t.style.background='rgba(255,255,255,0.03)';
     t.style.border='1px solid rgba(255,255,255,0.12)';
@@ -615,11 +624,40 @@ function cosDemo(scenario){
   if(active){active.style.background='rgba(212,175,55,0.12)';active.style.border='1px solid rgba(212,175,55,0.4)';active.style.color='rgba(212,175,55,0.9)';}
   var box=document.getElementById('cos-messages');
   var typing=document.getElementById('cos-typing');
-  box.innerHTML=''; typing.style.display='none';
-  _cosCurScenario=scenario;
+  box.innerHTML='<div style="color:rgba(212,175,55,0.35);font-size:.82rem;text-align:center;padding:60px 0;letter-spacing:.04em">Press Play to begin.</div>';
+  typing.style.display='none';
+  _cosSetPlayBtn('play');
+}
+
+function cosPlayStop(){
+  _cosUnlock(); // unlock AudioContext — must be inside user gesture
+  if(_cosSession>0 && _cosAudio && !_cosAudio.paused){
+    // Currently playing — stop it
+    _cosStop();
+    _cosSetPlayBtn('play');
+  } else {
+    // Start or replay
+    _cosStart();
+  }
+}
+
+function _cosStop(){
+  _cosSession++; // invalidates all active callbacks
+  if(_cosAudio){try{_cosAudio.pause();_cosAudio.onended=null;_cosAudio.onerror=null;_cosAudio.src='';}catch(e){} _cosAudio=null;}
+  if(_cosTimer){clearTimeout(_cosTimer);_cosTimer=null;}
+  document.getElementById('cos-typing').style.display='none';
+}
+
+function _cosStart(){
+  _cosStop(); // clear any previous run
+  var mySession=_cosSession; // captured — if session changes, callbacks abort
+  var scenario=_cosCurScenario||'hedge';
+  var box=document.getElementById('cos-messages');
+  box.innerHTML='';
+  document.getElementById('cos-typing').style.display='none';
   _cosIdx=0;
-  _cosRunning=true;
-  _cosNextMsg();
+  _cosSetPlayBtn('playing');
+  _cosNextMsg(mySession,scenario);
 }
 
 function _cosAddBubble(m){
@@ -638,40 +676,42 @@ function _cosAddBubble(m){
   box.scrollTop=box.scrollHeight;
 }
 
-function _cosNextMsg(){
-  if(!_cosRunning) return;
-  var msgs=_cosScenarios[_cosCurScenario]||[];
+function _cosNextMsg(session,scenario){
+  if(session!==_cosSession) return; // stale session — another demo started, abort
+  var msgs=_cosScenarios[scenario]||[];
   var typing=document.getElementById('cos-typing');
   typing.style.display='none';
-  if(_cosIdx>=msgs.length) return; // done
+  if(_cosIdx>=msgs.length){
+    // Demo complete
+    _cosSetPlayBtn('replay');
+    return;
+  }
   var m=msgs[_cosIdx];
   _cosIdx++;
   _cosAddBubble(m);
-  // Play audio for this line
-  var audioFile='audio/cos_'+_cosCurScenario+'_'+(_cosIdx<10?'0'+(_cosIdx-1):String(_cosIdx-1))+'.mp3';
+  var idx=_cosIdx-1;
+  var audioFile='audio/cos_'+scenario+'_'+(idx<10?'0'+idx:String(idx))+'.mp3';
   var a=new Audio(audioFile);
   _cosAudio=a;
   a.onended=function(){
-    if(!_cosRunning) return;
+    if(session!==_cosSession) return; // stale
     var next=msgs[_cosIdx];
-    if(!next){return;} // all done
+    if(!next){_cosSetPlayBtn('replay');return;}
     if(next.role==='cos'){
-      // Show typing indicator before COS response
-      var typing=document.getElementById('cos-messages').parentElement&&document.getElementById('cos-typing');
-      if(typing){typing.style.display='block';document.getElementById('cos-messages').scrollTop=document.getElementById('cos-messages').scrollHeight;}
-      _cosTimer=setTimeout(_cosNextMsg,700);
+      typing.style.display='block';
+      document.getElementById('cos-messages').scrollTop=document.getElementById('cos-messages').scrollHeight;
+      _cosTimer=setTimeout(function(){_cosNextMsg(session,scenario);},700);
     } else {
-      _cosTimer=setTimeout(_cosNextMsg,350);
+      _cosTimer=setTimeout(function(){_cosNextMsg(session,scenario);},350);
     }
   };
   a.onerror=function(){
-    // Audio failed — fall back to timed pacing
-    if(!_cosRunning) return;
-    _cosTimer=setTimeout(_cosNextMsg,msgs[_cosIdx-1].role==='cos'?2200:1000);
+    if(session!==_cosSession) return;
+    _cosTimer=setTimeout(function(){_cosNextMsg(session,scenario);},m.role==='cos'?2200:1000);
   };
   a.play().catch(function(){
-    if(!_cosRunning) return;
-    _cosTimer=setTimeout(_cosNextMsg,msgs[_cosIdx-1].role==='cos'?2200:1000);
+    if(session!==_cosSession) return;
+    _cosTimer=setTimeout(function(){_cosNextMsg(session,scenario);},m.role==='cos'?2200:1000);
   });
 }
 // auto-play first scenario on section open
@@ -683,7 +723,7 @@ function toggleSection(detailId, btnId){
     d.style.maxHeight=d.scrollHeight+'px';
     btn.innerHTML=btn.innerHTML.replace('Learn More','Show Less');
     arrow.style.transform='rotate(180deg)';
-    if(detailId==='cos-detail'){_cosUnlock();cosDemo('hedge');}
+    if(detailId==='cos-detail'){_cosUnlock();}
   } else {
     d.style.maxHeight='0px';
     btn.innerHTML=btn.innerHTML.replace('Show Less','Learn More');

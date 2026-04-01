@@ -533,7 +533,43 @@ footer{
 
 <script>
 // ── Chief of Staff Interactive Demo ───────────────────────────────────────
+// Audio pattern mirrors agent.html: one context, unlocked once during gesture,
+// reused for all chimes even from setTimeout. iOS stays unlocked after first play.
 var _cosTimer=null;
+var _cosCtx=null;
+
+function _cosUnlock(){
+  // Call synchronously inside a gesture. Plays a real 1-sample buffer which is
+  // what actually transitions iOS AudioContext from suspended → running.
+  if(_cosCtx&&_cosCtx.state!=='closed') return;
+  try{
+    _cosCtx=new(window.AudioContext||window.webkitAudioContext)();
+    var buf=_cosCtx.createBuffer(1,1,22050);
+    var src=_cosCtx.createBufferSource();
+    src.buffer=buf; src.connect(_cosCtx.destination); src.start(0);
+    _cosCtx.resume();
+  }catch(e){}
+}
+
+function _cosChime(isCoS){
+  // Safe to call from setTimeout — _cosCtx is already running (unlocked during gesture above)
+  if(!_cosCtx||_cosCtx.state==='closed') return;
+  try{
+    var t=_cosCtx.currentTime;
+    var o=_cosCtx.createOscillator();
+    var g=_cosCtx.createGain();
+    o.connect(g); g.connect(_cosCtx.destination);
+    o.type='sine';
+    o.frequency.setValueAtTime(isCoS?587:1047,t);
+    if(isCoS) o.frequency.linearRampToValueAtTime(523,t+0.15);
+    g.gain.setValueAtTime(0.001,t);
+    g.gain.linearRampToValueAtTime(isCoS?0.32:0.2,t+0.03);
+    g.gain.exponentialRampToValueAtTime(0.001,t+(isCoS?0.55:0.22));
+    o.start(t);
+    o.stop(t+(isCoS?0.6:0.25));
+  }catch(e){}
+}
+
 var _cosScenarios={
   hedge:[
     {role:'user',name:'Marcus Chen — Managing Partner',text:'Quick — where are we sitting on the Northfield position? Board call in 20 minutes.'},
@@ -561,6 +597,7 @@ var _cosScenarios={
   ]
 };
 function cosDemo(scenario){
+  _cosUnlock(); // unlock AudioContext NOW — synchronously inside gesture, before anything else
   if(_cosTimer) clearTimeout(_cosTimer);
   document.querySelectorAll('.cos-tab').forEach(function(t){
     t.style.background='rgba(255,255,255,0.03)';
@@ -574,31 +611,6 @@ function cosDemo(scenario){
   box.innerHTML=''; typing.style.display='none';
   var msgs=_cosScenarios[scenario]||[];
   var delays=[0,1200,2600,3900,5400,6700];
-  // ── Schedule ALL audio synchronously NOW (inside gesture window) ──────────
-  // iOS Safari blocks audio in setTimeout. We pre-schedule every chime using
-  // AudioContext timing so they fire at the right moment without needing the
-  // gesture to still be active. setTimeout is only used for DOM updates below.
-  try{
-    var ctx=new(window.AudioContext||window.webkitAudioContext)();
-    ctx.resume();
-    msgs.forEach(function(m,i){
-      var t0=ctx.currentTime+(delays[i]!=null?delays[i]:i*1400)/1000;
-      var isCoS=m.role==='cos';
-      var o=ctx.createOscillator();
-      var g=ctx.createGain();
-      o.connect(g); g.connect(ctx.destination);
-      o.type='sine';
-      o.frequency.setValueAtTime(isCoS?587:1047,t0);
-      if(isCoS) o.frequency.linearRampToValueAtTime(523,t0+0.15);
-      g.gain.setValueAtTime(0.001,t0);
-      g.gain.linearRampToValueAtTime(isCoS?0.32:0.2,t0+0.03);
-      g.gain.exponentialRampToValueAtTime(0.001,t0+(isCoS?0.55:0.22));
-      o.start(t0);
-      o.stop(t0+(isCoS?0.6:0.25));
-      if(i===msgs.length-1) o.onended=function(){try{ctx.close();}catch(e){}};
-    });
-  }catch(e){}
-  // ── DOM updates via setTimeout (audio already pre-scheduled above) ────────
   msgs.forEach(function(m,i){
     _cosTimer=setTimeout(function(){
       typing.style.display='none';
@@ -614,6 +626,7 @@ function cosDemo(scenario){
       }
       box.appendChild(wrap);
       box.scrollTop=box.scrollHeight;
+      _cosChime(m.role==='cos'); // _cosCtx is already running — this works from setTimeout
       if(msgs[i+1]&&msgs[i+1].role==='cos'){
         setTimeout(function(){typing.style.display='block';box.scrollTop=box.scrollHeight;},200);
       }
@@ -629,8 +642,7 @@ function toggleSection(detailId, btnId){
     d.style.maxHeight=d.scrollHeight+'px';
     btn.innerHTML=btn.innerHTML.replace('Learn More','Show Less');
     arrow.style.transform='rotate(180deg)';
-    // auto-play demo when COS section opens — call cosDemo synchronously (inside gesture) so audio schedules now
-    if(detailId==='cos-detail'){cosDemo('hedge');}
+    if(detailId==='cos-detail'){_cosUnlock();cosDemo('hedge');}
   } else {
     d.style.maxHeight='0px';
     btn.innerHTML=btn.innerHTML.replace('Show Less','Learn More');

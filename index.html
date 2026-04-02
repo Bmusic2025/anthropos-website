@@ -1310,7 +1310,7 @@ function showLogin(){document.getElementById("loginModal").style.display="flex";
 function _closeLogin(){document.getElementById("loginModal").style.display="none";document.body.style.overflow=""}
 function closeLogin(){_closeLogin()}
 function googleLogin(){window.location.href="https://app.anthroposalphaintelligence.com/auth/google"}
-function facebookLogin(){alert("Facebook & Instagram login coming soon — use Google or email for now.");}
+function facebookLogin(){window.location.href="https://app.anthroposalphaintelligence.com/auth/facebook"}
 function emailLogin(){var e=document.getElementById("emailInput").value;var p=document.getElementById("passwordInput").value;if(e&&p){alert("Email login coming soon!");closeLogin()}else{alert("Please enter email and password")}}
 
 </script>

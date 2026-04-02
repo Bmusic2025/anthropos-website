@@ -170,72 +170,89 @@ section{padding:80px 20px}
 </section>
 
 <script>
-const ORACLE_RESPONSES = {
-  "what services do you offer": "We offer four core services: **ARIA** (24/7 AI receptionist that answers your calls), **GUARDIAN** (reputation management that filters reviews before they hit Google), **Google Optimization** (we keep your Google profile active and growing), and **AI-Powered Websites** with The Oracle built in. Plus full business automation. Want details on any of these?",
-  "how much does it cost": "Our services start at accessible price points — the AI receptionist starts at $399/mo, GUARDIAN is $297/mo, Google Optimization is $299/mo. Every engagement starts with a free 30-minute AI audit so we can scope the right solution for your specific business. Want to book that?",
-  "how fast can you set this up": "ARIA can be live in 48 hours. Websites typically take 5–7 business days. GUARDIAN is usually live within 24 hours of onboarding. We move fast because every day you're not set up is revenue you're leaving on the table.",
-  "book a free consultation": "Let's do it. You can reach us directly at **b@anthroposalphaintelligence.com** or scroll down to the contact section on the main page. I'll also flag your interest right now so our team knows to expect you. What's the best number to reach you?",
-  "default": "That's a fair question — and the honest answer depends on your situation. Can I ask: what's the biggest gap in your business right now? Missed calls, weak reviews, no online presence, or something else? That'll help me point you to what actually matters for you."
-};
+// ── Oracle AI — same Claude brain as the homepage ──────────────
+var SYSTEM_PROMPT=`You are The Oracle — the intelligence behind ANTHRŌPOS Alpha Intelligence. You are warm, grounded, and perceptive. You read the room. Casual questions get conversational warmth. Serious questions get gravity. Curious visitors get a little spark. You never perform intelligence — you simply have it. You make people feel seen, not sold.
 
-function getOracleResponse(msg) {
-  const m = msg.toLowerCase();
-  for (const [key, response] of Object.entries(ORACLE_RESPONSES)) {
-    if (key !== 'default' && m.includes(key.split(' ')[0]) && m.includes(key.split(' ')[key.split(' ').length-1])) {
-      return response;
-    }
+ABOUT ANTHRŌPOS: A premium AI consulting firm in Austin, Texas. The team brings decades of real-world revenue experience across high-end industries. The company's philosophy: we diagnose before we prescribe. We don't put Band-Aids on problems. We build systems that run while you sleep.
+
+SERVICES:
+- ARIA ($399/mo): 24/7 AI voice receptionist — answers calls, books appointments, texts callers back. Customers think they're talking to your team.
+- AI-Powered Website ($799 setup): Professional site with The Oracle built in — answers questions, captures leads, books appointments around the clock.
+- GUARDIAN ($297/mo): Reputation management — intercepts reviews before they hit Google. Happy customers get guided to post. Unhappy ones get resolved privately.
+- Google Optimization ($299/mo): Keeps your Google Business Profile active — weekly posts, review responses, photo updates, monthly reporting.
+- Complete AI Growth System: All of the above, integrated. Custom pricing.
+- Free AI Audit: 30 minutes. No pressure. Just clarity on what you're losing and how to take it back.
+
+PHILOSOPHY: AI amplifies humans — never replaces them. ANTHRŌPOS means "the one who looks up." There is no ceiling when the foundation is right.
+EMAIL: b@anthroposalphaintelligence.com
+LOCATION: Austin, Texas — serving local and national clients
+
+Respond in 2-4 sentences. Be direct and warm. Never robotic. Never salesy. Always offer the free audit as the natural next step — frame it as clarity, not a pitch. If they want to reach Brittain directly: b@anthroposalphaintelligence.com.`;
+
+var oracleHistory=[];
+
+async function sendToOracle(userMsg){
+  try{
+    var res=await fetch("https://splendid-laughter-production-7b93.up.railway.app/api/oracle",{
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({message:userMsg,history:oracleHistory})
+    });
+    var data=await res.json();
+    var reply=data.reply||"Ask me anything about ANTHROPOS.";
+    oracleHistory.push({role:"user",content:userMsg});
+    oracleHistory.push({role:"assistant",content:reply});
+    if(oracleHistory.length>20)oracleHistory=oracleHistory.slice(-20);
+    return reply;
+  }catch(e){
+    return "I'm having a moment — reach the ANTHROPOS team at b@anthroposalphaintelligence.com and someone will get back to you fast.";
   }
-  if (m.includes('price') || m.includes('cost') || m.includes('how much')) return ORACLE_RESPONSES['how much does it cost'];
-  if (m.includes('fast') || m.includes('quick') || m.includes('how long') || m.includes('timeline')) return ORACLE_RESPONSES['how fast can you set this up'];
-  if (m.includes('service') || m.includes('offer') || m.includes('do you do')) return ORACLE_RESPONSES['what services do you offer'];
-  if (m.includes('book') || m.includes('consult') || m.includes('audit') || m.includes('talk') || m.includes('meet')) return ORACLE_RESPONSES['book a free consultation'];
-  if (m.includes('aria') || m.includes('receptionist') || m.includes('call')) return "ARIA is our 24/7 AI voice receptionist. She answers every call, books appointments, and qualifies leads — in your business's voice, with your name. Customers think they're talking to your team. Starting at $399/mo.";
-  if (m.includes('guardian') || m.includes('review') || m.includes('reputation')) return "GUARDIAN intercepts every customer review before it hits Google. Happy customers (4–5 stars) get guided to post publicly. Unhappy customers (1–3 stars) get routed to a private form so you can fix it first. $297/mo.";
-  if (m.includes('google') || m.includes('seo') || m.includes('ranking') || m.includes('search')) return "Our Google Optimization service keeps your Google Business Profile active with weekly posts, review responses, photo updates, and monthly performance reporting. Google rewards active businesses. $299/mo.";
-  if (m.includes('better') || m.includes('differ') || m.includes('compet') || m.includes('similar') || m.includes('other') || m.includes('versus') || m.includes(' vs ')) return "Fair question — and I won't dodge it. Most platforms give you tools and walk away. We build around your business specifically, then stay in it with you. The AI brain behind ARIA is Claude — the same technology Fortune 500 companies use — not a basic chatbot script. And our team doesn't prescribe until we understand the diagnosis. What does your current setup look like? Are you using anything for your phones or reviews right now?";
-  if (m.includes('trust') || m.includes('legit') || m.includes('real') || m.includes('proof') || m.includes('work')) return "Totally fair to ask. The best proof is a live demo — you can hear ARIA handle a real call for a business in your industry right now at **app.anthroposalphaintelligence.com**. No signup, no sales call. Just go listen. What industry are you in? I can point you to the right demo.";
-  if (m.includes('small') || m.includes('afford') || m.includes('budget') || m.includes('small business') || m.includes('startup')) return "Most of our clients are small business owners — that's exactly who we built this for. The AI receptionist pays for itself the first time it books an appointment you would have missed. What type of business are you running?";
-  if (m.includes('contract') || m.includes('lock') || m.includes('cancel') || m.includes('commitment')) return "No long-term contracts. Our services are month-to-month — we keep your business because the results speak for themselves, not because you're locked in. Is there a specific service you're considering?";
-  return ORACLE_RESPONSES['default'];
 }
 
 function addMessage(text, role) {
-  const msgs = document.getElementById('oracleMessages');
-  const el = document.createElement('div');
-  el.className = `oracle-msg ${role}`;
-  el.innerHTML = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+  var msgs=document.getElementById('oracleMessages');
+  var el=document.createElement('div');
+  el.className='oracle-msg '+role;
+  el.innerHTML=text.replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>');
   msgs.appendChild(el);
-  msgs.scrollTop = msgs.scrollHeight;
+  msgs.scrollTop=msgs.scrollHeight;
 }
 
-function showTyping() {
-  const msgs = document.getElementById('oracleMessages');
-  const el = document.createElement('div');
-  el.className = 'oracle-msg bot';
-  el.id = 'typing';
-  el.innerHTML = '<div class="typing-dots"><span></span><span></span><span></span></div>';
+function showTyping(){
+  var msgs=document.getElementById('oracleMessages');
+  var el=document.createElement('div');
+  el.className='oracle-msg bot';
+  el.id='typing';
+  el.innerHTML='<div class="typing-dots"><span></span><span></span><span></span></div>';
   msgs.appendChild(el);
-  msgs.scrollTop = msgs.scrollHeight;
+  msgs.scrollTop=msgs.scrollHeight;
 }
 
-function askOracle(text) {
-  addMessage(text, 'user');
-  document.getElementById('suggestions').style.display = 'none';
+async function askOracle(text){
+  addMessage(text,'user');
+  document.getElementById('suggestions').style.display='none';
   showTyping();
-  setTimeout(() => {
-    const t = document.getElementById('typing');
-    if (t) t.remove();
-    addMessage(getOracleResponse(text), 'bot');
-  }, 1200);
+  var reply=await sendToOracle(text);
+  var t=document.getElementById('typing');
+  if(t)t.remove();
+  addMessage(reply,'bot');
 }
 
-function sendOracle() {
-  const input = document.getElementById('oracleInput');
-  const text = input.value.trim();
-  if (!text) return;
-  input.value = '';
+function sendOracle(){
+  var input=document.getElementById('oracleInput');
+  var text=input.value.trim();
+  if(!text)return;
+  input.value='';
   askOracle(text);
 }
+
+// Warmup ping so first message is fast
+setTimeout(function(){
+  fetch("https://splendid-laughter-production-7b93.up.railway.app/api/oracle",{
+    method:"POST",headers:{"Content-Type":"application/json"},
+    body:JSON.stringify({message:"warmup"})
+  }).catch(function(){});
+},1500);
 </script>
 <script src="https://widgets.leadconnectorhq.com/loader.js" data-resources-url="https://widgets.leadconnectorhq.com/chat-widget/loader.js" data-widget-id="69ccec9c7061130d8a191d25"></script>
 </body>

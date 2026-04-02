@@ -483,82 +483,87 @@ footer{
 </div>
 </section>
 
-<section id="contact">
+<section id="contact" style="padding:100px 20px;background:radial-gradient(ellipse 80% 50% at 50% 100%,rgba(66,133,244,0.05) 0%,transparent 70%)">
 <div class="container">
-<h2 style="color:#34A853;text-align:center">Get In Touch</h2>
-<p style="text-align:center;font-size:1.15rem;color:#9ca3af;margin-bottom:48px">Tell us about your business. We'll show you exactly where AI fits.</p>
 
-<!-- Top row: Form + Contact Info -->
-<div id="contactLayout" style="max-width:820px;margin:0 auto 32px;display:grid;grid-template-columns:1fr 1fr;gap:32px">
-
-<!-- Contact Form -->
-<div class="card" style="padding:32px">
-<h3 style="margin-bottom:6px;font-size:1.1rem">Send a Message</h3>
-<p style="color:#6b7280;font-size:0.82rem;margin-bottom:24px">We respond same day.</p>
-<form id="contactForm" onsubmit="submitContact(event)" style="display:flex;flex-direction:column;gap:14px">
-<input type="text" id="cf_name" placeholder="Your name *" required style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.12);border-radius:10px;padding:12px 16px;color:#fff;font-size:0.9rem;outline:none;transition:border-color 0.2s" onfocus="this.style.borderColor='#4285F4'" onblur="this.style.borderColor='rgba(255,255,255,0.12)'">
-<input type="text" id="cf_business" placeholder="Business name" style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.12);border-radius:10px;padding:12px 16px;color:#fff;font-size:0.9rem;outline:none;transition:border-color 0.2s" onfocus="this.style.borderColor='#4285F4'" onblur="this.style.borderColor='rgba(255,255,255,0.12)'">
-<input type="tel" id="cf_phone" placeholder="Phone number *" required style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.12);border-radius:10px;padding:12px 16px;color:#fff;font-size:0.9rem;outline:none;transition:border-color 0.2s" onfocus="this.style.borderColor='#4285F4'" onblur="this.style.borderColor='rgba(255,255,255,0.12)'">
-<input type="email" id="cf_email" placeholder="Email address" style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.12);border-radius:10px;padding:12px 16px;color:#fff;font-size:0.9rem;outline:none;transition:border-color 0.2s" onfocus="this.style.borderColor='#4285F4'" onblur="this.style.borderColor='rgba(255,255,255,0.12)'">
-<select id="cf_service" style="background:#111;border:1px solid rgba(255,255,255,0.12);border-radius:10px;padding:12px 16px;color:#9ca3af;font-size:0.9rem;outline:none">
-<option value="Not sure yet">What are you interested in?</option>
-<option value="ARIA AI Receptionist">ARIA — AI Receptionist</option>
-<option value="GUARDIAN Reputation">GUARDIAN — Reputation Management</option>
-<option value="Google Optimization">Google Business Optimization</option>
-<option value="AI Website">AI-Powered Website</option>
-<option value="Enterprise / NEO">Enterprise / Full Automation (NEO)</option>
-<option value="Not sure yet">Not sure — show me everything</option>
-</select>
-<textarea id="cf_message" placeholder="Anything you want us to know?" rows="3" style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.12);border-radius:10px;padding:12px 16px;color:#fff;font-size:0.9rem;outline:none;resize:vertical;transition:border-color 0.2s" onfocus="this.style.borderColor='#4285F4'" onblur="this.style.borderColor='rgba(255,255,255,0.12)'"></textarea>
-<!-- SMS Consent -->
-<label style="display:flex;align-items:flex-start;gap:10px;cursor:pointer">
-<input type="checkbox" id="cf_consent_nonmkt" required style="margin-top:3px;accent-color:#4285F4;min-width:16px;height:16px">
-<span style="font-size:0.75rem;color:#9ca3af;line-height:1.6">By checking this box, I consent to receive non-marketing messages (appointment reminders and service updates) from ANTHROPOS Alpha Intelligence. Msg &amp; data rates may apply. Reply STOP to cancel. <span style="color:#EA4335">*</span></span>
-</label>
-<label style="display:flex;align-items:flex-start;gap:10px;cursor:pointer">
-<input type="checkbox" id="cf_consent_mkt" style="margin-top:3px;accent-color:#4285F4;min-width:16px;height:16px">
-<span style="font-size:0.75rem;color:#9ca3af;line-height:1.6">By checking this box, I consent to receive marketing messages from ANTHROPOS Alpha Intelligence. Msg &amp; data rates may apply. Reply STOP to cancel.</span>
-</label>
-<button type="submit" id="cfSubmitBtn" style="padding:14px;background:#4285F4;border:none;border-radius:10px;color:#fff;font-size:0.95rem;font-weight:600;cursor:pointer;transition:background 0.2s">Send Message →</button>
-<p id="cfStatus" style="text-align:center;font-size:0.82rem;color:#34A853;display:none"></p>
-</form>
+<!-- Section Header -->
+<div style="text-align:center;margin-bottom:64px">
+  <p style="font-size:0.68rem;letter-spacing:5px;text-transform:uppercase;color:rgba(212,175,55,0.6);margin-bottom:14px">Start the Conversation</p>
+  <h2 style="font-family:'Space Grotesk',sans-serif;font-size:clamp(1.8rem,4vw,2.8rem);font-weight:700;margin-bottom:16px">Ready to See What AI<br>Does for Your Business?</h2>
+  <p style="color:#9ca3af;font-size:1rem;max-width:520px;margin:0 auto;line-height:1.8">Send us a message or book a free 30-minute AI audit. We look at your business, find the gaps, and show you exactly what AI would do about it.</p>
 </div>
 
-<!-- Contact Info -->
-<div style="display:flex;flex-direction:column;gap:20px">
-<div class="card" style="padding:28px">
-<div style="display:flex;align-items:center;gap:14px;margin-bottom:20px">
-<div style="font-size:2rem">📞</div>
-<div>
-<div style="font-weight:600;margin-bottom:4px">Call or Text</div>
-<a href="tel:8302613792" style="color:#34A853;text-decoration:none;font-size:1.05rem;font-weight:600">(830) 261-3792</a>
-<div style="font-size:0.72rem;color:#6b7280;margin-top:3px">AI receptionist answers 24/7</div>
-</div>
-</div>
-<div style="display:flex;align-items:center;gap:14px">
-<div style="font-size:2rem">📧</div>
-<div>
-<div style="font-weight:600;margin-bottom:4px">Email</div>
-<a href="mailto:b@anthroposalphaintelligence.com" style="color:#4285F4;text-decoration:none;font-size:0.85rem">b@anthroposalphaintelligence.com</a>
-</div>
-</div>
-</div>
-<div class="card" style="padding:28px;text-align:center">
-<div style="font-size:2rem;margin-bottom:12px">📅</div>
-<h3 style="margin-bottom:8px;font-size:1rem">Prefer to schedule?</h3>
-<p style="color:#9ca3af;font-size:0.8rem;margin-bottom:18px;line-height:1.6">30 minutes. No pitch — just clarity on where AI fits your business.</p>
-<a href="https://api.leadconnectorhq.com/widget/bookings/zachary-gaudette-personal-calendar-rxshmju5w-e0d05aaa-d59e-4b8e-ba75-37a34bb48116" target="_blank" rel="noopener" style="display:inline-block;padding:12px 28px;background:rgba(52,168,83,0.15);border:1px solid rgba(52,168,83,0.4);border-radius:25px;color:#34A853;text-decoration:none;font-weight:600;font-size:0.88rem;transition:all 0.3s" onmouseover="this.style.background='rgba(52,168,83,0.25)'" onmouseout="this.style.background='rgba(52,168,83,0.15)'">Book Your Free Audit →</a>
-</div>
+<!-- Main Grid -->
+<div style="max-width:1000px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:32px;align-items:start">
+
+<!-- LEFT: Contact Form -->
+<div style="background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.08);border-radius:20px;padding:36px">
+  <p style="font-size:0.68rem;letter-spacing:4px;text-transform:uppercase;color:rgba(66,133,244,0.7);margin-bottom:6px">Send a Message</p>
+  <h3 style="font-family:'Space Grotesk',sans-serif;font-size:1.3rem;font-weight:700;margin-bottom:6px">Tell Us About Your Business</h3>
+  <p style="color:#6b7280;font-size:0.82rem;margin-bottom:28px">We respond same day.</p>
+  <form id="contactForm" onsubmit="submitContact(event)" style="display:flex;flex-direction:column;gap:14px">
+    <input type="text" id="cf_name" placeholder="Your name *" required style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-radius:12px;padding:13px 16px;color:#fff;font-size:0.9rem;outline:none;transition:border-color 0.2s;width:100%;box-sizing:border-box" onfocus="this.style.borderColor='#4285F4'" onblur="this.style.borderColor='rgba(255,255,255,0.1)'">
+    <input type="text" id="cf_business" placeholder="Business name" style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-radius:12px;padding:13px 16px;color:#fff;font-size:0.9rem;outline:none;transition:border-color 0.2s;width:100%;box-sizing:border-box" onfocus="this.style.borderColor='#4285F4'" onblur="this.style.borderColor='rgba(255,255,255,0.1)'">
+    <input type="tel" id="cf_phone" placeholder="Phone number *" required style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-radius:12px;padding:13px 16px;color:#fff;font-size:0.9rem;outline:none;transition:border-color 0.2s;width:100%;box-sizing:border-box" onfocus="this.style.borderColor='#4285F4'" onblur="this.style.borderColor='rgba(255,255,255,0.1)'">
+    <input type="email" id="cf_email" placeholder="Email address" style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-radius:12px;padding:13px 16px;color:#fff;font-size:0.9rem;outline:none;transition:border-color 0.2s;width:100%;box-sizing:border-box" onfocus="this.style.borderColor='#4285F4'" onblur="this.style.borderColor='rgba(255,255,255,0.1)'">
+    <select id="cf_service" style="background:#0a0a0a;border:1px solid rgba(255,255,255,0.1);border-radius:12px;padding:13px 16px;color:#9ca3af;font-size:0.9rem;outline:none;width:100%;box-sizing:border-box">
+      <option value="Not sure yet">What are you interested in?</option>
+      <option value="ARIA AI Receptionist">ARIA — AI Receptionist</option>
+      <option value="GUARDIAN Reputation">GUARDIAN — Reputation Management</option>
+      <option value="Google Optimization">Google Business Optimization</option>
+      <option value="AI Website">AI-Powered Website</option>
+      <option value="Chief of Staff">Chief of Staff — Executive AI</option>
+      <option value="Consulting">Consulting / Strategy Session</option>
+      <option value="Enterprise / NEO">Enterprise / Full Automation</option>
+      <option value="Not sure yet">Not sure — show me everything</option>
+    </select>
+    <textarea id="cf_message" placeholder="Anything you want us to know?" rows="3" style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-radius:12px;padding:13px 16px;color:#fff;font-size:0.9rem;outline:none;resize:vertical;transition:border-color 0.2s;width:100%;box-sizing:border-box" onfocus="this.style.borderColor='#4285F4'" onblur="this.style.borderColor='rgba(255,255,255,0.1)'"></textarea>
+    <!-- SMS Consent -->
+    <label style="display:flex;align-items:flex-start;gap:10px;cursor:pointer">
+      <input type="checkbox" id="cf_consent_nonmkt" required style="margin-top:3px;accent-color:#4285F4;min-width:16px;height:16px;flex-shrink:0">
+      <span style="font-size:0.72rem;color:#6b7280;line-height:1.6">By checking this box, I consent to receive non-marketing messages (appointment reminders and service updates) from ANTHRŌPOS Alpha Intelligence. Msg &amp; data rates may apply. Reply STOP to cancel. <span style="color:#EA4335">*</span></span>
+    </label>
+    <label style="display:flex;align-items:flex-start;gap:10px;cursor:pointer">
+      <input type="checkbox" id="cf_consent_mkt" style="margin-top:3px;accent-color:#4285F4;min-width:16px;height:16px;flex-shrink:0">
+      <span style="font-size:0.72rem;color:#6b7280;line-height:1.6">By checking this box, I consent to receive marketing messages from ANTHRŌPOS Alpha Intelligence. Msg &amp; data rates may apply. Reply STOP to cancel.</span>
+    </label>
+    <button type="submit" id="cfSubmitBtn" style="padding:15px;background:linear-gradient(135deg,#4285F4,#3b6fd4);border:none;border-radius:12px;color:#fff;font-size:0.95rem;font-weight:700;cursor:pointer;letter-spacing:.04em;transition:all 0.2s" onmouseover="this.style.transform='translateY(-1px)';this.style.boxShadow='0 6px 20px rgba(66,133,244,0.35)'" onmouseout="this.style.transform='none';this.style.boxShadow='none'">Send Message →</button>
+    <p id="cfStatus" style="text-align:center;font-size:0.82rem;color:#34A853;display:none"></p>
+  </form>
 </div>
 
-</div>
+<!-- RIGHT: Book + Contact -->
+<div style="display:flex;flex-direction:column;gap:24px">
 
-<!-- Full-width Booking Calendar -->
-<div style="max-width:820px;margin:0 auto">
-<div class="card" style="padding:28px">
-<h3 style="margin-bottom:6px;font-size:1.1rem;text-align:center">Book a Free AI Audit</h3>
-<p style="color:#9ca3af;font-size:0.82rem;margin-bottom:20px;line-height:1.6;text-align:center">Pick a time that works for you. 30 minutes. Find the gaps. Leave with a plan.</p>
-<iframe src="https://api.leadconnectorhq.com/widget/bookings/zachary-gaudette-personal-calendar-rxshmju5w-e0d05aaa-d59e-4b8e-ba75-37a34bb48116" style="width:100%;height:600px;border:none;border-radius:10px" scrolling="no" frameborder="0" title="Book a Free AI Audit"></iframe>
+  <!-- Book a Free Audit — premium card -->
+  <div style="background:linear-gradient(135deg,rgba(212,175,55,0.08) 0%,rgba(212,175,55,0.03) 100%);border:1px solid rgba(212,175,55,0.25);border-radius:20px;padding:36px;text-align:center;position:relative;overflow:hidden">
+    <div style="position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,#D4AF37,transparent)"></div>
+    <p style="font-size:0.65rem;letter-spacing:4px;text-transform:uppercase;color:rgba(212,175,55,0.6);margin-bottom:12px">Free · No Obligation</p>
+    <h3 style="font-family:'Space Grotesk',sans-serif;font-size:1.4rem;font-weight:700;margin-bottom:10px">Book a Free AI Audit</h3>
+    <p style="color:#9ca3af;font-size:0.88rem;line-height:1.75;margin-bottom:28px;max-width:300px;margin-left:auto;margin-right:auto">30 minutes. We look at your business, find where you're losing revenue, and show you exactly what AI would do about it. No pitch. Just the plan.</p>
+    <a href="https://api.leadconnectorhq.com/widget/bookings/zachary-gaudette-personal-calendar-rxshmju5w-e0d05aaa-d59e-4b8e-ba75-37a34bb48116" target="_blank" rel="noopener" style="display:inline-block;padding:15px 40px;background:#D4AF37;color:#000;font-size:0.9rem;font-weight:700;letter-spacing:.06em;border-radius:30px;text-decoration:none;transition:all .3s" onmouseover="this.style.background='#e8c547';this.style.transform='translateY(-2px)';this.style.boxShadow='0 8px 24px rgba(212,175,55,0.35)'" onmouseout="this.style.background='#D4AF37';this.style.transform='none';this.style.boxShadow='none'">Claim Your Free Slot →</a>
+  </div>
+
+  <!-- Contact Info -->
+  <div style="background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.08);border-radius:20px;padding:28px;display:flex;flex-direction:column;gap:20px">
+    <div style="display:flex;align-items:center;gap:16px">
+      <div style="width:44px;height:44px;background:rgba(52,168,83,0.1);border:1px solid rgba(52,168,83,0.25);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.2rem;flex-shrink:0">📞</div>
+      <div>
+        <div style="font-size:0.7rem;letter-spacing:3px;text-transform:uppercase;color:#6b7280;margin-bottom:4px">Call or Text</div>
+        <a href="tel:8302613792" style="color:#fff;text-decoration:none;font-size:1.1rem;font-weight:700;font-family:'Space Grotesk',sans-serif">(830) 261-3792</a>
+        <div style="font-size:0.72rem;color:rgba(52,168,83,0.8);margin-top:3px">AI receptionist answers 24/7</div>
+      </div>
+    </div>
+    <div style="height:1px;background:rgba(255,255,255,0.06)"></div>
+    <div style="display:flex;align-items:center;gap:16px">
+      <div style="width:44px;height:44px;background:rgba(66,133,244,0.1);border:1px solid rgba(66,133,244,0.25);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.2rem;flex-shrink:0">📧</div>
+      <div>
+        <div style="font-size:0.7rem;letter-spacing:3px;text-transform:uppercase;color:#6b7280;margin-bottom:4px">Email</div>
+        <a href="mailto:b@anthroposalphaintelligence.com" style="color:#4285F4;text-decoration:none;font-size:0.88rem;font-weight:500">b@anthroposalphaintelligence.com</a>
+      </div>
+    </div>
+  </div>
+
 </div>
 </div>
 

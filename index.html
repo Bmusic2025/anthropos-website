@@ -49,8 +49,12 @@ nav a:hover{color:#4285F4}
 .oracle-response-area.visible{opacity:1}
 .oracle-input-row{display:flex;align-items:center;gap:10px;width:90%;max-width:500px;background:rgba(255,255,255,0.05);border:1px solid rgba(245,158,11,0.22);border-radius:50px;padding:10px 10px 10px 20px;transition:border-color 0.3s,box-shadow 0.3s}
 .oracle-input-row:focus-within{border-color:rgba(245,158,11,0.55);box-shadow:0 0 24px rgba(245,158,11,0.1)}
-.oracle-input{flex:1;background:transparent;border:none;outline:none;color:#fff;font-size:1rem;font-family:inherit;min-width:0}
-.oracle-input::placeholder{color:rgba(255,255,255,0.28)}
+.oracle-input{width:100%;background:transparent;border:none;outline:none;color:#fff;font-size:1rem;font-family:inherit;min-width:0}
+.oracle-input::placeholder{color:transparent}
+.oracle-ph-wrap{flex:1;position:relative;min-width:0;display:flex;align-items:center}
+.oracle-ph-text{position:absolute;left:0;top:50%;transform:translateY(-50%);pointer-events:none;font-size:1rem;font-family:inherit;white-space:nowrap;display:flex;align-items:center;transition:opacity 0.2s}
+.oracle-ph-text span{color:rgba(245,158,11,0.32);transition:color 0.06s,text-shadow 0.06s}
+.oracle-ph-text span.ph-lit{color:rgba(245,158,11,0.92);text-shadow:0 0 10px rgba(245,158,11,0.65)}
 #contactForm input::placeholder,#contactForm textarea::placeholder{color:rgba(255,255,255,0.85);opacity:1}
 #contactForm input,#contactForm textarea{color:#fff}
 #contactForm select{color:#fff}
@@ -239,7 +243,10 @@ footer{
 <div class="oracle-section" id="oracleWidget">
 <div class="oracle-response-area" id="oracleResponse"></div>
 <div class="oracle-input-row">
-<input type="text" id="chatInput" class="oracle-input" placeholder="Ask The Oracle anything..." onkeypress="if(event.key==='Enter')sendMessage()">
+<div class="oracle-ph-wrap">
+<input type="text" id="chatInput" class="oracle-input" onkeypress="if(event.key==='Enter')sendMessage()">
+<div class="oracle-ph-text" id="oraclePh"><span>A</span><span>s</span><span>k</span><span>&nbsp;</span><span>T</span><span>h</span><span>e</span><span>&nbsp;</span><span>O</span><span>r</span><span>a</span><span>c</span><span>l</span><span>e</span><span>&nbsp;</span><span>a</span><span>n</span><span>y</span><span>t</span><span>h</span><span>i</span><span>n</span><span>g</span><span>.</span><span>.</span><span>.</span></div>
+</div>
 <button class="oracle-mic-btn" id="oracleMicBtn" onclick="toggleOracleMic()" title="Speak">🎤</button>
 <button class="oracle-send-btn" onclick="sendMessage()" title="Send">➤</button>
 </div>
@@ -1328,6 +1335,27 @@ function googleLogin(){window.location.href="https://app.anthroposalphaintellige
 function facebookLogin(){window.location.href="https://app.anthroposalphaintelligence.com/auth/facebook"}
 function emailLogin(){var e=document.getElementById("emailInput").value;var p=document.getElementById("passwordInput").value;if(e&&p){alert("Email login coming soon!");closeLogin()}else{alert("Please enter email and password")}}
 
+// Oracle placeholder sweep animation
+(function(){
+  var ph=document.getElementById('oraclePh');
+  var inp=document.getElementById('chatInput');
+  if(!ph||!inp)return;
+  var spans=ph.querySelectorAll('span');
+  var idx=0,dir=1,t;
+  function sweep(){
+    spans.forEach(function(s,i){
+      s.classList.toggle('ph-lit',i===idx);
+    });
+    idx+=dir;
+    if(idx>=spans.length-1)dir=-1;
+    if(idx<=0)dir=1;
+    t=setTimeout(sweep,65);
+  }
+  sweep();
+  inp.addEventListener('focus',function(){ph.style.opacity='0';clearTimeout(t);});
+  inp.addEventListener('blur',function(){if(!inp.value.trim()){ph.style.opacity='1';idx=0;dir=1;sweep();}});
+  inp.addEventListener('input',function(){ph.style.opacity=inp.value?'0':'1';if(!inp.value){clearTimeout(t);idx=0;dir=1;sweep();}});
+})();
 </script>
 
 

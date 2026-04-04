@@ -195,18 +195,6 @@ footer{
   }
 }
 </style>
-<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
-<script>
-firebase.initializeApp({
-  apiKey: "AIzaSyC4vM-gZORxtdOJ5oNgzfw-UGv-mfGgBLQ",
-  authDomain: "anthropos-ai-c7d76.firebaseapp.com",
-  projectId: "anthropos-ai-c7d76",
-  storageBucket: "anthropos-ai-c7d76.firebasestorage.app",
-  messagingSenderId: "9407132672",
-  appId: "1:9407132672:web:c872d3b5f91208faf294e5"
-});
-</script>
 </head>
 <body>
 <canvas id="matrixCanvas"></canvas>
@@ -1343,17 +1331,7 @@ console.log("Matrix running!");
 function showLogin(){document.getElementById("loginModal").style.display="flex";document.body.style.overflow="hidden"}
 function _closeLogin(){document.getElementById("loginModal").style.display="none";document.body.style.overflow=""}
 function closeLogin(){_closeLogin()}
-function googleLogin(){
-  var provider=new firebase.auth.GoogleAuthProvider();
-  firebase.auth().signInWithPopup(provider)
-    .then(function(result){
-      closeLogin();
-      window.location.href='/checkout.html';
-    })
-    .catch(function(error){
-      alert('Sign in failed: '+error.message);
-    });
-}
+function googleLogin(){ if(window.signInWithGoogle) window.signInWithGoogle(); }
 function facebookLogin(){alert('Facebook login coming soon.');}
 function emailLogin(){var e=document.getElementById("emailInput").value;var p=document.getElementById("passwordInput").value;if(e&&p){alert("Email login coming soon!");closeLogin()}else{alert("Please enter email and password")}}
 
@@ -1433,5 +1411,6 @@ window.addEventListener('pageshow',function(e){
 </div>
 
 
+<script type="module" src="/firebase-auth.js"></script>
 </body>
 </html>

@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Secure Checkout — ANTHRŌPOS Alpha Intelligence</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet">
+<script src="https://js.stripe.com/v3/"></script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+html{overflow-x:hidden}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#000;color:#fff;min-height:100vh;overflow-x:hidden}
+
+/* ── Header ─────────────────────────────────────────────── */
+header{position:fixed;top:0;width:100%;background:rgba(0,0,0,0.92);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);padding:0 24px;height:52px;z-index:200;border-bottom:1px solid rgba(255,255,255,0.08);display:flex;align-items:center}
+.header-inner{max-width:1280px;width:100%;margin:0 auto;display:flex;justify-content:space-between;align-items:center}
+.wordmark{font-family:'Space Grotesk',sans-serif;font-size:1.15rem;font-weight:700;letter-spacing:1px;text-decoration:none;background:linear-gradient(90deg,#4285F4,#EA4335,#FBBC04,#34A853);background-size:200% 100%;-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;animation:gradientShift 4s ease infinite}
+@keyframes gradientShift{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
+.header-right{display:flex;align-items:center;gap:16px}
+.user-name{color:rgba(255,255,255,0.7);font-size:0.85rem}
+.back-link{color:rgba(255,255,255,0.45);font-size:0.82rem;text-decoration:none;transition:color 0.2s;display:flex;align-items:center;gap:4px}
+.back-link:hover{color:#4285F4}
+
+/* ── Page Shell ─────────────────────────────────────────── */
+main{padding-top:72px;min-height:100vh}
+
+/* ── Hero ───────────────────────────────────────────────── */
+.hero{text-align:center;padding:48px 20px 36px}
+.eyebrow{font-size:0.7rem;letter-spacing:4px;text-transform:uppercase;color:#34A853;font-weight:600;margin-bottom:14px;display:flex;align-items:center;justify-content:center;gap:8px}
+.eyebrow::before,.eyebrow::after{content:'';width:28px;height:1px;background:#34A853;opacity:0.5}
+.hero h1{font-family:'Space Grotesk',sans-serif;font-size:2.8rem;font-weight:700;letter-spacing:-0.5px;margin-bottom:14px;line-height:1.1}
+.hero-sub{color:rgba(255,255,255,0.5);font-size:0.95rem;max-width:520px;margin:0 auto;line-height:1.7}
+@media(max-width:600px){.hero h1{font-size:1.9rem}.hero{padding:32px 16px 24px}}
+
+/* ── Two-column Layout ──────────────────────────────────── */
+.checkout-layout{max-width:1160px;margin:0 auto;padding:0 20px 80px;display:grid;grid-template-columns:1fr 360px;gap:32px;align-items:start}
+@media(max-width:900px){.checkout-layout{grid-template-columns:1fr;gap:24px}}
+
+/* ── Product Cards ──────────────────────────────────────── */
+.products-col{}
+.section-label{font-size:0.7rem;letter-spacing:3px;text-transform:uppercase;color:rgba(255,255,255,0.35);margin-bottom:20px;font-weight:600}
+
+.product-card{background:rgba(255,255,255,0.03);border:1.5px solid rgba(255,255,255,0.1);border-radius:14px;padding:22px 24px;margin-bottom:14px;cursor:pointer;transition:all 0.25s;position:relative;overflow:hidden}
+.product-card::before{content:'';position:absolute;inset:0;border-radius:14px;opacity:0;transition:opacity 0.25s;pointer-events:none}
+.product-card:hover{background:rgba(255,255,255,0.05);border-color:rgba(255,255,255,0.2)}
+.product-card.locked{cursor:default}
+
+/* Selected states */
+.product-card.selected-green{border-color:#34A853;background:rgba(52,168,83,0.06)}
+.product-card.selected-blue{border-color:#4285F4;background:rgba(66,133,244,0.06)}
+.product-card.selected-google{border-color:#34A853;background:rgba(52,168,83,0.06)}
+.product-card.selected-website{border-color:#FBBC04;background:rgba(251,188,4,0.05)}
+.product-card.selected-gold{border-color:#D4AF37;background:rgba(212,175,55,0.07)}
+
+/* Card top row */
+.card-top{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:10px}
+.card-title-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.card-title{font-family:'Space Grotesk',sans-serif;font-size:1.05rem;font-weight:700;letter-spacing:0.3px}
+.card-badge{font-size:0.65rem;letter-spacing:2px;text-transform:uppercase;padding:3px 9px;border-radius:20px;font-weight:700}
+.badge-free{background:rgba(52,168,83,0.15);color:#34A853;border:1px solid rgba(52,168,83,0.35)}
+.badge-popular{background:rgba(212,175,55,0.15);color:#D4AF37;border:1px solid rgba(212,175,55,0.35)}
+.card-price{font-family:'Space Grotesk',sans-serif;font-size:1.1rem;font-weight:700;white-space:nowrap;flex-shrink:0}
+.price-blue{color:#4285F4}
+.price-green{color:#34A853}
+.price-yellow{color:#FBBC04}
+.price-gold{color:#D4AF37}
+.card-desc{font-size:0.88rem;color:rgba(255,255,255,0.55);line-height:1.65}
+
+/* Checkbox */
+.card-checkbox{width:20px;height:20px;border-radius:6px;border:1.5px solid rgba(255,255,255,0.2);display:flex;align-items:center;justify-content:center;transition:all 0.2s;flex-shrink:0;margin-top:2px}
+.card-checkbox.checked-green{background:#34A853;border-color:#34A853}
+.card-checkbox.checked-blue{background:#4285F4;border-color:#4285F4}
+.card-checkbox.checked-yellow{background:#FBBC04;border-color:#FBBC04}
+.card-checkbox.checked-gold{background:#D4AF37;border-color:#D4AF37}
+.card-checkbox svg{width:12px;height:12px;opacity:0;transition:opacity 0.2s}
+.card-checkbox.checked-green svg,.card-checkbox.checked-blue svg,.card-checkbox.checked-yellow svg,.card-checkbox.checked-gold svg{opacity:1}
+
+/* CoS Tiers */
+.cos-tiers{margin-top:16px;display:flex;flex-direction:column;gap:8px}
+.cos-tier{display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:10px;border:1px solid rgba(212,175,55,0.2);background:rgba(212,175,55,0.04);cursor:pointer;transition:all 0.2s}
+.cos-tier.tier-selected{border-color:#D4AF37;background:rgba(212,175,55,0.12)}
+.cos-tier:hover{background:rgba(212,175,55,0.08)}
+.tier-radio{width:16px;height:16px;border-radius:50%;border:1.5px solid rgba(212,175,55,0.4);flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all 0.2s}
+.cos-tier.tier-selected .tier-radio{border-color:#D4AF37;background:#D4AF37}
+.tier-radio::after{content:'';width:6px;height:6px;border-radius:50%;background:#000;opacity:0;transition:opacity 0.2s}
+.cos-tier.tier-selected .tier-radio::after{opacity:1}
+.tier-info{flex:1;min-width:0}
+.tier-name{font-weight:600;font-size:0.88rem;color:#D4AF37}
+.tier-price{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:0.95rem;color:#D4AF37;white-space:nowrap;flex-shrink:0}
+.tier-desc{font-size:0.78rem;color:rgba(255,255,255,0.45);margin-top:2px}
+
+/* Gold card special */
+.product-card.cos-card{border-color:rgba(212,175,55,0.25);background:rgba(212,175,55,0.03)}
+.product-card.cos-card:hover{background:rgba(212,175,55,0.06)}
+.cos-shimmer{position:absolute;top:0;left:-100%;width:60%;height:100%;background:linear-gradient(90deg,transparent,rgba(212,175,55,0.04),transparent);animation:shimmer 4s ease infinite;pointer-events:none}
+@keyframes shimmer{0%{left:-100%}100%{left:160%}}
+
+/* ── Order Summary ──────────────────────────────────────── */
+.summary-col{position:sticky;top:72px}
+.summary-card{background:rgba(255,255,255,0.03);border:1.5px solid rgba(255,255,255,0.1);border-radius:16px;padding:26px;overflow:hidden}
+.summary-title{font-family:'Space Grotesk',sans-serif;font-size:1.1rem;font-weight:700;margin-bottom:20px;color:#fff}
+.summary-items{min-height:60px;margin-bottom:20px}
+.summary-item{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;padding:10px 0;border-bottom:1px solid rgba(255,255,255,0.06);animation:itemIn 0.25s ease}
+.summary-item:last-child{border-bottom:none}
+@keyframes itemIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+.summary-item-name{font-size:0.88rem;color:rgba(255,255,255,0.75);line-height:1.4}
+.summary-item-price{font-size:0.88rem;font-weight:600;white-space:nowrap;flex-shrink:0}
+.price-tag-free{color:#34A853}
+.price-tag-monthly{color:#4285F4}
+.price-tag-onetime{color:#FBBC04}
+.price-tag-gold{color:#D4AF37}
+
+.summary-divider{height:1px;background:rgba(255,255,255,0.08);margin:16px 0}
+
+.totals-block{margin-bottom:20px}
+.total-row{display:flex;justify-content:space-between;align-items:center;padding:5px 0}
+.total-label{font-size:0.82rem;color:rgba(255,255,255,0.45)}
+.total-value{font-size:0.88rem;font-weight:600;color:rgba(255,255,255,0.75)}
+.grand-total-row{display:flex;justify-content:space-between;align-items:center;margin-top:8px;padding-top:12px;border-top:1px solid rgba(255,255,255,0.1)}
+.grand-total-label{font-family:'Space Grotesk',sans-serif;font-size:0.95rem;font-weight:700}
+.grand-total-value{font-family:'Space Grotesk',sans-serif;font-size:1.2rem;font-weight:700;color:#fff}
+
+/* CTA Button */
+.cta-btn{width:100%;padding:16px 24px;border-radius:12px;border:none;font-family:'Space Grotesk',sans-serif;font-size:1rem;font-weight:700;cursor:pointer;transition:all 0.25s;display:flex;align-items:center;justify-content:center;gap:10px;position:relative;overflow:hidden;margin-bottom:12px}
+.cta-btn-paid{background:linear-gradient(135deg,#D4AF37 0%,#f0c84a 50%,#D4AF37 100%);color:#000;box-shadow:0 4px 20px rgba(212,175,55,0.3)}
+.cta-btn-paid:hover{transform:translateY(-2px);box-shadow:0 8px 30px rgba(212,175,55,0.45)}
+.cta-btn-free{background:linear-gradient(135deg,#34A853 0%,#4ccc6a 50%,#34A853 100%);color:#fff;box-shadow:0 4px 20px rgba(52,168,83,0.25)}
+.cta-btn-free:hover{transform:translateY(-2px);box-shadow:0 8px 30px rgba(52,168,83,0.4)}
+.cta-btn:disabled{opacity:0.6;cursor:not-allowed;transform:none!important}
+
+.spinner{width:18px;height:18px;border:2px solid rgba(0,0,0,0.3);border-top-color:#000;border-radius:50%;animation:spin 0.7s linear infinite;display:none;flex-shrink:0}
+@keyframes spin{to{transform:rotate(360deg)}}
+.spinner.visible{display:block}
+
+.trust-line{text-align:center;font-size:0.75rem;color:rgba(255,255,255,0.3);margin-bottom:14px;line-height:1.6}
+.oracle-link{display:block;text-align:center;font-size:0.82rem;color:rgba(255,255,255,0.4);text-decoration:none;transition:color 0.2s;padding:8px}
+.oracle-link:hover{color:#f59e0b}
+
+/* ── Footer ─────────────────────────────────────────────── */
+footer{border-top:1px solid rgba(255,255,255,0.07);padding:28px 20px;text-align:center;font-size:0.78rem;color:rgba(255,255,255,0.25);background:rgba(0,0,0,0.6)}
+
+/* ── Error Toast ─────────────────────────────────────────── */
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(20px);background:#EA4335;color:#fff;padding:12px 24px;border-radius:10px;font-size:0.88rem;font-weight:600;z-index:9999;opacity:0;transition:all 0.3s;pointer-events:none;max-width:320px;text-align:center}
+.toast.visible{opacity:1;transform:translateX(-50%) translateY(0)}
+
+/* ── Glow lines ─────────────────────────────────────────── */
+.glow-sep{width:100%;height:1px;background:linear-gradient(90deg,transparent,rgba(66,133,244,0.2),transparent);margin:8px 0 24px}
+</style>
+</head>
+<body>
+
+<!-- Header -->
+<header>
+  <div class="header-inner">
+    <a href="/index.html" class="wordmark">ANTHRŌPOS</a>
+    <div class="header-right">
+      <span class="user-name" id="userName"></span>
+      <a href="/index.html" class="back-link">← Back</a>
+    </div>
+  </div>
+</header>
+
+<!-- Main -->
+<main>
+  <!-- Hero -->
+  <div class="hero">
+    <div class="eyebrow">Secure Checkout</div>
+    <h1>Build Your AI Stack</h1>
+    <p class="hero-sub">Select your services below. You'll be charged today and our team will reach out within 24 hours to begin setup.</p>
+  </div>
+  <div class="glow-sep"></div>
+
+  <!-- Layout -->
+  <div class="checkout-layout">
+
+    <!-- LEFT: Products -->
+    <div class="products-col">
+      <div class="section-label">Select Services</div>
+
+      <!-- 1. Free Strategy Call (always selected, locked) -->
+      <div class="product-card selected-green locked" id="card-strategy" data-product="strategy">
+        <div class="card-top">
+          <div>
+            <div class="card-title-row">
+              <span class="card-title">Free Strategy Call</span>
+              <span class="card-badge badge-free">FREE</span>
+            </div>
+            <p class="card-desc" style="margin-top:8px">30 minutes with Brittain's team. We map your AI strategy before we touch anything.</p>
+          </div>
+          <div class="card-checkbox checked-green" id="chk-strategy">
+            <svg viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="#000" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2. ARIA -->
+      <div class="product-card" id="card-aria" data-product="aria" onclick="toggleCard('aria')">
+        <div class="card-top">
+          <div>
+            <div class="card-title-row">
+              <span class="card-title">ARIA — AI Voice Receptionist</span>
+            </div>
+            <p class="card-desc" style="margin-top:8px">24/7 AI that answers every call, books appointments, and texts callers back. Customers think they're talking to your team.</p>
+          </div>
+          <div style="display:flex;flex-direction:column;align-items:flex-end;gap:10px;flex-shrink:0">
+            <span class="card-price price-blue">$399<span style="font-size:0.65rem;font-weight:400;color:rgba(66,133,244,0.7)">/mo</span></span>
+            <div class="card-checkbox" id="chk-aria">
+              <svg viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3. GUARDIAN -->
+      <div class="product-card" id="card-guardian" data-product="guardian" onclick="toggleCard('guardian')">
+        <div class="card-top">
+          <div>
+            <div class="card-title-row">
+              <span class="card-title">GUARDIAN — Reputation Management</span>
+            </div>
+            <p class="card-desc" style="margin-top:8px">Intercepts reviews before they hit Google. Happy customers post publicly. Unhappy ones get resolved privately.</p>
+          </div>
+          <div style="display:flex;flex-direction:column;align-items:flex-end;gap:10px;flex-shrink:0">
+            <span class="card-price price-green">$297<span style="font-size:0.65rem;font-weight:400;color:rgba(52,168,83,0.7)">/mo</span></span>
+            <div class="card-checkbox" id="chk-guardian">
+              <svg viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 4. Google Optimization -->
+      <div class="product-card" id="card-google" data-product="google" onclick="toggleCard('google')">
+        <div class="card-top">
+          <div>
+            <div class="card-title-row">
+              <span class="card-title">Google Optimization</span>
+            </div>
+            <p class="card-desc" style="margin-top:8px">Weekly posts, review responses, profile accuracy. Show up higher than competitors who aren't better — just more visible.</p>
+          </div>
+          <div style="display:flex;flex-direction:column;align-items:flex-end;gap:10px;flex-shrink:0">
+            <span class="card-price price-green">$299<span style="font-size:0.65rem;font-weight:400;color:rgba(52,168,83,0.7)">/mo</span></span>
+            <div class="card-checkbox" id="chk-google">
+              <svg viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 5. AI Website -->
+      <div class="product-card" id="card-website" data-product="website" onclick="toggleCard('website')">
+        <div class="card-top">
+          <div>
+            <div class="card-title-row">
+              <span class="card-title">AI-Powered Website</span>
+            </div>
+            <p class="card-desc" style="margin-top:8px">Professional site with your own custom AI built in. Answers questions, captures leads, books appointments around the clock.</p>
+          </div>
+          <div style="display:flex;flex-direction:column;align-items:flex-end;gap:10px;flex-shrink:0">
+            <span class="card-price price-yellow">$799<span style="font-size:0.65rem;font-weight:400;color:rgba(251,188,4,0.6)"> one-time</span></span>
+            <div class="card-checkbox" id="chk-website">
+              <svg viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 6. Chief of Staff -->
+      <div class="product-card cos-card" id="card-cos" data-product="cos" onclick="toggleCosCard(event)">
+        <div class="cos-shimmer"></div>
+        <div class="card-top">
+          <div>
+            <div class="card-title-row">
+              <span class="card-title" style="color:#D4AF37">Chief of Staff — Executive AI</span>
+            </div>
+            <p class="card-desc" style="margin-top:8px">Your private AI executive advisor. Voice conversations, persistent memory, strategic intelligence. Always on. Never overwhelmed.</p>
+          </div>
+          <div style="display:flex;flex-direction:column;align-items:flex-end;gap:10px;flex-shrink:0">
+            <div class="card-checkbox" id="chk-cos">
+              <svg viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="#000" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tier selector -->
+        <div class="cos-tiers" id="cos-tiers" style="display:none">
+          <div class="cos-tier" id="tier-essential" onclick="selectCosTier('essential',event)">
+            <div class="tier-radio"></div>
+            <div class="tier-info">
+              <div class="tier-name">Essential</div>
+              <div class="tier-desc">Voice + persistent memory. 24/7 availability.</div>
+            </div>
+            <div class="tier-price">$497<span style="font-size:0.7rem;font-weight:400;color:rgba(212,175,55,0.6)">/mo</span></div>
+          </div>
+          <div class="cos-tier tier-selected" id="tier-executive" onclick="selectCosTier('executive',event)">
+            <div class="tier-radio"></div>
+            <div class="tier-info">
+              <div class="tier-name" style="display:flex;align-items:center;gap:6px">Executive <span class="card-badge badge-popular" style="font-size:0.58rem;padding:2px 7px">⭐ MOST POPULAR</span></div>
+              <div class="tier-desc">Everything in Essential + CRM & pipeline intelligence.</div>
+            </div>
+            <div class="tier-price">$797<span style="font-size:0.7rem;font-weight:400;color:rgba(212,175,55,0.6)">/mo</span></div>
+          </div>
+          <div class="cos-tier" id="tier-enterprise" onclick="selectCosTier('enterprise',event)">
+            <div class="tier-radio"></div>
+            <div class="tier-info">
+              <div class="tier-name">Enterprise</div>
+              <div class="tier-desc">Everything in Executive + custom personality + white-glove setup.</div>
+            </div>
+            <div class="tier-price">$1,497<span style="font-size:0.7rem;font-weight:400;color:rgba(212,175,55,0.6)">/mo</span></div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /products-col -->
+
+    <!-- RIGHT: Order Summary -->
+    <div class="summary-col">
+      <div class="summary-card">
+        <div class="summary-title">Your Order</div>
+
+        <div class="summary-items" id="summaryItems">
+          <!-- Items injected by JS -->
+        </div>
+
+        <div class="summary-divider"></div>
+
+        <div class="totals-block" id="totalsBlock">
+          <!-- Totals injected by JS -->
+        </div>
+
+        <!-- CTA -->
+        <button class="cta-btn cta-btn-free" id="ctaBtn" onclick="handleCTA()">
+          <span id="ctaText">Book Your Strategy Call →</span>
+          <div class="spinner" id="ctaSpinner"></div>
+        </button>
+
+        <p class="trust-line">🔒 Secured by Stripe · No contracts · Cancel anytime</p>
+        <a class="oracle-link" href="https://anthroposalphaintelligence.com/#oracleWidget">Questions? Talk to The Oracle →</a>
+      </div>
+    </div>
+
+  </div><!-- /checkout-layout -->
+</main>
+
+<!-- Footer -->
+<footer>
+  ANTHRŌPOS Alpha Intelligence &nbsp;·&nbsp; Austin, Texas &nbsp;·&nbsp; <a href="mailto:b@anthroposalphaintelligence.com" style="color:rgba(255,255,255,0.3);text-decoration:none">b@anthroposalphaintelligence.com</a>
+</footer>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<!-- Firebase Auth -->
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
+
+const app = initializeApp({
+  apiKey: "AIzaSyC4vM-gZORxtdOJ5oNgzfw-UGv-mfGgBLQ",
+  authDomain: "anthropos-ai-c7d76.firebaseapp.com",
+  projectId: "anthropos-ai-c7d76",
+  storageBucket: "anthropos-ai-c7d76.firebasestorage.app",
+  messagingSenderId: "9407132672",
+  appId: "1:9407132672:web:c872d3b5f91208faf294e5"
+});
+
+const auth = getAuth(app);
+onAuthStateChanged(auth, (user) => {
+  if (!user) {
+    window.location.href = '/index.html';
+  } else {
+    // First name only in header
+    const firstName = (user.displayName || user.email).split(' ')[0];
+    document.getElementById('userName').textContent = firstName;
+    // Store email for Stripe session
+    window._userEmail = user.email;
+  }
+});
+</script>
+
+<script>
+// ── Product catalog ────────────────────────────────────────
+const PRODUCTS = {
+  strategy: { label: 'Free Strategy Call',                type: 'free',    cents: 0,      monthly: 0,    onetime: 0    },
+  aria:     { label: 'ARIA — AI Voice Receptionist',      type: 'monthly', cents: 39900,  monthly: 399,  onetime: 0    },
+  guardian: { label: 'GUARDIAN — Reputation Management',  type: 'monthly', cents: 29700,  monthly: 297,  onetime: 0    },
+  google:   { label: 'Google Optimization',               type: 'monthly', cents: 29900,  monthly: 299,  onetime: 0    },
+  website:  { label: 'AI-Powered Website',                type: 'onetime', cents: 79900,  monthly: 0,    onetime: 799  },
+  cos_essential:  { label: 'Chief of Staff — Essential',  type: 'monthly', cents: 49700,  monthly: 497,  onetime: 0    },
+  cos_executive:  { label: 'Chief of Staff — Executive',  type: 'monthly', cents: 79700,  monthly: 797,  onetime: 0    },
+  cos_enterprise: { label: 'Chief of Staff — Enterprise', type: 'monthly', cents: 149700, monthly: 1497, onetime: 0    },
+};
+
+// ── State ──────────────────────────────────────────────────
+let selected = new Set(['strategy']);
+let cosSelected = false;
+let cosActiveTier = 'executive';
+let chimeHasFired = false;
+
+// ── Card toggle ────────────────────────────────────────────
+function toggleCard(id) {
+  const wasEmpty = paidProductCount() === 0;
+  if (selected.has(id)) {
+    selected.delete(id);
+    setCardState(id, false);
+  } else {
+    selected.add(id);
+    setCardState(id, true);
+    if (wasEmpty) fireChime();
+  }
+  renderSummary();
+}
+
+function setCardState(id, on) {
+  const card = document.getElementById('card-' + id);
+  const chk  = document.getElementById('chk-' + id);
+  // Map product to color
+  const colors = { aria:'blue', guardian:'google', google:'google', website:'website' };
+  const col = colors[id] || 'blue';
+
+  // Remove all selected classes first
+  card.classList.remove('selected-blue','selected-green','selected-google','selected-website','selected-gold');
+  chk.classList.remove('checked-blue','checked-green','checked-yellow','checked-gold');
+
+  if (on) {
+    const classMap = { aria:'blue', guardian:'google', google:'google', website:'website' };
+    card.classList.add('selected-' + (classMap[id] || 'blue'));
+    const chkMap = { aria:'blue', guardian:'green', google:'green', website:'yellow' };
+    chk.classList.add('checked-' + (chkMap[id] || 'blue'));
+  }
+}
+
+// ── CoS card ───────────────────────────────────────────────
+function toggleCosCard(e) {
+  // If click was on a tier, let tier handler run
+  if (e.target.closest('.cos-tier')) return;
+
+  const wasEmpty = paidProductCount() === 0;
+  cosSelected = !cosSelected;
+  const card = document.getElementById('card-cos');
+  const chk  = document.getElementById('chk-cos');
+  const tiers = document.getElementById('cos-tiers');
+
+  if (cosSelected) {
+    card.classList.add('selected-gold');
+    chk.classList.add('checked-gold');
+    tiers.style.display = 'flex';
+    if (wasEmpty) fireChime();
+  } else {
+    card.classList.remove('selected-gold');
+    chk.classList.remove('checked-gold');
+    tiers.style.display = 'none';
+  }
+  renderSummary();
+}
+
+function selectCosTier(tier, e) {
+  e.stopPropagation();
+  const wasEmpty = paidProductCount() === 0;
+  const wasSelected = cosSelected;
+
+  cosActiveTier = tier;
+  cosSelected = true;
+
+  // Update tier UI
+  ['essential','executive','enterprise'].forEach(t => {
+    document.getElementById('tier-' + t).classList.toggle('tier-selected', t === tier);
+  });
+
+  // Select the card if not already
+  const card = document.getElementById('card-cos');
+  const chk  = document.getElementById('chk-cos');
+  const tiers = document.getElementById('cos-tiers');
+  card.classList.add('selected-gold');
+  chk.classList.add('checked-gold');
+  tiers.style.display = 'flex';
+
+  if (!wasSelected && wasEmpty) fireChime();
+  renderSummary();
+}
+
+// ── Paid product count (excludes strategy) ─────────────────
+function paidProductCount() {
+  let count = 0;
+  ['aria','guardian','google','website'].forEach(id => { if (selected.has(id)) count++; });
+  if (cosSelected) count++;
+  return count;
+}
+
+// ── Summary renderer ───────────────────────────────────────
+function renderSummary() {
+  const itemsEl  = document.getElementById('summaryItems');
+  const totalsEl = document.getElementById('totalsBlock');
+  const ctaBtn   = document.getElementById('ctaBtn');
+  const ctaText  = document.getElementById('ctaText');
+
+  let html = '';
+  let monthlyTotal = 0;
+  let onetimeTotal = 0;
+  let itemsList = [];
+
+  // Strategy call always first
+  html += `<div class="summary-item">
+    <span class="summary-item-name">Free Strategy Call</span>
+    <span class="summary-item-price price-tag-free">FREE</span>
+  </div>`;
+
+  // Other selected
+  const ids = ['aria','guardian','google','website'];
+  ids.forEach(id => {
+    if (!selected.has(id)) return;
+    const p = PRODUCTS[id];
+    if (p.type === 'monthly') {
+      monthlyTotal += p.monthly;
+      html += `<div class="summary-item">
+        <span class="summary-item-name">${p.label}</span>
+        <span class="summary-item-price price-tag-monthly">$${p.monthly}/mo</span>
+      </div>`;
+      itemsList.push({ label: p.label, cents: p.cents, type: 'monthly' });
+    } else if (p.type === 'onetime') {
+      onetimeTotal += p.onetime;
+      html += `<div class="summary-item">
+        <span class="summary-item-name">${p.label}</span>
+        <span class="summary-item-price price-tag-onetime">$${p.onetime}</span>
+      </div>`;
+      itemsList.push({ label: p.label, cents: p.cents, type: 'onetime' });
+    }
+  });
+
+  // CoS
+  if (cosSelected) {
+    const key = 'cos_' + cosActiveTier;
+    const p = PRODUCTS[key];
+    monthlyTotal += p.monthly;
+    const tierLabel = cosActiveTier.charAt(0).toUpperCase() + cosActiveTier.slice(1);
+    html += `<div class="summary-item">
+      <span class="summary-item-name">Chief of Staff — ${tierLabel}</span>
+      <span class="summary-item-price price-tag-gold">$${p.monthly}/mo</span>
+    </div>`;
+    itemsList.push({ label: p.label, cents: p.cents, type: 'monthly' });
+  }
+
+  itemsEl.innerHTML = html;
+
+  // Totals
+  let totalsHtml = '';
+  if (monthlyTotal > 0) {
+    totalsHtml += `<div class="total-row">
+      <span class="total-label">Monthly recurring</span>
+      <span class="total-value" style="color:#4285F4">$${monthlyTotal.toLocaleString()}/mo</span>
+    </div>`;
+  }
+  if (onetimeTotal > 0) {
+    totalsHtml += `<div class="total-row">
+      <span class="total-label">One-time setup</span>
+      <span class="total-value" style="color:#FBBC04">$${onetimeTotal.toLocaleString()}</span>
+    </div>`;
+  }
+
+  if (monthlyTotal > 0 || onetimeTotal > 0) {
+    const todayTotal = monthlyTotal + onetimeTotal;
+    totalsHtml += `<div class="grand-total-row">
+      <span class="grand-total-label">Due today</span>
+      <span class="grand-total-value">$${todayTotal.toLocaleString()}</span>
+    </div>`;
+  }
+
+  totalsEl.innerHTML = totalsHtml;
+
+  // Store for CTA
+  window._checkoutItems = itemsList;
+  window._monthlyTotal = monthlyTotal;
+  window._onetimeTotal = onetimeTotal;
+
+  // CTA state
+  if (paidProductCount() === 0) {
+    ctaBtn.className = 'cta-btn cta-btn-free';
+    ctaText.textContent = 'Book Your Strategy Call →';
+  } else {
+    ctaBtn.className = 'cta-btn cta-btn-paid';
+    ctaText.textContent = 'Complete Purchase →';
+  }
+}
+
+// ── CTA handler ────────────────────────────────────────────
+async function handleCTA() {
+  if (paidProductCount() === 0) {
+    // Free path — just book the call
+    window.open('https://api.leadconnectorhq.com/widget/bookings/zachary-gaudette-personal-calendar-rxshmju5w-e0d05aaa-d59e-4b8e-ba75-37a34bb48116', '_blank');
+    return;
+  }
+
+  const btn = document.getElementById('ctaBtn');
+  const spinner = document.getElementById('ctaSpinner');
+  const ctaText = document.getElementById('ctaText');
+
+  btn.disabled = true;
+  ctaText.textContent = 'Preparing checkout…';
+  spinner.classList.add('visible');
+
+  try {
+    const email = window._userEmail || '';
+    const totalCents = (window._monthlyTotal + window._onetimeTotal) * 100;
+
+    const res = await fetch('https://app.anthroposalphaintelligence.com/payment/create-session', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        items: window._checkoutItems,
+        customer_email: email,
+        total_cents: totalCents
+      })
+    });
+
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      throw new Error(err.error || 'Server error — please try again.');
+    }
+
+    const data = await res.json();
+    if (!data.checkout_url) throw new Error('No checkout URL returned.');
+    window.location.href = data.checkout_url;
+
+  } catch (err) {
+    showToast(err.message || 'Something went wrong. Please try again.');
+    btn.disabled = false;
+    spinner.classList.remove('visible');
+    ctaText.textContent = 'Complete Purchase →';
+  }
+}
+
+// ── 3-note WebAudio chime ──────────────────────────────────
+function fireChime() {
+  if (chimeHasFired) return;
+  chimeHasFired = true;
+  try {
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    const notes = [523.25, 659.25, 783.99]; // C5, E5, G5
+    notes.forEach((freq, i) => {
+      const osc  = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.type = 'sine';
+      osc.frequency.value = freq;
+      const t = ctx.currentTime + i * 0.15;
+      gain.gain.setValueAtTime(0, t);
+      gain.gain.linearRampToValueAtTime(0.18, t + 0.02);
+      gain.gain.exponentialRampToValueAtTime(0.001, t + 0.45);
+      osc.start(t);
+      osc.stop(t + 0.5);
+    });
+  } catch(e) { /* AudioContext blocked — silent fallback */ }
+}
+
+// ── Toast ──────────────────────────────────────────────────
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('visible');
+  setTimeout(() => t.classList.remove('visible'), 4000);
+}
+
+// ── Init ───────────────────────────────────────────────────
+renderSummary();
+</script>
+</body>
+</html>

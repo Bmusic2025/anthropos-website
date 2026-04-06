@@ -172,6 +172,156 @@ header{position:fixed;top:0;width:100%;background:rgba(0,0,0,0.92);backdrop-filt
   </div>
 </section>
 
+<!-- SIMULTANEOUS CALLS ANIMATION -->
+<section id="simultaneous" style="padding:80px 20px;background:#000;border-top:1px solid rgba(66,133,244,0.1)">
+  <div class="container" style="max-width:780px;text-align:center">
+    <p class="section-label">Why It Matters</p>
+    <h2 class="section-title" style="font-size:clamp(1.6rem,4vw,2.4rem);margin-bottom:10px">A human takes one call.<br>ARIA takes them all.</h2>
+    <p style="color:#9ca3af;font-size:0.95rem;margin-bottom:48px">Friday. 6pm. Happy hour. Watch what happens.</p>
+
+    <!-- Animation Stage -->
+    <div id="sim-stage" style="background:rgba(255,255,255,0.02);border:1px solid rgba(66,133,244,0.15);border-radius:20px;padding:36px 24px;position:relative;overflow:hidden">
+
+      <!-- Scene label -->
+      <div id="sim-scene-label" style="font-size:0.7rem;letter-spacing:3px;text-transform:uppercase;color:rgba(255,255,255,0.3);margin-bottom:28px;transition:opacity 0.4s">WITHOUT ARIA</div>
+
+      <!-- Phone grid -->
+      <div id="sim-phones" style="display:flex;justify-content:center;gap:clamp(8px,2vw,20px);margin-bottom:32px;flex-wrap:wrap"></div>
+
+      <!-- Status message -->
+      <div id="sim-msg" style="min-height:56px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px">
+        <p id="sim-main-msg" style="font-size:1rem;font-weight:600;color:#fff;transition:opacity 0.4s;opacity:0"></p>
+        <p id="sim-sub-msg" style="font-size:0.8rem;color:#9ca3af;transition:opacity 0.4s;opacity:0"></p>
+      </div>
+
+      <!-- Replay button -->
+      <button id="sim-replay-btn" onclick="simStart()" style="display:none;margin-top:20px;padding:10px 28px;background:rgba(66,133,244,0.15);border:1px solid rgba(66,133,244,0.4);border-radius:20px;color:#4285F4;font-size:0.85rem;font-weight:600;cursor:pointer;transition:all 0.3s" onmouseover="this.style.background='rgba(66,133,244,0.25)'" onmouseout="this.style.background='rgba(66,133,244,0.15)'">↺ Watch again</button>
+    </div>
+
+    <p style="font-size:0.78rem;color:rgba(255,255,255,0.2);margin-top:20px;letter-spacing:0.08em">Same story. Every industry. Every busy hour.</p>
+  </div>
+</section>
+
+<style>
+.sim-phone{width:clamp(48px,8vw,64px);height:clamp(48px,8vw,64px);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:clamp(1.2rem,3vw,1.6rem);border:2px solid rgba(255,255,255,0.1);background:rgba(255,255,255,0.03);transition:all 0.4s;position:relative}
+.sim-phone.ringing{border-color:rgba(251,188,4,0.6);background:rgba(251,188,4,0.08);animation:simRing 0.5s ease-in-out infinite alternate}
+.sim-phone.answered{border-color:rgba(52,168,83,0.8);background:rgba(52,168,83,0.12);animation:none}
+.sim-phone.missed{border-color:rgba(234,67,53,0.6);background:rgba(234,67,53,0.08);animation:none;opacity:0.7}
+.sim-phone.human{border-color:rgba(255,255,255,0.4);background:rgba(255,255,255,0.06);animation:none}
+@keyframes simRing{0%{transform:rotate(-8deg) scale(1.02)}100%{transform:rotate(8deg) scale(1.05)}}
+.sim-badge{position:absolute;top:-4px;right:-4px;width:20px;height:20px;border-radius:50%;font-size:0.65rem;display:flex;align-items:center;justify-content:center;font-weight:700}
+.sim-badge.green{background:#34A853;color:#fff}
+.sim-badge.red{background:#EA4335;color:#fff}
+</style>
+
+<script>
+(function(){
+  const phones = [
+    {emoji:'📞',label:'Table 4'},
+    {emoji:'📱',label:'Takeout'},
+    {emoji:'☎️',label:'Reservation'},
+    {emoji:'📞',label:'Bar seating'},
+    {emoji:'📱',label:'Party of 8'},
+    {emoji:'☎️',label:'Happy hour'}
+  ];
+
+  function buildPhones(){
+    const grid = document.getElementById('sim-phones');
+    grid.innerHTML = '';
+    phones.forEach((_,i)=>{
+      const el = document.createElement('div');
+      el.className = 'sim-phone';
+      el.id = 'sp-'+i;
+      el.innerHTML = phones[i].emoji;
+      grid.appendChild(el);
+    });
+  }
+
+  function setMsg(main,sub,delay){
+    setTimeout(()=>{
+      const m = document.getElementById('sim-main-msg');
+      const s = document.getElementById('sim-sub-msg');
+      m.style.opacity=0; s.style.opacity=0;
+      setTimeout(()=>{
+        m.textContent=main; s.textContent=sub||'';
+        m.style.opacity=1; s.style.opacity=sub?1:0;
+      },200);
+    },delay);
+  }
+
+  function phoneClass(i,cls,badgeType,delay){
+    setTimeout(()=>{
+      const el = document.getElementById('sp-'+i);
+      if(!el) return;
+      el.className='sim-phone '+cls;
+      const old = el.querySelector('.sim-badge');
+      if(old) old.remove();
+      if(badgeType){
+        const b = document.createElement('span');
+        b.className='sim-badge '+badgeType;
+        b.textContent = badgeType==='green'?'✓':'✕';
+        el.appendChild(b);
+      }
+    },delay);
+  }
+
+  function sceneLabel(txt,delay){
+    setTimeout(()=>{
+      const el = document.getElementById('sim-scene-label');
+      el.style.opacity=0;
+      setTimeout(()=>{ el.textContent=txt; el.style.opacity=1; },300);
+    },delay);
+  }
+
+  window.simStart = function(){
+    document.getElementById('sim-replay-btn').style.display='none';
+    buildPhones();
+    setMsg('','',0);
+
+    // — PHASE 1: WITHOUT ARIA —
+    sceneLabel('WITHOUT ARIA',0);
+    setMsg('The phone starts ringing...','Friday 6pm. Happy hour.',400);
+
+    // Phones ring one by one
+    [0,1,2,3,4,5].forEach((i,idx)=> phoneClass(i,'ringing',null,800+(idx*300)));
+
+    // Human picks up #0
+    setMsg('One human. One phone.','The others keep ringing.',2800);
+    phoneClass(0,'human answered','green',3200);
+
+    // Rest go missed
+    setMsg('5 callers wait...','No one picks up.',4200);
+    [1,2,3,4,5].forEach((i,idx)=> phoneClass(i,'missed',null,4600+(idx*350)));
+
+    setMsg('5 missed calls.','They called your competitor instead.',7000);
+
+    // — RESET —
+    setTimeout(()=>{
+      buildPhones();
+      sceneLabel('WITH ARIA',8500);
+      setMsg('Same Friday. Same happy hour.','Same 6 calls — all at once.',9000);
+      [0,1,2,3,4,5].forEach((i,idx)=> phoneClass(i,'ringing',null,9800+(idx*200)));
+
+      // ARIA answers ALL simultaneously
+      setMsg('ARIA answers every line.','By the second ring. All six.',11200);
+      [0,1,2,3,4,5].forEach((i,idx)=> phoneClass(i,'answered','green',11600+(idx*120)));
+
+      setMsg('0 missed calls.','Every caller booked. Every lead captured.',13000);
+
+      setTimeout(()=>{
+        document.getElementById('sim-replay-btn').style.display='inline-block';
+      },14500);
+    },7800);
+  };
+
+  // Auto-start when section scrolls into view
+  const obs = new IntersectionObserver((entries)=>{
+    if(entries[0].isIntersecting){ obs.disconnect(); simStart(); }
+  },{threshold:0.3});
+  obs.observe(document.getElementById('simultaneous'));
+})();
+</script>
+
 <section class="how-section">
   <div class="container">
     <p class="section-label">How It Works</p>

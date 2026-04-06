@@ -276,8 +276,8 @@ footer{
     <div style="font-size:0.7rem;letter-spacing:0.18em;text-transform:uppercase;color:rgba(255,255,255,0.35);margin-top:4px">Simultaneous calls</div>
   </div>
   <div style="flex:1;min-width:200px;text-align:center;padding:28px 20px;border-right:1px solid rgba(255,255,255,0.06)">
-    <div style="font-size:1.6rem;font-weight:800;color:#fff;letter-spacing:-0.02em">&lt; 2 sec</div>
-    <div style="font-size:0.7rem;letter-spacing:0.18em;text-transform:uppercase;color:rgba(255,255,255,0.35);margin-top:4px">Response time</div>
+    <div style="font-size:1.6rem;font-weight:800;color:#fff;letter-spacing:-0.02em">2nd Ring</div>
+    <div style="font-size:0.7rem;letter-spacing:0.18em;text-transform:uppercase;color:rgba(255,255,255,0.35);margin-top:4px">Answers by the second ring</div>
   </div>
   <div style="flex:1;min-width:200px;text-align:center;padding:28px 20px">
     <div style="font-size:1.6rem;font-weight:800;color:#fff;letter-spacing:-0.02em">0</div>
@@ -290,9 +290,11 @@ footer{
 <div class="container">
 <h2 style="color:#EA4335">Our Services</h2>
 <div class="grid">
-<div class="card" style="border-color:rgba(66,133,244,0.4);box-shadow:0 0 20px rgba(66,133,244,0.15),0 8px 32px rgba(0,0,0,0.3)"><div style="font-size:2.5rem;margin-bottom:15px">📞</div><h3 style="margin-bottom:10px">ARIA — AI Voice Receptionist</h3><p style="color:#9ca3af">Your business answers every call — day or night, weekday or weekend. Books appointments, qualifies leads, texts callers back instantly. Customers think they're talking to your team. You stop losing business to voicemail.</p>
-<div style="margin:14px 0;padding:14px 16px;background:rgba(66,133,244,0.06);border-left:2px solid rgba(66,133,244,0.5);border-radius:0 10px 10px 0">
-  <p style="font-size:0.82rem;color:rgba(255,255,255,0.75);line-height:1.65;margin:0">10 people call at once during your lunch rush — <strong style="color:#fff">every single one gets answered.</strong> No hold music. No missed leads. No apology calls the next morning.</p>
+<div class="card" style="border-color:rgba(66,133,244,0.4);box-shadow:0 0 20px rgba(66,133,244,0.15),0 8px 32px rgba(0,0,0,0.3)"><div style="font-size:2.5rem;margin-bottom:15px">📞</div><h3 style="margin-bottom:10px">ARIA — AI Voice Receptionist</h3><p style="color:#9ca3af">Your business answers every call — day or night, weekday or weekend. Books appointments, qualifies leads, and texts callers back instantly. Customers think they're talking to your team. You stop losing business to voicemail.</p>
+<div style="margin:14px 0;padding:16px 18px;background:rgba(66,133,244,0.06);border-left:2px solid rgba(66,133,244,0.5);border-radius:0 10px 10px 0">
+  <p style="font-size:0.9rem;font-weight:700;color:#fff;margin:0 0 8px 0">10 people call at once. Every single one gets answered.</p>
+  <p style="font-size:0.82rem;color:rgba(255,255,255,0.7);line-height:1.7;margin:0">When your phone spikes — the lunch rush, Monday morning, the 9am appointment window — most businesses start missing calls.<br><br>ARIA doesn't.<br><br>Every caller gets a live response by the second ring. No hold music. No missed leads. No apology calls the next morning.</p>
+  <p style="font-size:0.85rem;font-weight:700;color:#fff;margin:10px 0 0 0">A human can only take one call. ARIA takes them all.</p>
 </div>
 <p style="color:#4285F4;margin-top:10px;font-weight:600">Starting at $297/mo</p><a href="aria.html" class="lm-btn">Hear ARIA in Action →</a><button onclick="signInWithGoogle()" style="display:block;width:100%;margin-top:10px;padding:10px 0;background:#4285F4;border:none;border-radius:20px;color:#fff;font-size:0.85rem;font-weight:700;letter-spacing:0.08em;cursor:pointer;transition:all 0.3s" onmouseover="this.style.background='#5a95f5'" onmouseout="this.style.background='#4285F4'">Buy Now →</button></div>
 <div class="card" style="border-color:rgba(234,67,53,0.4);box-shadow:0 0 20px rgba(234,67,53,0.15),0 8px 32px rgba(0,0,0,0.3)"><div style="font-size:2.5rem;margin-bottom:15px">🛡️</div><h3 style="margin-bottom:10px">GUARDIAN — Reputation Management</h3><p style="color:#9ca3af">Every customer gets routed through a private rating page before they can post publicly. 4–5 stars go straight to Google. 1–3 stars come to you privately so you can fix it first. Your competitors are getting negative reviews you'll never see. Your clients won't.</p><p style="color:#EA4335;margin-top:10px;font-weight:600">$297/mo</p><a href="guardian.html" class="lm-btn" style="border-color:rgba(234,67,53,0.4);color:#EA4335">See GUARDIAN in Action →</a><button onclick="signInWithGoogle()" style="display:block;width:100%;margin-top:10px;padding:10px 0;background:#EA4335;border:none;border-radius:20px;color:#fff;font-size:0.85rem;font-weight:700;letter-spacing:0.08em;cursor:pointer;transition:all 0.3s" onmouseover="this.style.background='#f55a4e'" onmouseout="this.style.background='#EA4335'">Buy Now →</button></div>
@@ -916,7 +918,7 @@ var KB={
       name:"ARIA — AI Voice Receptionist",
       shortDesc:"Your 24/7 AI receptionist that never misses a call",
       fullDesc:"An AI-powered receptionist that answers every call, day or night. It knows your services, books appointments, qualifies leads, and texts callers back instantly. Your customers think they're talking to your team. No more missed calls, no more voicemail, no more lost business.",
-      startingPrice:"$399/month",
+      startingPrice:"$297/month",
       includes:["24/7 call answering","Appointment booking","Instant text-back on missed calls","Lead qualification","Custom-trained on your specific business","Monthly reporting"],
       bestFor:"Any business that misses phone calls — medical offices, law firms, salons, home services, real estate"
     },
@@ -975,7 +977,7 @@ var KB={
   },
   pricing:{
     approach:"We believe in transparency. Our entry-level services start at accessible price points, and we customize packages based on your specific needs and goals. Every engagement starts with a free consultation — no pressure, no pitch, just clarity on what AI can do for your business.",
-    voiceAI:"Starting at $399/month",
+    voiceAI:"Starting at $297/month",
     guardian:"$297/month — flat rate, no setup fee",
     googleOptimization:"Starting at $299/month",
     website:"Starting at $799 setup",
@@ -1047,7 +1049,7 @@ var SYSTEM_PROMPT=`You are The Oracle — the intelligence behind ANTHRŌPOS Alp
 ABOUT ANTHRŌPOS: A premium AI consulting firm in Austin, Texas. The team brings decades of real-world revenue experience across high-end industries. The company's philosophy: we diagnose before we prescribe. We don't put Band-Aids on problems. We build systems that run while you sleep.
 
 SERVICES:
-- ARIA ($399/mo): 24/7 AI voice receptionist — answers calls, books appointments, texts callers back. Customers think they're talking to your team.
+- ARIA ($297/mo): 24/7 AI voice receptionist — answers calls, books appointments, texts callers back. Customers think they're talking to your team.
 - AI-Powered Website ($799 setup): Professional site with your own custom AI built in — you name it, you brand it, any persona you choose. It answers questions, captures leads, and books appointments around the clock.
 - GUARDIAN ($297/mo): Reputation management — intercepts reviews before they hit Google. Happy customers get guided to post. Unhappy ones get resolved privately.
 - Google Optimization ($299/mo): Keeps your Google Business Profile active — weekly posts, review responses, photo updates, monthly reporting.

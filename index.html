@@ -1291,15 +1291,18 @@ async function sendMessage(){
   var msg=inp.value.trim();
   if(!msg)return;
   inp.value="";
-  // Unlock AudioContext on iOS — must happen sync inside user gesture
-  try{var ac=_getAC();if(ac.state==="suspended")ac.resume();}catch(e){}
+  // iOS-safe AudioContext unlock — wrapped to never block message send
+  try{
+    if(_ac&&_ac.state==="suspended") _ac.resume().catch(function(){});
+  }catch(e){}
   if(status)status.textContent="The Oracle is consulting the intelligence...";
   if(resp){resp.classList.remove("visible");resp.textContent="";}
   var reply=await sendToGemini(msg);
   if(resp){resp.textContent=reply;resp.classList.add("visible");}
   if(status)status.textContent="";
   stopOracle();
-  speakResponse(reply);
+  // Attempt TTS — silently skip if audio not available (iOS background tab, etc.)
+  try{speakResponse(reply);}catch(e){}
 }
 
 function toggleMenu(){document.getElementById("mobileMenu").classList.toggle("active")}
@@ -1308,11 +1311,24 @@ document.querySelectorAll('a[href^="#"]').forEach(function(l){l.addEventListener
 
 /* ---- Speech Recognition (Microphone) ---- */
 var isListening=false;
-var _SpeechClass=window.SpeechRecognition||window.webkitSpeechRecognition||null;
+// iOS Safari does not support Web Speech API — detect upfront
+var _isIOS=/iPad|iPhone|iPod/.test(navigator.userAgent)&&!window.MSStream;
+var _SpeechClass=(!_isIOS&&(window.SpeechRecognition||window.webkitSpeechRecognition))||null;
 var recognition=null;
 var _silenceTimer=null;
 var _silenceDelay=1800;
 var _lastTranscript='';
+var _micRestartCount=0;
+
+// On iOS: update mic button to show type-only message
+if(_isIOS){
+  window.addEventListener('DOMContentLoaded',function(){
+    var btn=document.getElementById("oracleMicBtn");
+    if(btn){btn.title="Type your question below";btn.style.opacity="0.35";btn.style.cursor="default";}
+    var status=document.getElementById("chatStatus");
+    if(status)status.textContent="Type your question below";
+  });
+}
 
 function _buildRecognition(){
   if(!_SpeechClass)return null;
@@ -1334,31 +1350,57 @@ function _buildRecognition(){
   r.onerror=function(e){
     if(e.error==='no-speech')return;
     isListening=false;
+    _micRestartCount=0;
     var btn=document.getElementById("oracleMicBtn");
     if(btn)btn.classList.remove("active");
     document.getElementById("chatStatus").textContent=
-      e.error==='not-allowed'?"Mic blocked — check browser permissions and try again.":"Couldn't hear that — try again or type below.";
+      e.error==='not-allowed'?"Mic blocked — check browser permissions.":"Couldn't hear that — try again or type below.";
   };
   r.onend=function(){
-    if(isListening){
-      // browser stopped unexpectedly — rebuild and restart
-      recognition=_buildRecognition();
-      if(recognition)try{recognition.start();}catch(ex){}
+    if(isListening&&_micRestartCount<5){
+      // Chrome stops unexpectedly — wait briefly then restart cleanly
+      _micRestartCount++;
+      setTimeout(function(){
+        if(!isListening)return;
+        recognition=_buildRecognition();
+        if(recognition){
+          try{recognition.start();}catch(ex){
+            isListening=false;
+            _micRestartCount=0;
+            var btn=document.getElementById("oracleMicBtn");
+            if(btn)btn.classList.remove("active");
+            document.getElementById("chatStatus").textContent="Mic stopped — tap to try again.";
+          }
+        }
+      },200);
+    } else if(isListening){
+      // Too many restarts — give up gracefully
+      isListening=false;
+      _micRestartCount=0;
+      var btn=document.getElementById("oracleMicBtn");
+      if(btn)btn.classList.remove("active");
+      document.getElementById("chatStatus").textContent="Tap the orb or type your question";
     }
   };
   return r;
 }
 
-function toggleOracleMic(){if(isListening){stopMicAndSend();}else{startMic();}}
+function toggleOracleMic(){
+  if(_isIOS){document.getElementById("chatStatus").textContent="Voice not available on iOS — type your question below.";return;}
+  if(isListening){stopMicAndSend();}else{startMic();}
+}
 function toggleMic(){toggleOracleMic();}
 function stopMicAndSend(){
   stopMic();
   if(_lastTranscript.trim()){sendMessage();}
 }
 function startMic(){
-  if(!_SpeechClass){document.getElementById("chatStatus").textContent="Voice not supported — please use Chrome";return;}
+  if(!_SpeechClass){
+    document.getElementById("chatStatus").textContent=_isIOS?"Type your question below — voice not available on iOS.":"Voice requires Chrome — or type below.";
+    return;
+  }
   _lastTranscript='';
-  // Rebuild recognition fresh every tap — fixes macOS/Chrome stale-focus bug
+  _micRestartCount=0;
   if(recognition){try{recognition.abort();}catch(ex){}}
   recognition=_buildRecognition();
   isListening=true;
@@ -1367,29 +1409,27 @@ function startMic(){
   document.getElementById("chatStatus").textContent="Listening... speak now";
   var widget=document.getElementById("oracleWidget");
   if(widget)widget.scrollIntoView({behavior:"smooth",block:"center"});
-  if(window.innerWidth<=768){
-    document.body.style.overflow='hidden';
-    document.documentElement.style.overflow='hidden';
-  }
-  // Small delay lets macOS focus context settle before starting
   setTimeout(function(){
-    if(isListening&&recognition)try{recognition.start();}catch(e){
-      isListening=false;
-      if(btn)btn.classList.remove("active");
-      document.getElementById("chatStatus").textContent="Mic blocked — check browser permissions and try again.";
+    if(isListening&&recognition){
+      try{recognition.start();}catch(e){
+        isListening=false;
+        _micRestartCount=0;
+        if(btn)btn.classList.remove("active");
+        document.getElementById("chatStatus").textContent="Mic blocked — check browser permissions.";
+      }
     }
-  },120);
+  },150);
 }
 function stopMic(){
   if(_silenceTimer){clearTimeout(_silenceTimer);_silenceTimer=null;}
   isListening=false;
+  _micRestartCount=0;
   try{if(recognition)recognition.stop();}catch(e){}
   var orb=document.getElementById("oracleOrb");
   var btn=document.getElementById("oracleMicBtn");
   if(orb)orb.classList.remove("listening");
   if(btn)btn.classList.remove("active");
-  document.getElementById("chatStatus").textContent="Tap the orb or type your question";
-  // Restore scroll on mobile
+  document.getElementById("chatStatus").textContent=_isIOS?"Type your question below":"Tap the orb or type your question";
   document.body.style.overflow='';
   document.documentElement.style.overflow='';
 }
@@ -1486,33 +1526,32 @@ function emailLogin(){var e=document.getElementById("emailInput").value;var p=do
 
 
 
+<script>
 // ── Railway warmup — pre-warm server on page load ──────────────
 (function(){
   function ping(){fetch("https://splendid-laughter-production-7b93.up.railway.app/api/oracle",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({message:"warmup"})}).catch(function(){});}
-  ping(); // fire immediately on page load
-  setInterval(ping, 4*60*1000); // keep warm every 4 minutes
+  ping();
+  setInterval(ping, 4*60*1000);
 })();
 
-// ── Scroll restoration — always start at top ──
+// ── Scroll restoration ──
 if('scrollRestoration' in history) history.scrollRestoration='manual';
 window.addEventListener('DOMContentLoaded',function(){
-  // Only scroll to top if there's no hash in the URL
   if(!window.location.hash) window.scrollTo(0,0);
 });
 
-// ── Back-forward cache fix — reset layout when returning to page ──
+// ── Back-forward cache fix ──
 window.addEventListener('pageshow',function(e){
   if(e.persisted){
     if(!window.location.hash) window.scrollTo(0,0);
-    // Force a clean repaint so hero proportions reset
     document.body.style.display='none';
-    // eslint-disable-next-line no-unused-expressions
     document.body.offsetHeight;
     document.body.style.display='';
     var canvas=document.getElementById('matrixCanvas');
     if(canvas){canvas.width=window.innerWidth;canvas.height=window.innerHeight;}
   }
 });
+</script>
 <!-- LOGIN MODAL -->
 <div id="loginModal" style="display:none;position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(0,0,0,0.88);z-index:1000;align-items:center;justify-content:center;padding:20px" onclick="if(event.target===this)closeLogin()">
   <div style="background:#0a0a0a;border:1px solid rgba(255,255,255,0.1);border-radius:20px;padding:40px 36px;width:100%;max-width:400px;position:relative;text-align:center">

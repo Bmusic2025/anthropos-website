@@ -1291,18 +1291,15 @@ async function sendMessage(){
   var msg=inp.value.trim();
   if(!msg)return;
   inp.value="";
-  // iOS-safe AudioContext unlock — wrapped to never block message send
-  try{
-    if(_ac&&_ac.state==="suspended") _ac.resume().catch(function(){});
-  }catch(e){}
+  // Unlock AudioContext on iOS — must happen sync inside user gesture
+  try{var ac=_getAC();if(ac.state==="suspended")ac.resume();}catch(e){}
   if(status)status.textContent="The Oracle is consulting the intelligence...";
   if(resp){resp.classList.remove("visible");resp.textContent="";}
   var reply=await sendToGemini(msg);
   if(resp){resp.textContent=reply;resp.classList.add("visible");}
   if(status)status.textContent="";
   stopOracle();
-  // Attempt TTS — silently skip if audio not available (iOS background tab, etc.)
-  try{speakResponse(reply);}catch(e){}
+  speakResponse(reply);
 }
 
 function toggleMenu(){document.getElementById("mobileMenu").classList.toggle("active")}
@@ -1311,7 +1308,6 @@ document.querySelectorAll('a[href^="#"]').forEach(function(l){l.addEventListener
 
 /* ---- Speech Recognition (Microphone) ---- */
 var isListening=false;
-var _isIOS=/iPad|iPhone|iPod/.test(navigator.userAgent)&&!window.MSStream;
 var _SpeechClass=window.SpeechRecognition||window.webkitSpeechRecognition||null;
 var recognition=null;
 var _silenceTimer=null;
@@ -1341,11 +1337,11 @@ function _buildRecognition(){
     var btn=document.getElementById("oracleMicBtn");
     if(btn)btn.classList.remove("active");
     document.getElementById("chatStatus").textContent=
-      e.error==='not-allowed'?"Mic access blocked — allow mic in browser settings and refresh.":"Couldn't hear that — try again or type below.";
+      e.error==='not-allowed'?"Mic blocked — check browser permissions and try again.":"Couldn't hear that — try again or type below.";
   };
   r.onend=function(){
     if(isListening){
-      // Chrome stops recognition naturally — rebuild and restart immediately
+      // browser stopped unexpectedly — rebuild and restart
       recognition=_buildRecognition();
       if(recognition)try{recognition.start();}catch(ex){}
     }
@@ -1353,24 +1349,16 @@ function _buildRecognition(){
   return r;
 }
 
-function toggleOracleMic(){
-  if(_isIOS){
-    document.getElementById("chatStatus").textContent="Voice not available on iPhone — type your question below.";
-    return;
-  }
-  if(isListening){stopMicAndSend();}else{startMic();}
-}
+function toggleOracleMic(){if(isListening){stopMicAndSend();}else{startMic();}}
 function toggleMic(){toggleOracleMic();}
 function stopMicAndSend(){
   stopMic();
   if(_lastTranscript.trim()){sendMessage();}
 }
 function startMic(){
-  if(!_SpeechClass){
-    document.getElementById("chatStatus").textContent=_isIOS?"Type your question below.":"Voice requires Chrome — or type your question below.";
-    return;
-  }
+  if(!_SpeechClass){document.getElementById("chatStatus").textContent="Voice not supported — please use Chrome";return;}
   _lastTranscript='';
+  // Rebuild recognition fresh every tap — fixes macOS/Chrome stale-focus bug
   if(recognition){try{recognition.abort();}catch(ex){}}
   recognition=_buildRecognition();
   isListening=true;
@@ -1383,11 +1371,12 @@ function startMic(){
     document.body.style.overflow='hidden';
     document.documentElement.style.overflow='hidden';
   }
+  // Small delay lets macOS focus context settle before starting
   setTimeout(function(){
     if(isListening&&recognition)try{recognition.start();}catch(e){
       isListening=false;
       if(btn)btn.classList.remove("active");
-      document.getElementById("chatStatus").textContent="Mic blocked — allow mic in browser settings.";
+      document.getElementById("chatStatus").textContent="Mic blocked — check browser permissions and try again.";
     }
   },120);
 }
@@ -1400,9 +1389,11 @@ function stopMic(){
   if(orb)orb.classList.remove("listening");
   if(btn)btn.classList.remove("active");
   document.getElementById("chatStatus").textContent="Tap the orb or type your question";
+  // Restore scroll on mobile
   document.body.style.overflow='';
   document.documentElement.style.overflow='';
 }
+
 
 var canvas=document.getElementById("matrixCanvas");
 if(canvas){
@@ -1496,23 +1487,17 @@ function emailLogin(){var e=document.getElementById("emailInput").value;var p=do
 
 
 <script>
-// ── Railway warmup — pre-warm server on page load ──────────────
+// ── Railway warmup ──────────────────────────────────────────────
 (function(){
   function ping(){fetch("https://splendid-laughter-production-7b93.up.railway.app/api/oracle",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({message:"warmup"})}).catch(function(){});}
   ping();
   setInterval(ping, 4*60*1000);
 })();
-
-// ── Scroll restoration ──
 if('scrollRestoration' in history) history.scrollRestoration='manual';
-window.addEventListener('DOMContentLoaded',function(){
-  if(!window.location.hash) window.scrollTo(0,0);
-});
-
-// ── Back-forward cache fix ──
+window.addEventListener('DOMContentLoaded',function(){if(!window.location.hash)window.scrollTo(0,0);});
 window.addEventListener('pageshow',function(e){
   if(e.persisted){
-    if(!window.location.hash) window.scrollTo(0,0);
+    if(!window.location.hash)window.scrollTo(0,0);
     document.body.style.display='none';
     document.body.offsetHeight;
     document.body.style.display='';

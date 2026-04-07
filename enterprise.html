@@ -285,6 +285,31 @@ footer.ent-footer{background:rgba(4,6,12,0.98);border-top:1px solid rgba(192,200
   </div>
 </section>
 
+<!-- ORACLE -->
+<section class="oracle-ent-section" id="assess">
+  <div class="oracle-ent-wrap">
+    <span class="oracle-ent-label">Strategic Intelligence</span>
+    <h2 class="oracle-ent-h2">Talk to The Oracle.</h2>
+    <p class="oracle-ent-sub">Describe your operation, your challenge, or what you're trying to build. We'll map the architecture and come back with a real assessment — not a sales deck.</p>
+
+    <div class="oracle-ent-orb" id="entOrb" onclick="entOrbClick()">
+      <span class="ent-mic-icon" id="entMicIcon">◈</span>
+    </div>
+
+    <div class="oracle-ent-response" id="entResp"></div>
+
+    <div class="oracle-ent-input-row">
+      <input class="oracle-ent-input" id="entInput" type="text" placeholder="Describe your operation..." autocomplete="off" />
+      <button class="ent-mic-btn" id="entMicBtn" onclick="entMicToggle()" title="Voice input">🎙</button>
+      <button class="ent-send-btn" onclick="entSend()">→</button>
+    </div>
+    <p class="oracle-ent-status" id="entStatus"></p>
+    <div class="ent-booking-link-wrap" id="entBookingWrap" style="display:none">
+      <a href="https://api.leadconnectorhq.com/widget/bookings/zachary-gaudette-personal-calendar-rxshmju5w-e0d05aaa-d59e-4b8e-ba75-37a34bb48116" target="_blank" class="ent-booking-btn">Schedule Strategic Assessment →</a>
+    </div>
+  </div>
+</section>
+
 <!-- THE DIFFERENCE -->
 <section id="capabilities">
   <div class="container">
@@ -490,30 +515,6 @@ footer.ent-footer{background:rgba(4,6,12,0.98);border-top:1px solid rgba(192,200
 </section>
 
 <!-- ORACLE ENTERPRISE — REQUEST ASSESSMENT -->
-<section class="oracle-ent-section" id="assess">
-  <div class="oracle-ent-wrap">
-    <span class="oracle-ent-label">Strategic Intelligence</span>
-    <h2 class="oracle-ent-h2">Talk to The Oracle.</h2>
-    <p class="oracle-ent-sub">Describe your operation, your challenge, or what you're trying to build. We'll map the architecture and come back with a real assessment — not a sales deck.</p>
-
-    <div class="oracle-ent-orb" id="entOrb" onclick="entOrbClick()">
-      <span class="ent-mic-icon" id="entMicIcon">◈</span>
-    </div>
-
-    <div class="oracle-ent-response" id="entResp"></div>
-
-    <div class="oracle-ent-input-row">
-      <input class="oracle-ent-input" id="entInput" type="text" placeholder="Describe your operation..." autocomplete="off" />
-      <button class="ent-mic-btn" id="entMicBtn" onclick="entMicToggle()" title="Voice input">🎙</button>
-      <button class="ent-send-btn" onclick="entSend()">→</button>
-    </div>
-    <p class="oracle-ent-status" id="entStatus"></p>
-    <div class="ent-booking-link-wrap" id="entBookingWrap" style="display:none">
-      <a href="https://api.leadconnectorhq.com/widget/bookings/zachary-gaudette-personal-calendar-rxshmju5w-e0d05aaa-d59e-4b8e-ba75-37a34bb48116" target="_blank" class="ent-booking-btn">Schedule Strategic Assessment →</a>
-    </div>
-  </div>
-</section>
-
 <!-- FOOTER -->
 <footer class="ent-footer">
   <p class="footer-logo">ANTHRŌPOS <span>Alpha Intelligence</span></p>
@@ -696,9 +697,14 @@ async function entSpeakResponse(text){
       return fetch("https://splendid-laughter-production-7b93.up.railway.app/api/tts",{
         method:"POST",
         headers:{"Content-Type":"application/json"},
-        body:JSON.stringify({text:chunk})
-      }).then(function(r){return r.arrayBuffer();})
-        .then(function(buf){return ac.decodeAudioData(buf);})
+        body:JSON.stringify({text:chunk,voice:"en-GB-Chirp3-HD-Aoede"})
+      }).then(function(r){return r.json();})
+        .then(function(data){
+          if(!data.audioContent)throw new Error("no audio");
+          var bin=atob(data.audioContent),bytes=new Uint8Array(bin.length);
+          for(var i=0;i<bin.length;i++)bytes[i]=bin.charCodeAt(i);
+          return new Promise(function(res,rej){ac.decodeAudioData(bytes.buffer,res,rej);});
+        })
         .catch(function(){return null;});
     });
     for(var i=0;i<promises.length;i++){

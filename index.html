@@ -1197,6 +1197,8 @@ CONSULTING — "We Find the Money You're Already Losing": Three engagements, all
 Enterprise page: anthroposalphaintelligence.com/enterprise.html — for large organizations and enterprise decision-makers.`;
 
 var oracleHistory=[];
+var _voiceMode=false;
+var _userStopped=false;
 
 async function sendToGemini(userMsg){
   try{
@@ -1241,7 +1243,15 @@ function _getAC(){
   }
   return _ac;
 }
-function stopOracle(){_playSession++;if(_acSrc){try{_acSrc.stop();}catch(e){}}_acSrc=null;document.getElementById("oracleStop").style.display="none";}
+function stopOracle(){
+  _playSession++;
+  _userStopped=true;
+  _voiceMode=false;
+  if(_acSrc){try{_acSrc.stop();}catch(e){}}_acSrc=null;
+  document.getElementById("oracleStop").style.display="none";
+  var orb=document.getElementById("oracleOrb");
+  if(orb){orb.classList.remove("speaking");orb.classList.remove("listening");}
+}
 
 // Preprocess text so emails and .com don't get split as sentence boundaries
 function _ttsPreprocess(text){
@@ -1288,6 +1298,8 @@ async function _fetchTTSBuffer(text,ac){
 
 async function speakResponse(text){
   var session=++_playSession;
+  var orb=document.getElementById("oracleOrb");
+  if(orb)orb.classList.add("speaking");
   try{
     var ac=_getAC();
     if(ac.state==="suspended")await ac.resume();
@@ -1313,10 +1325,24 @@ async function speakResponse(text){
         _acSrc.start(0);
       });
     }
-    if(session===_playSession){document.getElementById("oracleStop").style.display="none";_acSrc=null;}
+    if(session===_playSession){
+      document.getElementById("oracleStop").style.display="none";
+      _acSrc=null;
+      if(orb)orb.classList.remove("speaking");
+      // Auto-restart mic after Oracle finishes speaking — voice conversation mode
+      if(_voiceMode&&!_userStopped){
+        setTimeout(function(){if(_voiceMode&&!_userStopped)startMic();},500);
+      }
+    }
   }catch(e){
     console.warn("TTS:",e);
-    if(session===_playSession)document.getElementById("oracleStop").style.display="none";
+    if(session===_playSession){
+      document.getElementById("oracleStop").style.display="none";
+      if(orb)orb.classList.remove("speaking");
+      if(_voiceMode&&!_userStopped){
+        setTimeout(function(){if(_voiceMode&&!_userStopped)startMic();},500);
+      }
+    }
   }
 }
 
@@ -1393,6 +1419,8 @@ function stopMicAndSend(){
 }
 function startMic(){
   if(!_SpeechClass){document.getElementById("chatStatus").textContent="Voice not supported — please use Chrome";return;}
+  _voiceMode=true;
+  _userStopped=false;
   _lastTranscript='';
   // Rebuild recognition fresh every tap — fixes macOS/Chrome stale-focus bug
   if(recognition){try{recognition.abort();}catch(ex){}}

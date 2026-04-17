@@ -1319,31 +1319,57 @@ async function sendToGemini(userMsg){
 
 // ── Memory Write ─────────────────────────────────────────────
 var _memoryTimer=null;
-var _memoryFired=false;
+var _sessionId=Math.random().toString(36).slice(2,10);
 function _buildTranscript(){
   return oracleHistory.map(function(m){
-    return (m.role==="user"?"User: ":"Oracle: ")+m.content;
+    return(m.role==="user"?"User: ":"Oracle: ")+m.content;
   }).join("\n");
 }
-function _fireMemoryWrite(){
-  if(_memoryFired||oracleHistory.length<4)return;
-  _memoryFired=true;
-  var transcript=_buildTranscript();
+function _hasIntent(){
+  return /book|schedul|price|cost|how much|availab|appoint/i.test(_buildTranscript());
+}
+function _shouldWrite(){
+  return oracleHistory.length>=4||_hasIntent();
+}
+function _memoryPayload(){
+  return JSON.stringify({
+    conversation:_buildTranscript(),
+    idempotency_key:_sessionId+"-"+oracleHistory.length
+  });
+}
+// Idle path — fetch (non-blocking, survives)
+function _fireMemoryFetch(){
+  if(window.__memorySent||!_shouldWrite())return;
+  window.__memorySent=true;
   fetch("https://splendid-laughter-production-7b93.up.railway.app/api/memory/write",{
-    method:"POST",headers:{"Content-Type":"application/json"},
-    body:JSON.stringify({conversation:transcript})
+    method:"POST",headers:{"Content-Type":"application/json"},body:_memoryPayload()
   }).catch(function(){});
 }
+// Page-close path — sendBeacon survives unload; fetch fallback for older browsers
+function _fireMemoryBeacon(){
+  if(window.__memorySent||!_shouldWrite())return;
+  window.__memorySent=true;
+  var payload=_memoryPayload();
+  if(navigator.sendBeacon){
+    navigator.sendBeacon(
+      "https://splendid-laughter-production-7b93.up.railway.app/api/memory/write",
+      new Blob([payload],{type:"application/json"})
+    );
+  }else{
+    fetch("https://splendid-laughter-production-7b93.up.railway.app/api/memory/write",{
+      method:"POST",headers:{"Content-Type":"application/json"},body:payload
+    }).catch(function(){});
+  }
+}
 function _resetMemoryTimer(){
-  _memoryFired=false;
+  window.__memorySent=false;
   if(_memoryTimer)clearTimeout(_memoryTimer);
-  // Fire after 3 minutes of inactivity
-  _memoryTimer=setTimeout(_fireMemoryWrite,180000);
+  _memoryTimer=setTimeout(_fireMemoryFetch,180000);
 }
 document.addEventListener("visibilitychange",function(){
-  if(document.visibilityState==="hidden")_fireMemoryWrite();
+  if(document.visibilityState==="hidden")_fireMemoryBeacon();
 });
-window.addEventListener("beforeunload",function(){_fireMemoryWrite();});
+window.addEventListener("beforeunload",function(){_fireMemoryBeacon();});
 
 // ── Voice ───────────────────────────────────────────────────
 

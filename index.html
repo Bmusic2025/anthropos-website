@@ -1295,6 +1295,7 @@ async function sendToGemini(userMsg){
     oracleHistory.push({role:"user",content:userMsg});
     oracleHistory.push({role:"assistant",content:reply});
     if(oracleHistory.length>20)oracleHistory=oracleHistory.slice(-20);
+    _resetMemoryTimer();
     // Show booking link as clickable button — not read aloud by TTS
     if(data.booking_link){
       var resp=document.getElementById("oracleResponse");
@@ -1315,6 +1316,34 @@ async function sendToGemini(userMsg){
     return "I'm having a moment — reach the ANTHROPOS team at b@anthroposalphaintelligence.com and someone will get back to you fast.";
   }
 }
+
+// ── Memory Write ─────────────────────────────────────────────
+var _memoryTimer=null;
+var _memoryFired=false;
+function _buildTranscript(){
+  return oracleHistory.map(function(m){
+    return (m.role==="user"?"User: ":"Oracle: ")+m.content;
+  }).join("\n");
+}
+function _fireMemoryWrite(){
+  if(_memoryFired||oracleHistory.length<4)return;
+  _memoryFired=true;
+  var transcript=_buildTranscript();
+  fetch("https://splendid-laughter-production-7b93.up.railway.app/api/memory/write",{
+    method:"POST",headers:{"Content-Type":"application/json"},
+    body:JSON.stringify({conversation:transcript})
+  }).catch(function(){});
+}
+function _resetMemoryTimer(){
+  _memoryFired=false;
+  if(_memoryTimer)clearTimeout(_memoryTimer);
+  // Fire after 3 minutes of inactivity
+  _memoryTimer=setTimeout(_fireMemoryWrite,180000);
+}
+document.addEventListener("visibilitychange",function(){
+  if(document.visibilityState==="hidden")_fireMemoryWrite();
+});
+window.addEventListener("beforeunload",function(){_fireMemoryWrite();});
 
 // ── Voice ───────────────────────────────────────────────────
 

@@ -1334,7 +1334,7 @@ function _shouldWrite(){
 function _memoryPayload(){
   return JSON.stringify({
     conversation:_buildTranscript(),
-    idempotency_key:_sessionId+"-"+oracleHistory.length
+    idempotency_key:_sessionId  // session-scoped: one write per page load
   });
 }
 // Idle path — fetch (non-blocking, survives)
@@ -1362,7 +1362,7 @@ function _fireMemoryBeacon(){
   }
 }
 function _resetMemoryTimer(){
-  window.__memorySent=false;
+  // Do NOT reset __memorySent — once fired this session, don't fire again
   if(_memoryTimer)clearTimeout(_memoryTimer);
   _memoryTimer=setTimeout(_fireMemoryFetch,180000);
 }

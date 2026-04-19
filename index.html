@@ -1285,7 +1285,7 @@ var _userStopped=false;
 
 async function sendToGemini(userMsg){
   try{
-    var res=await fetch("https://splendid-laughter-production-7b93.up.railway.app/api/oracle",{
+    var res=await fetch("https://app.anthroposalphaintelligence.com/api/oracle",{
       method:"POST",
       headers:{"Content-Type":"application/json"},
       body:JSON.stringify({message:userMsg,history:oracleHistory})
@@ -1341,7 +1341,7 @@ function _memoryPayload(){
 function _fireMemoryFetch(){
   if(window.__memorySent||!_shouldWrite())return;
   window.__memorySent=true;
-  fetch("https://splendid-laughter-production-7b93.up.railway.app/api/memory/write",{
+  fetch("https://app.anthroposalphaintelligence.com/api/memory/write",{
     method:"POST",headers:{"Content-Type":"application/json"},body:_memoryPayload()
   }).catch(function(){});
 }
@@ -1352,11 +1352,11 @@ function _fireMemoryBeacon(){
   var payload=_memoryPayload();
   if(navigator.sendBeacon){
     navigator.sendBeacon(
-      "https://splendid-laughter-production-7b93.up.railway.app/api/memory/write",
+      "https://app.anthroposalphaintelligence.com/api/memory/write",
       new Blob([payload],{type:"application/json"})
     );
   }else{
-    fetch("https://splendid-laughter-production-7b93.up.railway.app/api/memory/write",{
+    fetch("https://app.anthroposalphaintelligence.com/api/memory/write",{
       method:"POST",headers:{"Content-Type":"application/json"},body:payload
     }).catch(function(){});
   }
@@ -1424,7 +1424,7 @@ function _splitSentences(text){
 
 // Fetch a single TTS chunk → AudioBuffer
 async function _fetchTTSBuffer(text,ac){
-  var resp=await fetch("https://splendid-laughter-production-7b93.up.railway.app/api/tts",{
+  var resp=await fetch("https://app.anthroposalphaintelligence.com/api/tts",{
     method:"POST",headers:{"Content-Type":"application/json"},
     body:JSON.stringify({text:text,voice:"en-GB-Chirp3-HD-Aoede"})
   });
@@ -1698,7 +1698,7 @@ function emailLogin(){var e=document.getElementById("emailInput").value;var p=do
 <script>
 // ── Railway warmup ──────────────────────────────────────────────
 (function(){
-  function ping(){fetch("https://splendid-laughter-production-7b93.up.railway.app/api/oracle",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({message:"warmup"})}).catch(function(){});}
+  function ping(){fetch("https://app.anthroposalphaintelligence.com/api/oracle",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({message:"warmup"})}).catch(function(){});}
   ping();
   setInterval(ping, 4*60*1000);
 })();

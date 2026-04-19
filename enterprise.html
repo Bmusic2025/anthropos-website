@@ -642,7 +642,7 @@ async function entSend(){
   if(resp){resp.classList.remove('visible');resp.textContent='';}
 
   try{
-    var res=await fetch("https://splendid-laughter-production-7b93.up.railway.app/api/oracle",{
+    var res=await fetch("https://app.anthroposalphaintelligence.com/api/oracle",{
       method:"POST",
       headers:{"Content-Type":"application/json"},
       body:JSON.stringify({message:msg,history:entHistory,context:"enterprise"})
@@ -694,7 +694,7 @@ async function entSpeakResponse(text){
     var orb=document.getElementById('entOrb');
     if(orb)orb.classList.add('speaking');
     var promises=chunks.map(function(chunk){
-      return fetch("https://splendid-laughter-production-7b93.up.railway.app/api/tts",{
+      return fetch("https://app.anthroposalphaintelligence.com/api/tts",{
         method:"POST",
         headers:{"Content-Type":"application/json"},
         body:JSON.stringify({text:chunk,voice:"en-GB-Chirp3-HD-Aoede"})

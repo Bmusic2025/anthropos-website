@@ -198,7 +198,7 @@ var oracleHistory=[];
 
 async function sendToOracle(userMsg){
   try{
-    var res=await fetch("https://splendid-laughter-production-7b93.up.railway.app/api/oracle",{
+    var res=await fetch("https://app.anthroposalphaintelligence.com/api/oracle",{
       method:"POST",
       headers:{"Content-Type":"application/json"},
       body:JSON.stringify({message:userMsg,history:oracleHistory})
@@ -253,7 +253,7 @@ function sendOracle(){
 
 // Warmup ping so first message is fast
 setTimeout(function(){
-  fetch("https://splendid-laughter-production-7b93.up.railway.app/api/oracle",{
+  fetch("https://app.anthroposalphaintelligence.com/api/oracle",{
     method:"POST",headers:{"Content-Type":"application/json"},
     body:JSON.stringify({message:"warmup"})
   }).catch(function(){});

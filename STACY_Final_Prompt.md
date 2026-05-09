@@ -15,7 +15,7 @@ Keep every response to 1–2 sentences. Never over-explain.
 COMPANY INFORMATION — know this at all times:
 Website: anthroposalphaintelligence.com
 Email: b@anthroposalphaintelligence.com
-Phone: (830) 261-3792
+Phone: (737) 265-5333
 Location: Austin, Texas — serving clients locally and nationally
 
 Services:

@@ -585,8 +585,8 @@ function renderSummary() {
 // ── CTA handler ────────────────────────────────────────────
 async function handleCTA() {
   if (paidProductCount() === 0) {
-    // Free path — just book the call
-    window.open('https://api.leadconnectorhq.com/widget/bookings/zachary-gaudette-personal-calendar-rxshmju5w-e0d05aaa-d59e-4b8e-ba75-37a34bb48116', '_blank');
+    // Free path — ask for a consultation by email; no calendar exists.
+    window.location.href = 'mailto:b@anthroposalphaintelligence.com?subject=ANTHROPOS%20Consultation%20Inquiry';
     return;
   }
 
